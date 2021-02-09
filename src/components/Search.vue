@@ -10,23 +10,37 @@
       <md-tab id="tab-artists" md-label="Artists" @click="{}"></md-tab>
       <md-tab id="tab-playlists" md-label="Playlists" @click="{}"></md-tab>
     </md-tabs>
-    <div id="searchResultsContainer">
 
+    <div id="searchResultsContainer" v-for="(media, index) in getSearchContent" 
+      :key="index">
+      <p>{{index}}</p>
     </div>
+
   </div>
 </template>
 
 <script>
 
 export default {
-    components: {
+  name: "Search",
+  components: {
 
+  },
+  methods: {
+
+  },
+  computed: {
+    getSearchContent() {
+      let media = this.$store.getters.getSearchContent;
+      return media;
     }
+  }
 }
 </script>
 
 <style>
  #searchbox {
      width: 80%;
+     color: white;
  }
 </style>

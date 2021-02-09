@@ -5,12 +5,7 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <md-tabs>
-        <md-tab id="tab-home" md-label="Home"></md-tab>
-        <md-tab id="tab-pages" md-label="Pages"></md-tab>
-        <md-tab id="tab-posts" md-label="Posts"></md-tab>
-        <md-tab id="tab-favorites" md-label="Favorites"></md-tab>
-      </md-tabs>
+      <Search/>
       <!-- Komponent 2 -->
     </div>
     <div class="rightBarTop">
@@ -29,9 +24,12 @@
 </template>
 
 <script>
+import Search from "../components/Search"
+
 export default {
   name: 'Home',
   components: {
+    Search
   }
 }
 </script>

@@ -14,10 +14,21 @@ export default new Vuex.Store({
   },
   actions: {
     async getSearchResults({commit}, media, searchString) {
-      const response = await fetch(`/api/yt/${media}/search+${searchString}`);
+      let response;
+      if (media === "playlists") {
+        response = await fetch("our own endpoint towards playlists-table")
+      }
+      else {
+        response = await fetch(`/api/yt/${media}/search+${searchString}`);
+      }
       const searchResults =  await response.json();
       commit("setSearchResults", searchResults);
     },
+  },
+  getters: {
+    getSearchContent(state) {
+      return state.searchResults;
+    }
   },
   modules: {
   }
