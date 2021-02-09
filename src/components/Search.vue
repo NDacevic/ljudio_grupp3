@@ -1,18 +1,19 @@
 <template>
   <div>
-       <p>Search here</p>
-       <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist...">
-        <div>
-    <md-tabs @md-changed="checkNewPosts">
-
-
-      <md-tab id="tab-home" md-label="Home"></md-tab>
-      <md-tab id="tab-pages" md-label="Pages"></md-tab>
-      <md-tab id="tab-posts" md-label="Posts" :md-template-data="{ badge: newPosts }" @click="clearNewPosts"></md-tab>
-      <md-tab id="tab-favorites" md-label="Favorites"></md-tab>
+    <p>Search here:</p>
+    <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist...">
+    
+    <!-- TODO: Only render after a search has been performed -->
+    <md-tabs v-if="1">
+      <md-tab id="tab-songs" md-label="Songs" @click="{}"></md-tab>
+      <md-tab id="tab-albums" md-label="Albums" @click="{}"></md-tab>
+      <md-tab id="tab-artists" md-label="Artists" @click="{}"></md-tab>
+      <md-tab id="tab-playlists" md-label="Playlists" @click="{}"></md-tab>
     </md-tabs>
+    <div id="searchResultsContainer">
+
+    </div>
   </div>
-   </div>
 </template>
 
 <script>
