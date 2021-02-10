@@ -75,7 +75,8 @@ export default {
         list-style-type: none;
     
     &:hover {
-        background-color: lightgray;
+        background-color: rgb(233, 232, 232);
+        color:#448aff
         }
     }
 
@@ -89,15 +90,16 @@ export default {
     }
 
     & button {
-        background-color: lightgray;
+        background-color: rgb(233, 232, 232);;
         color: black;
         border: 0;
         margin: 0;
         padding-inline: 2%;
         border-radius: 0;
+        font-size: x-small;
 
         &:hover {
-            background-color: rgb(150, 150, 150);;
+            background-color: rgb(150, 150, 150);
         }
     }
 
