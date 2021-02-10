@@ -34,7 +34,8 @@ export default new Vuex.Store({
     getCurrentSong(state){
       return state.currentSong;
     },
-    getCenterComponent(state) {
+    getCenterComponentForHome(state) {
+
       return state.componentToRenderInHomeCenter;
     }
   },
