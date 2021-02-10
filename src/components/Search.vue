@@ -4,7 +4,7 @@
     <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist...">
     
     <!-- TODO: Only render after a search has been performed -->
-    <md-tabs id="tab-container" class="md-black" v-if="1">
+    <md-tabs id="tab-container" class="md-transparent" v-if="1">
       <md-tab id="tab-songs" md-label="Songs" @click="{}"></md-tab>
       <md-tab id="tab-albums" md-label="Albums" @click="{}"></md-tab>
       <md-tab id="tab-artists" md-label="Artists" @click="{}"></md-tab>
@@ -23,9 +23,6 @@
 
 export default {
   name: "Search",
-  components: {
-
-  },
   methods: {
 
   },
@@ -38,21 +35,33 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 
-#tab-songs {
-  color:white;
+#searchComponent {
+
+  #tab-songs {
+    color:white;
+  }
+
+  #searchbox {
+    width: 80%;
+    height: 50px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+  }
+
+  #tab-container {
+    background-color: rgb(63, 63, 63);
+  }
+
+  button {
+    color: black;
+    &:focus {
+      color: #448aff
+    }
+  }
+
+/* div. */
 }
 
-#searchbox {
-  width: 80%;
-  height: 50px;
-  border-radius: 50px;
-  margin-bottom: 10px;
-}
-
-#tab-container {
-  background-color: rgb(63, 63, 63);
-  
-}
 </style>
