@@ -7,8 +7,6 @@ export default new Vuex.Store({
   state: {
     searchResults: [],
     currentSong: "j9V78UbdzWI",
-    nextSong: "",
-    prevSong: ""
   },
   mutations: {
     setSearchResults(state, searchResults) {
