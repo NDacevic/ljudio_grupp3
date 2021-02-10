@@ -17,10 +17,6 @@
       <!-- Komponent 4 -->
     </div>
     <div class="bottomBar">
-<<<<<<< HEAD
-=======
-      <p>Bottom Bar</p>
->>>>>>> 41cf501... Fixed conflicts
       <Player />
       <!-- Komponent 5 -->
     </div>
