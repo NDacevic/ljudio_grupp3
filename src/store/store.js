@@ -5,7 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    searchResults: []
+    searchResults: [],
+    currentSong: "j9V78UbdzWI",
+    nextSong: "",
+    prevSong: ""
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -28,6 +31,9 @@ export default new Vuex.Store({
   getters: {
     getSearchContent(state) {
       return state.searchResults;
+    },
+    getCurrentSong(state){
+      return state.currentSong;
     }
   },
   modules: {
