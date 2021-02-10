@@ -3,3 +3,28 @@
   margin: 0;
 
 }
+
+.player{
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap:20px;
+  position:relative;
+  padding:20px;
+  border:2px solid black;
+
+  &-seekbar{
+    grid-column-start: 1;
+    grid-column-end: 5;
+
+    input[type="range"]{
+      width:100%;
+    }
+  }
+
+  figure {
+    cursor: pointer;
+    border:2px solid black;
+    width:100%;
+    text-align: center;
+  }
+}
