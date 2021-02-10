@@ -13,7 +13,7 @@
       <!-- Komponent 3 -->
     </div>
     <div class="rightBarBottom">
-      <p>Right Sidebar Bottom</p>
+      <Playlists/>
       <!-- Komponent 4 -->
     </div>
     <div class="bottomBar">
@@ -25,11 +25,13 @@
 
 <script>
 import Search from "../components/Search"
+import Playlists from "../components/Playlists"
 
 export default {
   name: 'Home',
   components: {
-    Search
+    Search,
+    Playlists
   }
 }
 </script>
@@ -59,7 +61,6 @@ export default {
 }
 
 .rightBarBottom {
-  background-color: rgb(179, 4, 4);
   grid-row: 2;
 }
 

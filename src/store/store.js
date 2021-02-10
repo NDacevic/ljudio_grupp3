@@ -5,11 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    searchResults: []
+    searchResults: [],
+    playlists: []
   },
   mutations: {
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
+    },
+    setPlaylistList(state, playlists) {
+      state.playlists = playlists;
     }
   },
   actions: {
@@ -24,10 +28,18 @@ export default new Vuex.Store({
       const searchResults =  await response.json();
       commit("setSearchResults", searchResults);
     },
+    async getPlaylists({commit}) {
+      let response = await fetch("login.userId");
+      const playlists = await response.json();
+      commit("setPlaylistList", playlists);
+    }
   },
   getters: {
     getSearchContent(state) {
       return state.searchResults;
+    },
+    getPlaylists(state) {
+      return state.playlists;
     }
   },
   modules: {
