@@ -75,7 +75,6 @@ export default {
   align-items: center;
   color: rgb(255, 255, 255)
 }
-
 tbody > div {
   display: flex;
   flex-direction: column;
