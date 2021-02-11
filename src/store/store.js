@@ -12,6 +12,9 @@ export default new Vuex.Store({
   mutations: {
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
+    },
+    setSongToPlay(state, song) {
+      state.currentSong = song.videoId;
     }
   },
   actions: {
