@@ -46,7 +46,7 @@ export default {
 .homeContainer {
   display: grid;
   grid-template-columns: 200px auto 400px;
-  grid-template-rows: 40vh 40vh 20vh;
+  grid-template-rows: 40vh 40vh auto;
   height: 100%;
 }
 

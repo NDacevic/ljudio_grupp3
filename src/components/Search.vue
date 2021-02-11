@@ -1,5 +1,6 @@
 <template>
   <div id="searchComponent">
+    <div id="yt-player" style="display:none"></div>
     <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist..." v-model="searchString" @keyup.enter="setMediaType('songs'), getMedia(), setSearchHasBeenPerformedToTrue()">
     <md-tabs id="tab-container" class="md-transparent" v-if="this.searchHasBeenPerformed===true">
       <md-tab id="tab-songs" md-label="Songs" @click="setMediaType('songs'), getMedia()"></md-tab>
@@ -62,6 +63,7 @@ export default {
 
 <style lang="scss">
 #searchComponent {
+  position:relative;
   width: 100%;
   display: flex;
   flex-direction: column;

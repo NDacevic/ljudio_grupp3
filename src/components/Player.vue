@@ -1,21 +1,38 @@
 <template>
   <div class="player">
-    <div id="yt-player" style="display:none"></div>
-    <p>{{ videoTitle }}</p>
-    <div class="player-seekbar">
-      <input
-        type="range"
-        min="0"
-        v-on:click="playFromTime"
-        v-bind:max="this.songDuration"
-        v-bind:value="this.songProgress"
+    <div class="thumbnail-container">
+      <p v-if="currentSong.artist != undefined">{{ currentSong.artist.name +" - " + currentSong.name }}</p>
+      <img
+        v-if="currentSong.thumbnails != undefined"
+        :src="currentSong.thumbnails[1].url"
       />
     </div>
-    <figure v-on:click="playPrev()">Previous</figure>
-    <figure v-on:click="play()">Play</figure>
-    <figure v-on:click="pause()">Pause</figure>
-    <figure v-on:click="playNext()">Next</figure>
-    <figure v-on:click="showPlayer()">Show Player</figure>
+    <div class="controls-container">
+      <div class="controls-container-seekbar">
+        <input
+          type="range"
+          min="0"
+          v-bind:max="this.songDuration"
+          v-on:click="playFromTime"
+          v-bind:value="this.songProgress"
+        />
+      </div>
+      <figure v-on:click="playPrev()">
+        <md-icon class="md-size-2x">skip_previous</md-icon>
+      </figure>
+      <figure v-on:click="play()">
+        <md-icon class="md-size-2x">play_arrow</md-icon>
+      </figure>
+      <figure v-on:click="pause()">
+        <md-icon class="md-size-2x">pause</md-icon>
+      </figure>
+      <figure v-on:click="playNext()">
+        <md-icon class="md-size-2x">skip_next</md-icon>
+      </figure>
+      <figure v-on:click="showPlayer()">
+        <md-icon class="md-size-2x">music_video</md-icon>
+      </figure>
+    </div>
   </div>
 </template>
 
@@ -23,36 +40,28 @@
 export default {
   name: "Player",
   methods: {
-    init() {
-      //window.player.addEventListener("onStateChange", this.onStateChange);
+    playPrev() {
+      if (this.songProgress < 2) {
+        window.player.seekTo(0, true);
+        this.songProgress = 0;
+      }
     },
-    hello() {
-      console.log("Hello!");
-    },
-    playPrev() {},
     play() {
-      let videoId = this.$store.getters.getCurrentSong.videoId;
-      window.player.loadVideoById(videoId);
       window.player.playVideo();
       window.player.setVolume(10);
-      this.startPlaying();
     },
     pause() {
       window.player.pauseVideo();
     },
     playNext() {},
     showPlayer() {
-      window.player.setSize(window.outerWidth, "100vh");
       let player = document.getElementById("yt-player");
-      
+
       if (player.style.display == "none") {
         player.style.display = "block";
       } else {
         player.style.display = "none";
       }
-    },
-    getSong() {
-      this.currentSong = this.$store.getCurrentSong;
     },
     playFromTime: function(event) {
       window.player.seekTo(event.target.value, true);
@@ -68,19 +77,14 @@ export default {
         1000
       );
     },
-    startPlaying() {
-      this.songDuration = window.player.getDuration();
-    },
     onStateChange(event) {
       if (event.data != window.YT.PlayerState.PLAYING) return;
     },
   },
   data() {
     return {
-      videoTitle: "An Interesting Title",
       duration: Number,
       progress: Number,
-      num: 25,
     };
   },
   computed: {
@@ -102,12 +106,13 @@ export default {
         }
       },
     },
+    currentSong() {
+      console.log(this.$store.state.currentSong.thumbnails);
+      return this.$store.state.currentSong;
+    },
   },
   mounted() {
-    this.init();
     this.updateSeekBar();
   },
 };
 </script>
-
-<style></style>
