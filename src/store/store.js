@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     searchResults: [],
-    currentSong: { videoId: "j9V78UbdzWI" },
+    currentSong: {},
     nextSong: {},
     prevSong: {},
     componentToRenderInHomeCenter: "search",
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     async setSongToPlay({ commit }, song) {
       window.player.loadVideoById(song.videoId);
       window.player.playVideo();
-      commit("playsong", song);
+      commit("playSong", song);
     },
     async getSearchResults({ commit }, payload) {
       let response;
