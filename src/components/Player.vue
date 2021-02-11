@@ -23,10 +23,10 @@
 export default {
   name: "Player",
   methods: {
-    init(){
+    init() {
       //window.player.addEventListener("onStateChange", this.onStateChange);
     },
-    hello(){
+    hello() {
       console.log("Hello!");
     },
     playPrev() {},
@@ -42,7 +42,14 @@ export default {
     },
     playNext() {},
     showPlayer() {
-      window.player.setSize(window.innerWidth, window.innerHeight);
+      window.player.setSize(window.outerWidth, "100vh");
+      let player = document.getElementById("yt-player");
+      
+      if (player.style.display == "none") {
+        player.style.display = "block";
+      } else {
+        player.style.display = "none";
+      }
     },
     getSong() {
       this.currentSong = this.$store.getCurrentSong;
@@ -65,7 +72,6 @@ export default {
       this.songDuration = window.player.getDuration();
     },
     onStateChange(event) {
-      console.log("tets");
       if (event.data != window.YT.PlayerState.PLAYING) return;
     },
   },
