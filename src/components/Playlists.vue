@@ -1,7 +1,7 @@
 <template>
 <div class="playlistBar">
     <h3>Playlists</h3>
-    <li v-for="(playlist, index) in playlistList" :key="index" @click="goToPlaylist(index)">
+    <li v-for="(playlist, index) in getPlaylists" :key="index" @click="goToPlaylist(index)">
         <div class="listItem">            
             <p>{{playlist.title}}</p>    
             <button v-if="playlist.ownerId===login.userId" @click="removePlaylist">Delete</button>

@@ -13,7 +13,7 @@
       <!-- Komponent 3 -->
     </div>
     <div class="rightBarBottom">
-      <Playlists/>
+      <Playlists />
       <!-- Komponent 4 -->
     </div>
     <div class="bottomBar">

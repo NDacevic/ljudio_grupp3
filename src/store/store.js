@@ -30,7 +30,8 @@ export default new Vuex.Store({
       commit("setSearchResults", searchResults);
     },
     async getPlaylists({commit}) {
-      let response = await fetch("login.userId");
+      let id =5;
+      let response = await fetch(`/api/table/:${id}`);
       const playlists = await response.json();
       commit("setPlaylistList", playlists);
     }

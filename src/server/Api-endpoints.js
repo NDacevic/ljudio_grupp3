@@ -71,6 +71,28 @@ module.exports = (app, db) => {
     response.json(data)
   })
 
+  //public get playlists with userId
+  app.get("/api/table/:id", async (request, response) => {
+    let data = await db.pool.request()
+    .input('id', db.Int, request.params.id)
+    .query('SELECT * FROM [Playlist] WHERE OwnerId = id')
+    response.json(data.recordset)
+  })
+
+  //alt get playlists with userId
+/*  app.get("/api/userplaylist/:id", async (request, response) => {
+    //check user
+    if(!request.session.user){
+      response.status(401) // unauthorised
+      response.json({error:'not logged in'})
+      return;
+    }
+    let data = await db.pool.request()
+    .query('SELECT * FROM [UserPlaylist] WHERE UserId = ?', [request.session.user.id])
+    response.json(data.recordset)
+  })*/
+
+
   // public get another table (happens to be a left joined view)
   app.get("/api/examples_with_colors", async (request, response) => {
     let data = await db.pool.request().query('SELECT * FROM [TABLE]')
