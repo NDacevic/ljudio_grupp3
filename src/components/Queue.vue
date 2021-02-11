@@ -14,6 +14,7 @@
           class="listItem" 
           v-for="(track, index) in queuedTracks" 
           :key="track.id"
+          @dblclick="playTrackAndRemoveFromQueue(index)"
         >
           <md-table-cell md-label="Title">{{ track.name }}</md-table-cell>
           <md-table-cell md-label="Artist">{{ track.artist.name }}</md-table-cell>
@@ -25,6 +26,7 @@
           </md-table-cell>
         </md-table-row>
       </draggable>
+      <md-button v-if="queuedTracks.length !== 0" @click="clearQueue">Clear Queue</md-button>
     </md-table>
   </div>
 </template>
@@ -43,6 +45,15 @@ export default {
     },
     removeFromQueue(index) {
       this.queuedTracks.splice(index, 1);
+    },
+    playTrackAndRemoveFromQueue(index) {
+      window.player.loadVideoById(this.queuedTracks[index].videoId);
+      window.player.playVideo();
+      window.player.setVolume(10);
+      this.queuedTracks.splice(index, 1);
+    },
+    clearQueue() {
+      this.queuedTracks = [];
     }
   },
   computed: {
