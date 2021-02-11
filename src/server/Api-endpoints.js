@@ -67,7 +67,7 @@ module.exports = (app, db) => {
     let data = await db.pool.request()
       .input('id', db.Int, request.params.id)
       .query('SELECT * FROM [TABLE] WHERE id = @id')
-    data = data.recordset[0] // single row
+    data = data.recordset[0] // single row3
     response.json(data)
   })
 
@@ -75,7 +75,7 @@ module.exports = (app, db) => {
   app.get("/api/getplaylist/:id", async (request, response) => {
     let data = await db.pool.request()
     .input('id', db.Int, request.params.id)
-    .query('SELECT * FROM [Playlist]  where OwnerId = id')
+    .query('SELECT * FROM [Playlist] where OwnerId = @id')
     response.json(data.recordset)
   })
 
