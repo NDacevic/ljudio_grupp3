@@ -40,7 +40,7 @@ export default {
     },
     setSearchHasBeenPerformedToTrue() {
       this.searchHasBeenPerformed=true;
-    }
+    },
   },
   computed: {
     getSearchContent() {
@@ -51,7 +51,7 @@ export default {
     return {
       searchString: "",
       mediaType: "songs",
-      searchHasBeenPerformed: false
+      searchHasBeenPerformed: false,
     }
   }
 }
