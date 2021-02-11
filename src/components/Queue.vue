@@ -16,7 +16,8 @@
           :key="track.id"
         >
           <md-table-cell md-label="Title">{{ track.name }}</md-table-cell>
-          <md-table-cell md-label="Artist">{{ track.artist }}</md-table-cell>
+          <md-table-cell md-label="Artist">{{ track.artist.name }}</md-table-cell>
+          <md-table-cell md-label="Duration">{{ track.duration }}</md-table-cell>
           <md-table-cell class="buttonCell" md-label="">
             <md-button @click="removeFromQueue(index)" class="md-icon-button md-raised md-accent">
               <md-icon>thumb_up</md-icon>
