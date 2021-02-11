@@ -16,7 +16,7 @@ export default new Vuex.Store({
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
     },
-    setSongToPlay(state, song) {
+    playSong(state, song) {
       state.currentSong = song;
     },
     updateQueue(state, newQueue) {
@@ -24,6 +24,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async setSongToPlay({ commit }, song) {
+      window.player.loadVideoById(song.videoId);
+      window.player.playVideo();
+      commit("playsong", song);
+    },
     async getSearchResults({ commit }, payload) {
       let response;
       if (payload.media === "playlists") {
