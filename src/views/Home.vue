@@ -72,16 +72,4 @@ export default {
   background-color: rgb(179, 4, 4);
   grid-row: 2;
 }
-
-.bottomBar {
-  background-color: rgb(4, 179, 19);
-  grid-row: 3;
-  grid-column: 1 / span 3;
-  height: 20vh;
-  /*   width: 100%;
-  height: 150px;
-  position: absolute;
-  z-index: 1;
-  bottom: 0; */
-}
 </style>
