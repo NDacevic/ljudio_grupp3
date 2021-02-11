@@ -1,15 +1,15 @@
 <template>
   <div>
-      <p>PLAYLIST CONTENT!</p>
+    <p id="placeholder">PLAYLIST CONTENT!</p>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
+#placeholder {
+  color: white;
+}
 </style>

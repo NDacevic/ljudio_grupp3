@@ -5,8 +5,10 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <Search />
-      <!-- Komponent 2 -->
+      <Search v-if="renderCenterComponent==='Search'" />
+      <AlbumContent v-if="renderCenterComponent==='Album'" />
+      <ArtistContent v-if="renderCenterComponent==='Artist'" />
+      <PlaylistContent v-if="renderCenterComponent==='Playlist'" />
     </div>
     <div class="rightBarTop">
       <Queue />
@@ -28,6 +30,9 @@ import Search from "../components/Search";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
 
+import AlbumContent from "../components/AlbumContent";
+import ArtistContent from "../components/ArtistContent";
+import PlaylistContent from "../components/PlaylistContent";
 
 export default {
   name: "Home",
@@ -35,10 +40,13 @@ export default {
 
     Search,
     Player,
-    Queue
+    Queue,
+    AlbumContent,
+    ArtistContent,
+    PlaylistContent
   },
   computed: {
-    getComponentToRenderInCenter() {
+    renderCenterComponent() {
       return this.$store.getters.getCenterComponentForHome;
     }
 

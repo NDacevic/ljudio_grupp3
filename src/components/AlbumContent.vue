@@ -1,15 +1,15 @@
 <template>
   <div>
-      <p>ALBUM!</p>
+    <p id="placeholder">ALBUM!</p>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
+#placeholder {
+  color: white;
+}
 </style>
