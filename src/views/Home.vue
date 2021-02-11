@@ -5,10 +5,10 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <Search v-if="renderCenterComponent==='Search'" />
-      <AlbumContent v-if="renderCenterComponent==='Album'" />
-      <ArtistContent v-if="renderCenterComponent==='Artist'" />
-      <PlaylistContent v-if="renderCenterComponent==='Playlist'" />
+      <Search v-if="renderCenterComponent==='search'" />
+      <AlbumContent v-if="renderCenterComponent==='album'" />
+      <ArtistContent v-if="renderCenterComponent==='artist'" />
+      <PlaylistContent v-if="renderCenterComponent==='playlist'" />
     </div>
     <div class="rightBarTop">
       <Queue />

@@ -21,7 +21,7 @@ export default new Vuex.Store({
     },
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
-    }
+    },
   },
   actions: {
     async setSongToPlay({ commit }, song) {
@@ -29,16 +29,30 @@ export default new Vuex.Store({
       window.player.playVideo();
       commit("playSong", song);
     },
-    async getSearchResults({ commit }, payload) {
+    setComponentToRenderInHomeCenter(state, componentToRender) {
+      state.componentToRenderInHomeCenter = componentToRender;
+    },
+    async getSearchResults({ commit }, searchParameters) {
       let response;
-      if (payload.media === "playlists") {
+      if (searchParameters.searchMedia === "playlists") {
+        //Todo: Create endpoint when there are playlists available
         response = await fetch("our own endpoint towards playlists-table");
       } else {
         response = await fetch(
-          `/api/yt/${payload.media}/search+${payload.searchString}`
+          `/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`
         );
       }
-      const searchResults = await response.json();
+
+      let searchResults = await response.json();
+
+      //Changing album type from 'ep' 'single' etc to 'album', to be able to render all content correctly
+      if (searchParameters.searchMedia === "albums") {
+        for (let i = 0; i < searchResults.content.length; i++) {
+          if (searchResults.content[i].type !== "album") {
+            searchResults.content[i].type = "album";
+          }
+        }
+      }
       commit("setSearchResults", searchResults.content);
     },
   },

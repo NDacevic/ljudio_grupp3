@@ -1,111 +1,164 @@
 <template>
   <div id="searchComponent">
     <div id="yt-player" style="display:none"></div>
-    <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist..." v-model="searchString" @keyup.enter="setMediaType('songs'), getMedia(), setSearchHasBeenPerformedToTrue()">
-    <md-tabs id="tab-container" class="md-transparent" v-if="this.searchHasBeenPerformed===true">
-      <md-tab id="tab-songs" md-label="Songs" @click="setMediaType('songs'), getMedia()"></md-tab>
-      <md-tab id="tab-albums" md-label="Albums" @click="setMediaType('albums'), getMedia()"></md-tab>
-      <md-tab id="tab-artists" md-label="Artists" @click="setMediaType('artists'), getMedia()"></md-tab>
-      <md-tab id="tab-playlists" md-label="Playlists" @click="setMediaType('playlists'), getMedia()"></md-tab>
+    <input
+      id="searchbox"
+      type="text"
+      placeholder="Search for Song, Album, Artist or Playlist..."
+      v-model="searchString"
+      @keyup.enter="
+        setSearchMediaType('songs'),
+          getMedia(),
+          setSearchHasBeenPerformedToTrue()
+      "
+    />
+
+    <md-tabs
+      id="tab-container"
+      class="md-transparent"
+      v-if="this.searchHasBeenPerformed === true"
+    >
+      <md-tab
+        id="tab-songs"
+        md-label="Songs"
+        @click="setSearchMediaType('songs'), getMedia()"
+      ></md-tab>
+      <md-tab
+        id="tab-albums"
+        md-label="Albums"
+        @click="setSearchMediaType('albums'), getMedia()"
+      ></md-tab>
+      <md-tab
+        id="tab-artists"
+        md-label="Artists"
+        @click="setSearchMediaType('artists'), getMedia()"
+      ></md-tab>
+      <md-tab
+        id="tab-playlists"
+        md-label="Playlists"
+        @click="setSearchMediaType('playlists'), getMedia()"
+      ></md-tab>
     </md-tabs>
-     <div id="searchResultsContainer" v-if="this.searchHasBeenPerformed===true">
-        <div class="mediaContainer" v-for="(media, index) in getSearchContent" 
-          :key="index">
-          <button @contextmenu.prevent.stop="showOptionsOnClick($event,media)" class="listButton" v-if="media.type === 'song'" @dblclick="setSongToPlay(media)">
-            <p>{{media.name}} {{media.duration}} {{media.album.name}}</p>
-          </button>
-          <button class="listButton" v-if="media.type === 'album'">
-            <p>{{media.name}} {{media.artist}} {{media.year}}</p>
-          </button>
-          <button class="listButton" v-if="media.type === 'artist'">
-            <p>{{media.name}}</p>
-          </button>
-          <button class="listButton" v-if="media.type === 'playlist'">
-            <p>{{media.name}}</p>
-          </button>
-        </div>
+    <div
+      id="searchResultsContainer"
+      v-if="this.searchHasBeenPerformed === true"
+    >
+      <div
+        class="mediaContainer"
+        v-for="(media, index) in getSearchContent"
+        :key="index"
+      >
+        <button
+          @contextmenu.prevent.stop="showOptionsOnClick($event, media)"
+          class="listButton"
+          v-if="media.type === 'song'"
+          @dblclick="performActionWhenMediaIsClicked(media)"
+        >
+          <p>{{ media.name }} {{ media.duration }} {{ media.album.name }}</p>
+        </button>
+        <button
+          class="listButton"
+          v-if="media.type === 'album'"
+          @click="performActionWhenMediaIsClicked(media)"
+        >
+          <p>{{ media.name }} {{ media.artist }} {{ media.year }}</p>
+        </button>
+        <button
+          class="listButton"
+          v-if="media.type === 'artist'"
+          @click="performActionWhenMediaIsClicked(media)"
+        >
+          <p>{{ media.name }}</p>
+        </button>
+        <button
+          class="listButton"
+          v-if="media.type === 'playlist'"
+          @click="performActionWhenMediaIsClicked(media)"
+        >
+          <p>{{ media.name }}</p>
+        </button>
       </div>
-      <OptionsMenu
-       :elementId="'myUniqueId'"
-       :ref="'OptionsMenu'"
-       @option-clicked="setOption"
-      />
+    </div>
+    <OptionsMenu
+      :elementId="'myUniqueId'"
+      :ref="'OptionsMenu'"
+      @option-clicked="setOption"
+    />
   </div>
-  
 </template>
 
 <script>
-let song= {}
-import OptionsMenu from "../components/OptionsMenu"
+let song = {};
+import OptionsMenu from "../components/OptionsMenu";
 
 export default {
   name: "Search",
 
-  data() {
-return {
-      searchString: "",
-      mediaType: "songs",
-      searchHasBeenPerformed: false,
-    }
-  },
   components: {
-    OptionsMenu
+    OptionsMenu,
   },
   methods: {
-    getMedia(){
-      this.$store.dispatch('getSearchResults', {media: this.mediaType, searchString: this.searchString})
+    getMedia() {
+      this.$store.dispatch("getSearchResults", {
+        searchMedia: this.searchMedia,
+        searchString: this.searchString,
+      });
     },
-    setMediaType(mediaType) {
-      this.mediaType = mediaType
+    setSearchMediaType(searchMedia) {
+      this.searchMedia = searchMedia;
     },
     setSearchHasBeenPerformedToTrue() {
-      this.searchHasBeenPerformed=true;
+      this.searchHasBeenPerformed = true;
     },
-    setSongToPlay(media) {
-      console.log(media.videoId)
-      this.$store.commit("setSongToPlay", media);
-      this.$store.dispatch("setSongToPlay", media);
+    showOptionsOnClick(event, media) {
+      song = media;
+      this.$refs.OptionsMenu.showMenu(event);
     },
-    showOptionsOnClick (event,media) {
-    
-      song = media
-      this.$refs.OptionsMenu.showMenu(event)
-    },
-    setOption (event) { 
-
-
-      
-      if(event.option.slug=='queue')
-      {
-        this.queuedTracks.push(song)
+    setOption(event) {
+      if (event.option.slug == "queue") {
+        this.queuedTracks.push(song);
       }
-      if(event.option.slug=='add')
-      {
+      if (event.option.slug == "add") {
         //Add to playlist
       }
     },
+    performActionWhenMediaIsClicked(media) {
+      switch (media.type) {
+        case "song":
+          this.$store.dispatch("setSongToPlay", media);
+          break;
+        case "album":
+          this.$store.commit("setComponentToRenderInHomeCenter", media.type);
+          break;
+      }
+    },
   },
-      
   computed: {
     getSearchContent() {
       return this.$store.getters.getSearchContent;
     },
-        queuedTracks: {
-        get() {
-            return this.$store.getters.getQueuedTracks;
-        },
-        set(newQueue) {
-            this.$store.commit('updateQueue', newQueue);
-        }
-    }
-    
+    queuedTracks: {
+      get() {
+        return this.$store.getters.getQueuedTracks;
+      },
+      set(newQueue) {
+        this.$store.commit("updateQueue", newQueue);
+      },
+    },
   },
-}
+  data() {
+    return {
+      searchString: "",
+      searchMedia: "songs",
+      searchHasBeenPerformed: false,
+    };
+  },
+};
 </script>
 
 <style lang="scss">
 #searchComponent {
-  position:relative;
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -117,18 +170,18 @@ return {
     background-color: black;
     border: none;
 
-    &>p{
+    & > p {
       font-size: 14px;
       margin-left: 20px;
       color: white;
-        &:hover{
-        color:royalblue;
-    };
+      &:hover {
+        color: royalblue;
+      }
     }
   }
 
   #tab-songs {
-    color:white;
+    color: white;
   }
 
   #searchbox {
@@ -145,14 +198,14 @@ return {
   button {
     color: black;
     &:focus {
-      color: #448aff
+      color: #448aff;
     }
   }
 
   .mediaContainer {
     color: white;
     border-bottom: 1px gray solid;
-    height: 50px
+    height: 50px;
   }
 
   #searchResultsContainer {
