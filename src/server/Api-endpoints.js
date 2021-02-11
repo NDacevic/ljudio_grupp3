@@ -72,10 +72,10 @@ module.exports = (app, db) => {
   })
 
   //public get playlists with userId
-  app.get("/api/table/:id", async (request, response) => {
+  app.get("/api/getplaylist/:id", async (request, response) => {
     let data = await db.pool.request()
     .input('id', db.Int, request.params.id)
-    .query('SELECT * FROM [Playlist] WHERE OwnerId = id')
+    .query('SELECT * FROM [Playlist]  where OwnerId = id')
     response.json(data.recordset)
   })
 

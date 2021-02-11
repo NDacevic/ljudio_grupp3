@@ -14,13 +14,11 @@ export default new Vuex.Store({
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
     },
-<<<<<<< HEAD
     setPlaylistList(state, playlists) {
       state.playlists = playlists;
-=======
+    },
     setSongToPlay(state, song) {
       state.currentSong = song.videoId;
->>>>>>> master
     }
   },
   actions: {
@@ -37,7 +35,7 @@ export default new Vuex.Store({
     },
     async getPlaylists({commit}) {
       let id =5;
-      let response = await fetch(`/api/table/:${id}`);
+      let response = await fetch(`/api/getplaylist/${id}`);
       const playlists = await response.json();
       commit("setPlaylistList", playlists);
     }
