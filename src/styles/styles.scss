@@ -6,7 +6,7 @@
 
 .player{
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(5, auto);
   gap:20px;
   position:relative;
   padding:20px;
@@ -14,7 +14,7 @@
 
   &-seekbar{
     grid-column-start: 1;
-    grid-column-end: 5;
+    grid-column-end: 6;
 
     input[type="range"]{
       width:100%;

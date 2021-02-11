@@ -6,9 +6,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     searchResults: [],
-    currentSong: "j9V78UbdzWI",
-    nextSong: "",
-    prevSong: "",
+    currentSong: { videoId: "j9V78UbdzWI" },
+    nextSong: {},
+    prevSong: {},
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
   },
