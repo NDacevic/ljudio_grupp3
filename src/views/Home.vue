@@ -5,30 +5,42 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <Search/>
+      <Search />
       <!-- Komponent 2 -->
     </div>
     <div class="rightBarTop">
-      <p>Right Sidebar Top</p>
-      <!-- Komponent 3 -->
+      <Queue />
     </div>
     <div class="rightBarBottom">
       <p>Right Sidebar Bottom</p>
       <!-- Komponent 4 -->
     </div>
     <div class="bottomBar">
-      <p>Bottom Bar</p>
+      <Player />
       <!-- Komponent 5 -->
     </div>
   </div>
 </template>
 
 <script>
-import Search from "../components/Search"
+
+import Search from "../components/Search";
+import Player from "../components/Player";
+import Queue from "../components/Queue";
+
+
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    Search
+
+    Search,
+    Player,
+    Queue
+  },
+  computed: {
+    getComponentToRenderInCenter() {
+      return this.$store.getters.getCenterComponentForHome;
+    }
 
   }
 }
@@ -37,7 +49,7 @@ export default {
 <style scoped>
 .homeContainer {
   display: grid;
-  grid-template-columns: 200px auto 200px;
+  grid-template-columns: 200px auto 400px;
   grid-template-rows: 40vh 40vh 20vh;
   height: 100%;
 }
@@ -49,12 +61,14 @@ export default {
 }
 
 .centerContent {
+  display: flex;
   background-color: rgb(0, 0, 0);
   grid-row: 1 / span 2;
 }
 
 .rightBarTop {
-  background-color: rgb(179, 4, 4);
+  display: flex;
+  background-color: rgb(0, 0, 0);
   grid-row: 1;
 }
 
@@ -68,7 +82,7 @@ export default {
   grid-row: 3;
   grid-column: 1 / span 3;
   height: 20vh;
-/*   width: 100%;
+  /*   width: 100%;
   height: 150px;
   position: absolute;
   z-index: 1;
