@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     searchResults: [],
     currentSong: "j9V78UbdzWI",
-    componentToRenderInHomeCenter: "search"
+    componentToRenderInHomeCenter: "search",
+    queuedTracks: []
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     setSongToPlay(state, song) {
       state.currentSong = song.videoId;
+    },
+    updateQueue(state, newQueue) {
+      state.queuedTracks = newQueue;
     }
   },
   actions: {
@@ -38,8 +42,10 @@ export default new Vuex.Store({
       return state.currentSong;
     },
     getCenterComponentForHome(state) {
-
       return state.componentToRenderInHomeCenter;
+    },
+    getQueuedTracks(state) {
+      return state.queuedTracks;
     }
   },
   modules: {
