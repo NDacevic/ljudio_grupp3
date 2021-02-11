@@ -11,10 +11,10 @@
         v-model="this.songProgress"
       />
     </div>
-    <figure v-on:click="PlayPrev()">Previous</figure>
-    <figure v-on:click="Play()">Play</figure>
-    <figure v-on:click="Pause()">Pause</figure>
-    <figure v-on:click="PlayNext()">Next</figure>
+    <figure v-on:click="playPrev()">Previous</figure>
+    <figure v-on:click="play()">Play</figure>
+    <figure v-on:click="pause()">Pause</figure>
+    <figure v-on:click="playNext()">Next</figure>
   </div>
 </template>
 
@@ -22,19 +22,19 @@
 export default {
   name: "Player",
   methods: {
-    PlayPrev() {
+    playPrev() {
       window.player.previousVideo();
     },
-    Play() {
+    play() {
       let videoId = this.$store.getters.getCurrentSong;
       window.player.loadVideoById(videoId);
       window.player.playVideo();
       window.player.setVolume(10);
     },
-    Pause() {
+    pause() {
       window.player.pauseVideo();
     },
-    PlayNext() {
+    playNext() {
       //window.player.nextVideo();
     },
     getSong() {
