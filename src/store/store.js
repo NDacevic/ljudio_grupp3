@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     searchResults: [],
-    playlists: []
+    playlists: [],
+    currentSong: "j9V78UbdzWI",
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     },
     getPlaylists(state) {
       return state.playlists;
+    },
+    getCurrentSong(state){
+      return state.currentSong;
     }
   },
   modules: {

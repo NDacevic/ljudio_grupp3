@@ -5,7 +5,7 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <Search/>
+      <Search />
       <!-- Komponent 2 -->
     </div>
     <div class="rightBarTop">
@@ -17,23 +17,26 @@
       <!-- Komponent 4 -->
     </div>
     <div class="bottomBar">
-      <p>Bottom Bar</p>
+      <Player />
       <!-- Komponent 5 -->
     </div>
   </div>
 </template>
 
 <script>
-import Search from "../components/Search"
-import Playlists from "../components/Playlists"
+
+import Search from "../components/Search";
+import Playlists from "../components/Playlists";
+import Player from "../components/Player";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
     Search,
-    Playlists
-  }
-}
+    Playlists,
+    Player
+  },
+};
 </script>
 
 <style scoped>
@@ -69,7 +72,7 @@ export default {
   grid-row: 3;
   grid-column: 1 / span 3;
   height: 20vh;
-/*   width: 100%;
+  /*   width: 100%;
   height: 150px;
   position: absolute;
   z-index: 1;

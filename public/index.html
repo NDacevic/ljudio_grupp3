@@ -1,17 +1,41 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>Ljudio - Where sound meets the eye</title>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but Ljudio doesn't work properly without JavaScript enabled. Please enable it to
+      continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
+<script>
+  function onYouTubeIframeAPIReady() {
+    window.player = new YT.Player('yt-player', {
+      height: '640',
+      width: '480',
+      playerVars: {
+        controls: 0,
+        showInfo: 0
+      },
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+  function onPlayerStateChange(event) {
+    if (event.data != YT.PlayerState.PLAYING) return
+  }
+</script>
+
 </html>
