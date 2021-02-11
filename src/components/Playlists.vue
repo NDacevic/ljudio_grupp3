@@ -3,8 +3,8 @@
     <h3>Playlists</h3>
     <li v-for="(playlist, index) in playlistList" :key="index" @click="goToPlaylist(index)">
         <div class="listItem">            
-            <p>{{playlist.title}} </p>    
-            <button v-if="playlist.ownerId == login.userId" @click="removePlaylist">Delete</button>
+            <p>{{playlist.title}}</p>    
+            <button v-if="playlist.ownerId===login.userId" @click="removePlaylist">Delete</button>
             <button v-else @click="unfollowPlaylist">Unfollow</button>            
         </div>
     </li>
@@ -23,19 +23,19 @@ export default {
         return {
             playlistList: [
             {
-             id:1,
+             id: 1,
              title: "Pop",
              ownerId: "1"
             },
             {
-             id:2,
+             id: 2,
              title: "Lounge",
-             ownerId:"2"
+             ownerId: "1"
             }
         ],
         login: [
             {
-             userId:"2" 
+             userId: "2" 
             }
 
         ]
@@ -51,10 +51,10 @@ export default {
         goToPlaylist(/*index*/) {
             //rendera playlistcomponent
         },
-        unfollowPlaylist(){
+        unfollowPlaylist() {
             //fetch ta bort playlist från UserPlaylist i db
         },
-        removePlaylist(){
+        removePlaylist() {
             //fetch ta bort playlist helt eller bara i UserPlaylist i db?
         }
     }
