@@ -36,7 +36,12 @@ export default {
     Playlists,
     Player
   },
-};
+  computed: {
+    getComponentToRenderInCenter() {
+      return this.$store.getters.getCenterComponentForHome;
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -54,6 +59,7 @@ export default {
 }
 
 .centerContent {
+  display: flex;
   background-color: rgb(0, 0, 0);
   grid-row: 1 / span 2;
 }
