@@ -11,8 +11,7 @@
      <div id="searchResultsContainer" v-if="this.searchHasBeenPerformed===true">
         <div class="mediaContainer" v-for="(media, index) in getSearchContent" 
           :key="index">
-          <button @contextmenu.prevent.stop="showOptionsOnClick($event,media)" class="listButton" v-if="media.type === 'song'" @click="setSongToPlay(media)">
-          <button class="listButton" v-if="media.type === 'song'" @dblclick="setSongToPlay(media)">
+          <button @contextmenu.prevent.stop="showOptionsOnClick($event,media)" class="listButton" v-if="media.type === 'song'" @dblclick="setSongToPlay(media)">
             <p>{{media.name}} {{media.duration}} {{media.album.name}}</p>
           </button>
           <button class="listButton" v-if="media.type === 'album'">
