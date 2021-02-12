@@ -36,7 +36,9 @@ export default new Vuex.Store({
       let response;
       if (searchParameters.searchMedia === "playlists") {
         //Todo: Create endpoint when there are playlists available
-        response = await fetch(`/api/playlist/${searchParameters.searchString}`);
+        response = await fetch(
+          `/api/playlist/${searchParameters.searchString}`
+        );
       } else {
         response = await fetch(
           `/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`
@@ -53,7 +55,11 @@ export default new Vuex.Store({
           }
         }
       }
-      commit("setSearchResults", searchResults.content);
+      if (searchParameters.searchMedia === "playlists") {
+        commit("setSearchResults", searchResults);
+      } else {
+        commit("setSearchResults", searchResults.content);
+      }
     },
   },
   getters: {

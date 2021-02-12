@@ -42,6 +42,23 @@
       id="searchResultsContainer"
       v-if="this.searchHasBeenPerformed === true"
     >
+      <div v-if="this.searchMedia === 'songs'" class="headers">
+        <h3>Title</h3>
+        <h3>Artist</h3>
+        <h3>Album</h3>
+        <h3>Duration</h3>
+      </div>
+      <div v-if="this.searchMedia === 'albums'" id="albumHeaders" class="headers" >
+        <h3>Title</h3>
+        <h3>Artist</h3>
+        <h3>Year</h3>
+      </div>
+      <div v-if="this.searchMedia === 'artists'" id="artistHeaders" class="headers">
+        <h3>Artist</h3>
+      </div>
+      <div v-if="this.searchMedia === 'playlists'" id="playlistHeaders" class="headers">
+        <h3>Title</h3>
+      </div>
       <div
         class="mediaContainer"
         v-for="(media, index) in getSearchContent"
@@ -53,17 +70,24 @@
           v-if="media.type === 'song'"
           @dblclick="performActionWhenMediaIsClicked(media)"
         >
-          <p>{{ media.name }} {{ media.duration }} {{ media.album.name }}</p>
+          <p>{{ media.name }}</p>
+          <p>{{ media.artist.name }}</p>
+          <p>{{ media.album.name }}</p>
+          <p>{{ convertMillisecondsToTimeString(media.duration) }}</p>
         </button>
         <button
           class="listButton"
+          id="albumButton"
           v-if="media.type === 'album'"
           @dblclick="performActionWhenMediaIsClicked(media)"
         >
-          <p>{{ media.name }} {{ media.artist }} {{ media.year }}</p>
+          <p>{{ media.name }}</p>
+          <p>{{ media.artist }}</p>
+          <p>{{ media.year }}</p>
         </button>
         <button
           class="listButton"
+          id="artistButton"
           v-if="media.type === 'artist'"
           @dblclick="performActionWhenMediaIsClicked(media)"
         >
@@ -71,10 +95,11 @@
         </button>
         <button
           class="listButton"
-          v-if="media.type === 'playlist'"
+          id="playlistButton"
+          v-if="searchMedia === 'playlists'"
           @dblclick="performActionWhenMediaIsClicked(media)"
         >
-          <p>{{ media.name }}</p>
+          <p>{{ media.PlaylistName }}</p>
         </button>
       </div>
     </div>
@@ -97,6 +122,12 @@ export default {
     OptionsMenu,
   },
   methods: {
+    convertMillisecondsToTimeString(milliseconds) {
+      let seconds = milliseconds / 1000;
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      return minutes + ":" + remainingSeconds;
+    },
     getMedia() {
       this.$store.dispatch("getSearchResults", {
         searchMedia: this.searchMedia,
@@ -126,8 +157,14 @@ export default {
         case "song":
           this.$store.dispatch("setSongToPlay", media);
           break;
-        case "album":
-          this.$store.commit("setComponentToRenderInHomeCenter", media.type);
+        default:
+          //for artist, album and playlist
+          media.type === undefined
+            ? this.$store.commit("setComponentToRenderInHomeCenter", "playlist")
+            : this.$store.commit(
+                "setComponentToRenderInHomeCenter",
+                media.type
+              );
           break;
       }
     },
@@ -162,21 +199,72 @@ export default {
   display: flex;
   flex-direction: column;
 
+  .headers {
+    width: 95%;
+    display: grid;
+    grid-template-columns: 5fr 2fr 2fr 1fr;
+    color: white;
+    margin: 20px auto 0 auto;
+    border-bottom: 2px white solid;
+
+    & > h3:first-child {
+      margin-left: 20px;
+    }
+  }
+
+  #albumHeaders {
+    grid-template-columns: 6fr 3fr 2fr;
+  }
+
+  #artistHeaders {
+    grid-template-columns: 1fr;
+  }
+
+  #playlistHeaders {
+    grid-template-columns: 1fr;
+  }
+
+  .mediaContainer {
+    color: white;
+    border-bottom: 1px gray solid;
+    width: 95%;
+    margin: auto;
+    height: 50px;
+  }
+
   .listButton {
     width: 100%;
+    display: grid;
+    grid-template-columns: 5fr 2fr 2fr 1fr;
     height: 100%;
     text-align: left;
+    justify-content: space-between;
     background-color: black;
     border: none;
 
     & > p {
       font-size: 14px;
-      margin-left: 20px;
       color: white;
+      margin: auto 0 auto 0;
       &:hover {
         color: royalblue;
       }
+      &:first-child {
+        margin-left: 20px;
+      }
     }
+  }
+
+  #albumButton {
+    grid-template-columns: 6fr 3fr 2fr;
+  }
+
+  #artistButton {
+    grid-template-columns: 1fr;
+  }
+
+  #playlistButton {
+    grid-template-columns: 1fr;
   }
 
   #tab-songs {
@@ -185,9 +273,16 @@ export default {
 
   #searchbox {
     width: 80%;
-    height: 50px;
+    min-height: 50px;
     margin: 10px auto 10px auto;
     border-radius: 50px;
+    padding-left: 20px;
+    font-size: 20px;
+    color: rgb(51, 51, 51);
+
+    &:focus {
+      outline: none;
+    }
   }
 
   #tab-container {
@@ -201,14 +296,9 @@ export default {
     }
   }
 
-  .mediaContainer {
-    color: white;
-    border-bottom: 1px gray solid;
-    height: 50px;
-  }
-
   #searchResultsContainer {
     overflow-y: scroll;
+    overflow-x: hidden;
   }
 }
 </style>
