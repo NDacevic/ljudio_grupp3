@@ -73,13 +73,11 @@ return {
     },
     setOption (event) { 
 
-      let artist = song.artist.name;
-      let songName = song.name;
-      let songDuration = song.duration;
+
       
       if(event.option.slug=='queue')
       {
-        this.queuedTracks.push({name:songName,artist:artist,duration:songDuration})
+        this.queuedTracks.push(song)
       }
       if(event.option.slug=='add')
       {

@@ -21,7 +21,7 @@
           <md-table-cell md-label="Duration">{{ track.duration }}</md-table-cell>
           <md-table-cell class="buttonCell" md-label="">
             <md-button @click="removeFromQueue(index)" class="md-icon-button md-raised md-accent">
-              <md-icon>thumb_up</md-icon>
+              <md-icon>delete</md-icon>
             </md-button>
           </md-table-cell>
         </md-table-row>
