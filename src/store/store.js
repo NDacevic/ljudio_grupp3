@@ -29,6 +29,9 @@ export default new Vuex.Store({
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
     },
+    modifyPlaylist(state, playlistId) {
+      state.playlists.splice(state.playlists.indexOf(state.playlists.find(x => x.PlaylistId === playlistId)), 1)
+    }
   },
   actions: {
     async setSongToPlay({ commit }, song) {
@@ -54,19 +57,20 @@ export default new Vuex.Store({
       const playlists = await response.json();
       commit("setPlaylistList", playlists);
     },
-    async unfollowPlaylist({dispatch}, playlistId) {
+    async unfollowPlaylist(playlistId) {
       let id =5;
       let response = await fetch(`/api/unfollowpPlaylist/${id}/${playlistId}`,{
       method: 'delete' 
       });     
     await response.json(); 
-    dispatch("getPlaylists")
     },
-    async deletePlaylist(playlistId) {
+    async deletePlaylist({commit}, playlistId) {
+      console.log("test", playlistId)
       let response = await fetch(`/api/deletePlaylist/${playlistId}`,{
         method: 'delete' 
         });
       await response.json();
+      commit("modifyPlaylist", playlistId)
     }
   },
   getters: {
