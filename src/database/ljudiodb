@@ -1,7 +1,7 @@
-insert into [Playlist](PlaylistName, Shared, OwnerId, ReadOnly) values ('Lounge', 0, 5, 0)
+/*insert into [Playlist](PlaylistName, Shared, OwnerId, ReadOnly) values ('Pop', 0, 5, 0)
 
 select * from [UserPlaylist]
 
-insert into [UserPlaylist](UserId, PlaylistId) values (5, 1)
+insert into [UserPlaylist](UserId, PlaylistId) values (5, 2)
 
-select * from [Playlist] where (OwnerId = 5)
+select * from [Playlist] where (OwnerId = 5)*/

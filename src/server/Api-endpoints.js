@@ -93,7 +93,7 @@ module.exports = (app, db) => {
   })*/
 
  // unfollow/delete from userplaylist
- app.delete("/api/unfollowPlaylist/:id/:playlistId", async (request, response) => {
+ app.delete("/api/deletePlaylist/:playlistId", async (request, response, response2) => {
   // check if user exists before writing
   /*if(!request.session.user){
     response.status(403) // forbidden
@@ -101,14 +101,20 @@ module.exports = (app, db) => {
     return
   }*/
   let result = await db.pool.request()
-    .input('id', db.Int, request.params.id)
+    //.input('id', db.Int, request.params.id)
     .input('playlistId', db.Int, request.params.playlistId)
-    .query("DELETE FROM [UserPlaylist] WHERE UserId = @id AND PlaylistId = @playlistId")
+    .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId")
   response.json(result)
+
+  let result2 = await db.pool.request()
+    .input('playlistId', db.Int, request.params.playlistId)
+    .query("DELETE FROM [Playlist] WHERE PlaylistId = @playlistId")
+  response2.json(result2)
+
 })
 
- // delete from playlist with ownerId
- app.delete("/api/deleteplaylist/:id/:playlistId", async (request, response) => {
+ // delete from userplaylist with userid and playlistid
+ app.delete("/api/unfollowpPlaylist/:id/:playlistId", async (request, response) => {
   // check if user exists before writing
   /*if(!request.session.user){
     response.status(403) // forbidden
@@ -118,7 +124,7 @@ module.exports = (app, db) => {
   let result = await db.pool.request()
     .input('id', db.Int, request.params.id)
     .input('playlistId', db.Int, request.params.playlistId)
-    .query("DELETE FROM [Playlist] WHERE OwnerId = @id AND PlaylistId = @playlistId")
+    .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId AND UserId = @id")
   response.json(result)
 })
 
