@@ -9,8 +9,7 @@
       <!-- Komponent 2 -->
     </div>
     <div class="rightBarTop">
-      <p>Right Sidebar Top</p>
-      <!-- Komponent 3 -->
+      <Queue />
     </div>
     <div class="rightBarBottom">
       <Playlists />
@@ -28,13 +27,15 @@
 import Search from "../components/Search";
 import Playlists from "../components/Playlists";
 import Player from "../components/Player";
+import Queue from "../components/Queue";
 
 export default {
   name: "Home",
   components: {
     Search,
     Playlists,
-    Player
+    Player,
+    Queue
   },
   computed: {
     getComponentToRenderInCenter() {
@@ -47,8 +48,8 @@ export default {
 <style scoped>
 .homeContainer {
   display: grid;
-  grid-template-columns: 200px auto 200px;
-  grid-template-rows: 40vh 40vh 20vh;
+  grid-template-columns: 200px auto 400px;
+  grid-template-rows: 40vh 40vh auto;
   height: 100%;
 }
 
@@ -65,23 +66,12 @@ export default {
 }
 
 .rightBarTop {
-  background-color: rgb(179, 4, 4);
+  display: flex;
+  background-color: rgb(0, 0, 0);
   grid-row: 1;
 }
 
 .rightBarBottom {
   grid-row: 2;
-}
-
-.bottomBar {
-  background-color: rgb(4, 179, 19);
-  grid-row: 3;
-  grid-column: 1 / span 3;
-  height: 20vh;
-  /*   width: 100%;
-  height: 150px;
-  position: absolute;
-  z-index: 1;
-  bottom: 0; */
 }
 </style>

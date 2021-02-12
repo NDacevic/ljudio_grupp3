@@ -1,5 +1,6 @@
 <template>
   <div id="searchComponent">
+    <div id="yt-player" style="display:none"></div>
     <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist..." v-model="searchString" @keyup.enter="setMediaType('songs'), getMedia(), setSearchHasBeenPerformedToTrue()">
     <md-tabs id="tab-container" class="md-transparent" v-if="this.searchHasBeenPerformed===true">
       <md-tab id="tab-songs" md-label="Songs" @click="setMediaType('songs'), getMedia()"></md-tab>
@@ -10,7 +11,7 @@
      <div id="searchResultsContainer" v-if="this.searchHasBeenPerformed===true">
         <div class="mediaContainer" v-for="(media, index) in getSearchContent" 
           :key="index">
-          <button class="listButton" v-if="media.type === 'song'" @click="setSongToPlay(media)">
+          <button class="listButton" v-if="media.type === 'song'" @dblclick="setSongToPlay(media)">
             <p>{{media.name}} {{media.duration}} {{media.album.name}}</p>
           </button>
           <button class="listButton" v-if="media.type === 'album'">
@@ -42,8 +43,7 @@ export default {
       this.searchHasBeenPerformed=true;
     },
     setSongToPlay(media) {
-      console.log(media.videoId)
-      this.$store.commit("setSongToPlay", media);
+      this.$store.dispatch("setSongToPlay", media);
     }
   },
   computed: {
@@ -63,6 +63,7 @@ export default {
 
 <style lang="scss">
 #searchComponent {
+  position:relative;
   width: 100%;
   display: flex;
   flex-direction: column;

@@ -8,6 +8,7 @@
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <title>Ljudio - Where sound meets the eye</title>
   <script src="https://www.youtube.com/iframe_api"></script>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Material+Icons">
 </head>
 
 <body>
@@ -27,14 +28,8 @@
       playerVars: {
         controls: 0,
         showInfo: 0
-      },
-      events: {
-        'onStateChange': onPlayerStateChange
       }
     });
-  }
-  function onPlayerStateChange(event) {
-    if (event.data != YT.PlayerState.PLAYING) return
   }
 </script>
 
