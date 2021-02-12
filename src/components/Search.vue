@@ -58,21 +58,21 @@
         <button
           class="listButton"
           v-if="media.type === 'album'"
-          @click="performActionWhenMediaIsClicked(media)"
+          @dblclick="performActionWhenMediaIsClicked(media)"
         >
           <p>{{ media.name }} {{ media.artist }} {{ media.year }}</p>
         </button>
         <button
           class="listButton"
           v-if="media.type === 'artist'"
-          @click="performActionWhenMediaIsClicked(media)"
+          @dblclick="performActionWhenMediaIsClicked(media)"
         >
           <p>{{ media.name }}</p>
         </button>
         <button
           class="listButton"
           v-if="media.type === 'playlist'"
-          @click="performActionWhenMediaIsClicked(media)"
+          @dblclick="performActionWhenMediaIsClicked(media)"
         >
           <p>{{ media.name }}</p>
         </button>

@@ -36,7 +36,7 @@ export default new Vuex.Store({
       let response;
       if (searchParameters.searchMedia === "playlists") {
         //Todo: Create endpoint when there are playlists available
-        response = await fetch("our own endpoint towards playlists-table");
+        response = await fetch(`/api/playlist/${searchParameters.searchString}`);
       } else {
         response = await fetch(
           `/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`
