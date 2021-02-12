@@ -42,20 +42,6 @@
 export default {
   name: "Player",
   methods: {
-    initYoutube() {
-      window.player = new window.YT.Player("yt-player", {
-        height: "640",
-        width: "480",
-        playerVars: {
-          controls: 0,
-          showInfo: 0,
-        },
-      });
-      window.player.addEventListener("onStateChanged", this.playerStateChanged);
-    },
-    playerStateChanged(){
-      console.log("YOOOOOO!");
-    },
     playPrev() {
       if (this.songProgress > 2) {
         window.player.seekTo(0, true);
@@ -64,7 +50,6 @@ export default {
     },
     play() {
       window.player.playVideo();
-      window.player.setVolume(10);
     },
     pause() {
       window.player.pauseVideo();
@@ -95,8 +80,29 @@ export default {
         1000
       );
     },
-    onStateChange(event) {
-      if (event.data != window.YT.PlayerState.PLAYING) return;
+    initYoutubePlayer() {
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      window.onYouTubeIframeAPIReady = () => {
+        // eslint-disable-next-line no-undef
+        window.player = new YT.Player("yt-player", {
+          height: "640",
+          width: "480",
+          playerVars: {
+            controls: 0,
+            showInfo: 0,
+          },
+          events: {
+            onStateChange: this.onPlayerStateChange,
+          },
+        });
+      };
+    },
+    onPlayerStateChange() {
+      console.log("yoooooooo!");
     },
   },
   data() {
@@ -129,7 +135,7 @@ export default {
     },
   },
   mounted() {
-    this.initYoutube();
+    this.initYoutubePlayer();
     this.updateSeekBar();
   },
 };
