@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <title>Ljudio - Where sound meets the eye</title>
-  <script src="https://www.youtube.com/iframe_api"></script>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Material+Icons">
 </head>
 
@@ -19,18 +18,4 @@
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
-
-<script>
-  function onYouTubeIframeAPIReady() {
-    window.player = new YT.Player('yt-player', {
-      height: '640',
-      width: '480',
-      playerVars: {
-        controls: 0,
-        showInfo: 0
-      }
-    });
-  }
-</script>
-
 </html>

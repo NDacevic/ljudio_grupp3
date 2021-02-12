@@ -60,9 +60,6 @@ export default new Vuex.Store({
     getSearchContent(state) {
       return state.searchResults;
     },
-    getCurrentSong(state) {
-      return state.currentSong;
-    },
     getCenterComponentForHome(state) {
       return state.componentToRenderInHomeCenter;
     },

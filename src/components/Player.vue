@@ -42,8 +42,22 @@
 export default {
   name: "Player",
   methods: {
+    initYoutube() {
+      window.player = new window.YT.Player("yt-player", {
+        height: "640",
+        width: "480",
+        playerVars: {
+          controls: 0,
+          showInfo: 0,
+        },
+      });
+      window.player.addEventListener("onStateChanged", this.playerStateChanged);
+    },
+    playerStateChanged(){
+      console.log("YOOOOOO!");
+    },
     playPrev() {
-      if (this.songProgress < 2) {
+      if (this.songProgress > 2) {
         window.player.seekTo(0, true);
         this.songProgress = 0;
       }
@@ -71,9 +85,11 @@ export default {
     updateSeekBar() {
       setInterval(
         function() {
-          if (window.player.getPlayerState() > 0) {
-            this.songDuration = window.player.getDuration();
-            this.songProgress = window.player.getCurrentTime();
+          if (window.player != null) {
+            if (window.player.getPlayerState() > 0) {
+              this.songDuration = window.player.getDuration();
+              this.songProgress = window.player.getCurrentTime();
+            }
           }
         }.bind(this),
         1000
@@ -109,11 +125,11 @@ export default {
       },
     },
     currentSong() {
-      console.log(this.$store.state.currentSong.thumbnails);
       return this.$store.state.currentSong;
     },
   },
   mounted() {
+    this.initYoutube();
     this.updateSeekBar();
   },
 };
