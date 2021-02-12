@@ -21,7 +21,7 @@ export default new Vuex.Store({
     },
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
-    },
+    }
   },
   actions: {
     async setSongToPlay({ commit }, song) {

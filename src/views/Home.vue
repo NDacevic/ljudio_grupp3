@@ -23,13 +23,16 @@
 </template>
 
 <script>
+
 import Search from "../components/Search";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
 
+
 export default {
   name: "Home",
   components: {
+
     Search,
     Player,
     Queue
@@ -38,6 +41,7 @@ export default {
     getComponentToRenderInCenter() {
       return this.$store.getters.getCenterComponentForHome;
     }
+
   }
 }
 </script>

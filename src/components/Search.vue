@@ -11,7 +11,7 @@
      <div id="searchResultsContainer" v-if="this.searchHasBeenPerformed===true">
         <div class="mediaContainer" v-for="(media, index) in getSearchContent" 
           :key="index">
-          <button class="listButton" v-if="media.type === 'song'" @dblclick="setSongToPlay(media)">
+          <button @contextmenu.prevent.stop="showOptionsOnClick($event,media)" class="listButton" v-if="media.type === 'song'" @dblclick="setSongToPlay(media)">
             <p>{{media.name}} {{media.duration}} {{media.album.name}}</p>
           </button>
           <button class="listButton" v-if="media.type === 'album'">
@@ -25,13 +25,32 @@
           </button>
         </div>
       </div>
+      <OptionsMenu
+       :elementId="'myUniqueId'"
+       :ref="'OptionsMenu'"
+       @option-clicked="setOption"
+      />
   </div>
+  
 </template>
 
 <script>
+let song= {}
+import OptionsMenu from "../components/OptionsMenu"
 
 export default {
   name: "Search",
+
+  data() {
+return {
+      searchString: "",
+      mediaType: "songs",
+      searchHasBeenPerformed: false,
+    }
+  },
+  components: {
+    OptionsMenu
+  },
   methods: {
     getMedia(){
       this.$store.dispatch('getSearchResults', {media: this.mediaType, searchString: this.searchString})
@@ -43,21 +62,44 @@ export default {
       this.searchHasBeenPerformed=true;
     },
     setSongToPlay(media) {
+      console.log(media.videoId)
+      this.$store.commit("setSongToPlay", media);
       this.$store.dispatch("setSongToPlay", media);
-    }
+    },
+    showOptionsOnClick (event,media) {
+    
+      song = media
+      this.$refs.OptionsMenu.showMenu(event)
+    },
+    setOption (event) { 
+
+
+      
+      if(event.option.slug=='queue')
+      {
+        this.queuedTracks.push(song)
+      }
+      if(event.option.slug=='add')
+      {
+        //Add to playlist
+      }
+    },
   },
+      
   computed: {
     getSearchContent() {
       return this.$store.getters.getSearchContent;
+    },
+        queuedTracks: {
+        get() {
+            return this.$store.getters.getQueuedTracks;
+        },
+        set(newQueue) {
+            this.$store.commit('updateQueue', newQueue);
+        }
     }
+    
   },
-  data() {
-    return {
-      searchString: "",
-      mediaType: "songs",
-      searchHasBeenPerformed: false,
-    }
-  }
 }
 </script>
 
