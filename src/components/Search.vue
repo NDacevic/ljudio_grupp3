@@ -1,6 +1,5 @@
 <template>
   <div id="searchComponent">
-    <div id="yt-player" style="display:none"></div>
     <input
       id="searchbox"
       type="text"

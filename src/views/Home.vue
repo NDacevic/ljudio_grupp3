@@ -5,10 +5,11 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <Search v-if="renderCenterComponent==='search'" />
-      <AlbumContent v-if="renderCenterComponent==='album'" />
-      <ArtistContent v-if="renderCenterComponent==='artist'" />
-      <PlaylistContent v-if="renderCenterComponent==='playlist'" />
+      <Search v-if="renderCenterComponent === 'search'" />
+      <AlbumContent v-if="renderCenterComponent === 'album'" />
+      <ArtistContent v-if="renderCenterComponent === 'artist'" />
+      <PlaylistContent v-if="renderCenterComponent === 'playlist'" />
+      <div id="yt-player" style="display:none"></div>
     </div>
     <div class="rightBarTop">
       <Queue />
@@ -25,7 +26,6 @@
 </template>
 
 <script>
-
 import Search from "../components/Search";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
@@ -37,21 +37,19 @@ import PlaylistContent from "../components/PlaylistContent";
 export default {
   name: "Home",
   components: {
-
     Search,
     Player,
     Queue,
     AlbumContent,
     ArtistContent,
-    PlaylistContent
+    PlaylistContent,
   },
   computed: {
     renderCenterComponent() {
       return this.$store.getters.getCenterComponentForHome;
-    }
-
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

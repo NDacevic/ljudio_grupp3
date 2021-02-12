@@ -22,15 +22,15 @@ export default new Vuex.Store({
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
     },
+    setComponentToRenderInHomeCenter(state, componentToRender) {
+      state.componentToRenderInHomeCenter = componentToRender;
+    },
   },
   actions: {
     async setSongToPlay({ commit }, song) {
       window.player.loadVideoById(song.videoId);
       window.player.playVideo();
       commit("playSong", song);
-    },
-    setComponentToRenderInHomeCenter(state, componentToRender) {
-      state.componentToRenderInHomeCenter = componentToRender;
     },
     async getSearchResults({ commit }, searchParameters) {
       let response;
