@@ -38,7 +38,16 @@ export default new Vuex.Store({
       let response = await fetch(`/api/getplaylist/${id}`);
       const playlists = await response.json();
       commit("setPlaylistList", playlists);
-    }
+    },
+    /*async unfollowPlaylist({commit}, playlistId) {
+      let id =5;
+      let response = await fetch(`/api/unfollowPlaylist/${id}/${playlistId}`,{
+      method: 'delete' 
+      });
+      
+      const result = await response.json(); 
+      commit("setPlaylistList")?
+    }*/
   },
   getters: {
     getSearchContent(state) {

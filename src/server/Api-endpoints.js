@@ -92,6 +92,35 @@ module.exports = (app, db) => {
     response.json(data.recordset)
   })*/
 
+ // unfollow/delete from userplaylist
+ app.delete("/api/unfollowPlaylist/:id/:playlistId", async (request, response) => {
+  // check if user exists before writing
+  /*if(!request.session.user){
+    response.status(403) // forbidden
+    response.json({error:'not logged in'})
+    return
+  }*/
+  let result = await db.pool.request()
+    .input('id', db.Int, request.params.id)
+    .input('playlistId', db.Int, request.params.playlistId)
+    .query("DELETE FROM [UserPlaylist] WHERE UserId = @id AND PlaylistId = @playlistId")
+  response.json(result)
+})
+
+ // delete from playlist with ownerId
+ app.delete("/api/deleteplaylist/:id/:playlistId", async (request, response) => {
+  // check if user exists before writing
+  /*if(!request.session.user){
+    response.status(403) // forbidden
+    response.json({error:'not logged in'})
+    return
+  }*/
+  let result = await db.pool.request()
+    .input('id', db.Int, request.params.id)
+    .input('playlistId', db.Int, request.params.playlistId)
+    .query("DELETE FROM [Playlist] WHERE OwnerId = @id AND PlaylistId = @playlistId")
+  response.json(result)
+})
 
   // public get another table (happens to be a left joined view)
   app.get("/api/examples_with_colors", async (request, response) => {

@@ -8,13 +8,14 @@
     >
       <div class="listItem">
         <p>{{ playlist.PlaylistName}}</p>
+        <p>{{ playlist.PlaylistId}}</p>
         <button
           v-if="playlist.OwnerId === login.userId"
-          @click="removePlaylist"
+          @click="removePlaylist(playlist.PlaylistId)"
         >
           Delete
         </button>
-        <button v-else @click="unfollowPlaylist">Unfollow</button>
+        <button v-else @click="unfollowPlaylist(playlist.PlaylistId)">Unfollow</button>
       </div>
     </li>
   </div>
@@ -51,18 +52,19 @@ export default {
     }
   },
   methods: {
-    goToPlaylist(/*index*/) {
+    goToPlaylist() {
       //rendera playlistcomponent
     },
-    unfollowPlaylist() {
+    unfollowPlaylist(id) {
       //fetch ta bort playlist från UserPlaylist i db
+      this.$store.dispatch("unfollowPlaylist", id) //commit?
     },
-    removePlaylist() {
-      //fetch ta bort playlist helt eller bara i UserPlaylist i db?
+    removePlaylist(id) {
+      //fetch ta bort playlist i playlist och userplaylist
+      this.$store.dispatch("removePlaylist", id) //commit?
     },
   },
   mounted(){
-      console.log("play")
       this.$store.dispatch("getPlaylists")
   }
 };
