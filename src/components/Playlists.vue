@@ -4,18 +4,18 @@
     <li
       v-for="(playlist, index) in getPlaylists"
       :key="index"
-      @click="goToPlaylist(index)"
+      v-on:click="goToPlaylist(index)"
     >
       <div class="listItem">
         <p>{{ playlist.PlaylistName}}</p>
         <p>{{ playlist.PlaylistId}}</p>
         <button
           v-if="playlist.OwnerId === login.userId"
-          @click="removePlaylist(playlist.PlaylistId)"
+          v-on:click="deletePlaylist(playlist.PlaylistId)"
         >
           Delete
         </button>
-        <button v-else @click="unfollowPlaylist(playlist.PlaylistId)">Unfollow</button>
+        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)">Unfollow</button>
       </div>
     </li>
   </div>
@@ -27,18 +27,6 @@ export default {
   components: {},
   data() {
     return {
-      playlistList: [
-        {
-          id: 1,
-          title: "Pop",
-          ownerId: "1",
-        },
-        {
-          id: 2,
-          title: "Lounge",
-          ownerId: "1",
-        },
-      ],
       login: [
         {
           userId: 5,
@@ -59,9 +47,9 @@ export default {
       //fetch ta bort playlist från UserPlaylist i db
       this.$store.dispatch("unfollowPlaylist", id) //commit?
     },
-    removePlaylist(id) {
+    deletePlaylist(id) {
       //fetch ta bort playlist i playlist och userplaylist
-      this.$store.dispatch("removePlaylist", id) //commit?
+      this.$store.dispatch("deletePlaylist", id) //commit?
     },
   },
   mounted(){

@@ -54,15 +54,20 @@ export default new Vuex.Store({
       const playlists = await response.json();
       commit("setPlaylistList", playlists);
     },
-    /*async unfollowPlaylist({commit}, playlistId) {
+    async unfollowPlaylist({dispatch}, playlistId) {
       let id =5;
-      let response = await fetch(`/api/unfollowPlaylist/${id}/${playlistId}`,{
+      let response = await fetch(`/api/unfollowpPlaylist/${id}/${playlistId}`,{
       method: 'delete' 
-      });
-      
-      const result = await response.json(); 
-      commit("setPlaylistList")?
-    }*/
+      });     
+    await response.json(); 
+    dispatch("getPlaylists")
+    },
+    async deletePlaylist(playlistId) {
+      let response = await fetch(`/api/deletePlaylist/${playlistId}`,{
+        method: 'delete' 
+        });
+      await response.json();
+    }
   },
   getters: {
     getSearchContent(state) {

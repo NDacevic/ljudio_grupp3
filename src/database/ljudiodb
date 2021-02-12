@@ -2,6 +2,6 @@
 
 select * from [UserPlaylist]
 
-insert into [UserPlaylist](UserId, PlaylistId) values (5, 2)
+insert into [UserPlaylist](UserId, PlaylistId) values (5, 4)
 
 select * from [Playlist] where (OwnerId = 5)*/
