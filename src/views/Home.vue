@@ -5,8 +5,11 @@
       <!-- Komponent 1 -->
     </div>
     <div class="centerContent">
-      <Search />
-      <!-- Komponent 2 -->
+      <Search v-if="renderCenterComponent === 'search'" />
+      <AlbumContent v-if="renderCenterComponent === 'album'" />
+      <ArtistContent v-if="renderCenterComponent === 'artist'" />
+      <PlaylistContent v-if="renderCenterComponent === 'playlist'" />
+      <div id="yt-player" style="display:none"></div>
     </div>
     <div class="rightBarTop">
       <Queue />
@@ -23,27 +26,30 @@
 </template>
 
 <script>
-
 import Search from "../components/Search";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
 
+import AlbumContent from "../components/AlbumContent";
+import ArtistContent from "../components/ArtistContent";
+import PlaylistContent from "../components/PlaylistContent";
 
 export default {
   name: "Home",
   components: {
-
     Search,
     Player,
-    Queue
+    Queue,
+    AlbumContent,
+    ArtistContent,
+    PlaylistContent,
   },
   computed: {
-    getComponentToRenderInCenter() {
+    renderCenterComponent() {
       return this.$store.getters.getCenterComponentForHome;
-    }
-
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

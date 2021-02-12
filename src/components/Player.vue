@@ -1,7 +1,9 @@
 <template>
   <div class="player">
     <div class="thumbnail-container">
-      <p v-if="currentSong.artist != undefined">{{ currentSong.artist.name +" - " + currentSong.name }}</p>
+      <p v-if="currentSong.artist != undefined">
+        {{ currentSong.artist.name + " - " + currentSong.name }}
+      </p>
       <img
         v-if="currentSong.thumbnails != undefined"
         :src="currentSong.thumbnails[1].url"
