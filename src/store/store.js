@@ -20,6 +20,7 @@ export default new Vuex.Store({
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
     }
+
   },
   actions: {
     async getSearchResults({commit}, payload) {

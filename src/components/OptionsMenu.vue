@@ -32,8 +32,7 @@ export default {
     },
   },
   data () {
-    let optionsMenu = this.getoption()
-      
+    let optionsMenu = this.getoption()    
     return {
       optionsMenu,
       menuWidth: null,

@@ -10,7 +10,7 @@
      <div id="searchResultsContainer" v-if="this.searchHasBeenPerformed===true">
         <div class="mediaContainer" v-for="(media, index) in getSearchContent" 
           :key="index">
-          <button class="listButton" v-if="media.type === 'song'" @click="setSongToPlay(media)">
+          <button @contextmenu.prevent.stop="showOptionsOnClick($event,media)" class="listButton" v-if="media.type === 'song'" @click="setSongToPlay(media)">
             <p>{{media.name}} {{media.duration}} {{media.album.name}}</p>
           </button>
           <button class="listButton" v-if="media.type === 'album'">
@@ -27,14 +27,14 @@
       <OptionsMenu
        :elementId="'myUniqueId'"
        :ref="'OptionsMenu'"
-       @option-clicked="optionClicked1"
+       @option-clicked="setOption"
       />
   </div>
   
 </template>
 
 <script>
-
+let song= {}
 import OptionsMenu from "../components/OptionsMenu"
 
 export default {
@@ -64,19 +64,44 @@ return {
       console.log(media.videoId)
       this.$store.commit("setSongToPlay", media);
     },
-    showMenuOnClick (event) {
-    this.$refs.OptionsMenu.showMenu(event)
-        },
-    optionClicked1 (event) {
-        alert("hej")
-      window.alert(JSON.stringify(event))
-        },
+    showOptionsOnClick (event,media) {
+    
+      song = media
+      this.$refs.OptionsMenu.showMenu(event)
+    },
+    setOption (event) { 
+
+      let artist = song.artist.name;
+      let songName = song.name;
+      let songDuration = song.duration;
+      
+      if(event.option.slug=='queue')
+      {
+        this.queuedTracks.push({name:songName,artist:artist,duration:songDuration})
+      }
+      if(event.option.slug=='add')
+      {
+        //Add to playlist
+      }
+
+      alert(JSON.stringify(event))  
+
+    },
   },
       
   computed: {
     getSearchContent() {
       return this.$store.getters.getSearchContent;
+    },
+        queuedTracks: {
+        get() {
+            return this.$store.getters.getQueuedTracks;
+        },
+        set(newQueue) {
+            this.$store.commit('updateQueue', newQueue);
+        }
     }
+    
   },
 }
 </script>
