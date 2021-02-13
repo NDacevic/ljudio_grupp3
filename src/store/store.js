@@ -14,7 +14,7 @@ export default new Vuex.Store({
     searchHasBeenPerformed: false, //Used to render search headers (or not)
     selectedArtistBrowseId: "",
     selectedArtist: {},
-    selectedAlbumBrowseId: ""
+    selectedAlbumBrowseId: "",
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -25,6 +25,9 @@ export default new Vuex.Store({
     },
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
+    },
+    removeTopFromQueue(state) {
+      state.queuedTracks.shift();
     },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
@@ -40,7 +43,7 @@ export default new Vuex.Store({
     },
     setSelectedAlbumBrowseId(state, browseId) {
       state.selectedAlbumBrowseId = browseId;
-    }
+    },
   },
   actions: {
     async setSongToPlay({ commit }, song) {
@@ -83,9 +86,9 @@ export default new Vuex.Store({
       commit("setSelectedArtist", {
         name: artist.name,
         artist: artist,
-        albums: artist.products.albums.content
+        albums: artist.products.albums.content,
       });
-    }
+    },
   },
   getters: {
     getSearchContent(state) {
@@ -108,7 +111,7 @@ export default new Vuex.Store({
     },
     getSelectedAlbumBrowseId(state) {
       return state.selectedAlbumBrowseId;
-    }
+    },
   },
   modules: {},
 });
