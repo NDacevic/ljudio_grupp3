@@ -7,7 +7,7 @@
       />
     </div>
     <section class="controls-container">
-      <div class="controls-container-seekbar">
+      <section class="controls-container-seekbar">
         <p v-if="currentSong.artist == undefined"></p>
         <p v-if="currentSong.artist != undefined">
           {{ currentSong.artist.name + " - " + currentSong.name }}
@@ -19,8 +19,8 @@
           v-on:click="playFromTime"
           v-bind:value="songProgress"
         />
-      </div>
-      <div class="controls-container-buttons">
+      </section>
+      <section class="controls-container-buttons">
         <figure v-on:click="playPrev()">
           <i class="material-icons-round">skip_previous</i>
         </figure>
@@ -32,7 +32,7 @@
             <i class="material-icons-round">pause</i>
           </figure>
         </div>
-        <figure v-on:click="playNext()">
+        <figure :class="{active: this.$store.getters.getQueuedTracksLength < 1}" v-on:click="playNext()">
           <i class="material-icons-round">skip_next</i>
         </figure>
         <figure v-on:click="showPlayer()">
@@ -45,11 +45,7 @@
               <i class="material-icons-round">volume_up</i>
             </figure>
             <figure v-if="muted" v-on:click="playerMute">
-<<<<<<< HEAD
               <i class="material-icons-round">volume_off</i>
-=======
-              <md-icon class="md-size-2x">volume_off</md-icon>
->>>>>>> 2267bf8... when song finished playing it continues from the top of the queue
             </figure>
           </div>
           <input
@@ -60,7 +56,7 @@
             @mouseup="setVolume"
           />
         </div>
-      </div>
+      </section>
     </section>
   </div>
 </template>
@@ -81,10 +77,19 @@ export default {
     pause() {
       window.player.pauseVideo();
     },
-    playNext() {},
+    playNext() {
+      let media;
+      if (this.$store.getters.getQueuedTracks.length > 0) {
+        media = this.$store.state.queuedTracks[0];
+        this.$store.dispatch("setSongToPlay", media);
+        this.$store.commit("removeTopFromQueue");
+        return true;
+      } else {
+        return false;
+      }
+    },
     showPlayer() {
       let player = document.getElementById("yt-player");
-
       if (player.style.display == "none") {
         player.style.display = "block";
       } else {
@@ -142,21 +147,16 @@ export default {
           2 – paused
           3 – buffering
           5 – video cued */
-
-      let media;
       switch (event.data) {
         case -1:
           console.log("unstarted");
           this.songDuration = window.player.getDuration();
+          this.playing = false;
           break;
         case 0:
           console.log("ended");
-
-          //find the index of the current song in the tracklist;
-          if (this.$store.getters.getQueuedTracks.length > 0) {
-            media = this.$store.state.queuedTracks[0];
-            this.$store.dispatch("setSongToPlay", media);
-            this.$store.commit("removeTopFromQueue");
+          if (!this.playNext()) {
+            window.player.stopVideo();
           }
           break;
         case 1:

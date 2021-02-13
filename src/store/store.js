@@ -81,6 +81,9 @@ export default new Vuex.Store({
     },
     getSearchHasBeenPerformed(state) {
       return state.searchHasBeenPerformed;
+    },
+    getQueuedTracksLength(state){
+      return state.queuedTracks.length
     }
   },
   modules: {},
