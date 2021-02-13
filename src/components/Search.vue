@@ -318,10 +318,6 @@ export default {
   button {
     color: rgb(196, 196, 196);
     font-size: 20px;
-    font: bolder;
-    &:focus {
-      color: #448aff;
-    }
   }
 
   #searchResultsContainer {
