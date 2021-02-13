@@ -11,6 +11,7 @@ export default new Vuex.Store({
     prevSong: {},
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
+    searchHasBeenPerformed: false //Used to render search headers (or not)
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
+    },
+    setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
+      state.searchHasBeenPerformed = searchHasBeenPerformed;
     },
   },
   actions: {
@@ -72,6 +76,9 @@ export default new Vuex.Store({
     getQueuedTracks(state) {
       return state.queuedTracks;
     },
+    getSearchHasBeenPerformed(state) {
+      return state.searchHasBeenPerformed;
+    }
   },
   modules: {},
 });
