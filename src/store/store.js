@@ -100,6 +100,9 @@ export default new Vuex.Store({
     getQueuedTracks(state) {
       return state.queuedTracks;
     },
+    getQueuedTracksLength(state) {
+      return state.queuedTracks.length;
+    },
     getSearchHasBeenPerformed(state) {
       return state.searchHasBeenPerformed;
     },

@@ -77,3 +77,11 @@
     height: 200px;
   }
 }
+
+.active > i{
+  color:rgb(58, 58, 58);
+
+  &:hover{
+    color:rgb(58, 58, 58) !important;
+  }
+}

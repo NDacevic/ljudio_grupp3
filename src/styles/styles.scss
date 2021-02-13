@@ -19,17 +19,10 @@
 }
 
 .centerContent {
+  position: relative;
   display: flex;
   grid-row: 1 / span 2;
 }
-
-
-
-.centerContent {
-  position: relative;
-}
-
-
 
 #yt-player {
   position: absolute;
