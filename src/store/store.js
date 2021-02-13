@@ -29,6 +29,9 @@ export default new Vuex.Store({
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
     },
+    removeTopFromQueue(state){
+      state.queuedTracks.shift();
+    }
   },
   actions: {
     async setSongToPlay({ commit }, song) {

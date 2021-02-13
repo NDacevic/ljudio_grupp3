@@ -45,7 +45,11 @@
               <i class="material-icons-round">volume_up</i>
             </figure>
             <figure v-if="muted" v-on:click="playerMute">
+<<<<<<< HEAD
               <i class="material-icons-round">volume_off</i>
+=======
+              <md-icon class="md-size-2x">volume_off</md-icon>
+>>>>>>> 2267bf8... when song finished playing it continues from the top of the queue
             </figure>
           </div>
           <input
@@ -138,6 +142,8 @@ export default {
           2 – paused
           3 – buffering
           5 – video cued */
+
+      let media;
       switch (event.data) {
         case -1:
           console.log("unstarted");
@@ -145,7 +151,13 @@ export default {
           break;
         case 0:
           console.log("ended");
-          //load next song in playlist
+
+          //find the index of the current song in the tracklist;
+          if (this.$store.getters.getQueuedTracks.length > 0) {
+            media = this.$store.state.queuedTracks[0];
+            this.$store.dispatch("setSongToPlay", media);
+            this.$store.commit("removeTopFromQueue");
+          }
           break;
         case 1:
           console.log("playing");
@@ -168,7 +180,7 @@ export default {
       updateTrackInterval: Object,
       volume: 100,
       playing: false,
-      muted:false
+      muted: false,
     };
   },
   computed: {
