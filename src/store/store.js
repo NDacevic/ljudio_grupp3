@@ -11,6 +11,7 @@ export default new Vuex.Store({
     prevSong: {},
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
+    searchHasBeenPerformed: false //Used to render search headers (or not)
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
+    setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
+      state.searchHasBeenPerformed = searchHasBeenPerformed;
+    },
   },
   actions: {
     async setSongToPlay({ commit }, song) {
@@ -36,7 +40,9 @@ export default new Vuex.Store({
       let response;
       if (searchParameters.searchMedia === "playlists") {
         //Todo: Create endpoint when there are playlists available
-        response = await fetch("our own endpoint towards playlists-table");
+        response = await fetch(
+          `/api/playlist/${searchParameters.searchString}`
+        );
       } else {
         response = await fetch(
           `/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`
@@ -53,7 +59,11 @@ export default new Vuex.Store({
           }
         }
       }
-      commit("setSearchResults", searchResults.content);
+      if (searchParameters.searchMedia === "playlists") {
+        commit("setSearchResults", searchResults);
+      } else {
+        commit("setSearchResults", searchResults.content);
+      }
     },
   },
   getters: {
@@ -66,6 +76,9 @@ export default new Vuex.Store({
     getQueuedTracks(state) {
       return state.queuedTracks;
     },
+    getSearchHasBeenPerformed(state) {
+      return state.searchHasBeenPerformed;
+    }
   },
   modules: {},
 });

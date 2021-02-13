@@ -59,8 +59,17 @@ module.exports = (app, db) => {
     } )
   })
 
+  // search for playlists
+  app.get('/api/playlist/:searchString', async (request, response) => {
+    let data = await db.pool.request()
+      .input('searchString', db.NVarChar(db.MAX), request.params.searchString)
+      .query("SELECT * FROM [Playlist] WHERE PlaylistName LIKE '%' + @searchString + '%'")
+    data = data.recordset;
+    response.json(data)
+  })
+  
 
-  // OBS!!!! ALL BELOW ARE Example routes
+  // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************
 
   // public get one table row
   app.get("/api/examples/:id", async (request, response) => {
@@ -125,6 +134,5 @@ module.exports = (app, db) => {
       .query("DELETE FROM [TABLE] WHERE id = @id")
     response.json(result)
   })
-
 
 }

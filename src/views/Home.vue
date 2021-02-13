@@ -68,7 +68,7 @@ export default {
 
 .centerContent {
   display: flex;
-  background-color: rgb(0, 0, 0);
+  background-color:rgb(27, 27, 27);
   grid-row: 1 / span 2;
 }
 
