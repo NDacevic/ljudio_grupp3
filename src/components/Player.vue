@@ -22,30 +22,30 @@
       </div>
       <div class="controls-container-buttons">
         <figure v-on:click="playPrev()">
-          <md-icon class="md-size-2x">skip_previous</md-icon>
+          <i class="material-icons-round">skip_previous</i>
         </figure>
         <div class="playPause">
           <figure v-if="!playing" v-on:click="play()">
-            <md-icon class="md-size-2x">play_arrow</md-icon>
+            <i class="material-icons-round">play_arrow</i>
           </figure>
           <figure v-if="playing" v-on:click="pause()">
-            <md-icon class="md-size-2x">pause</md-icon>
+            <i class="material-icons-round">pause</i>
           </figure>
         </div>
         <figure v-on:click="playNext()">
-          <md-icon class="md-size-2x">skip_next</md-icon>
+          <i class="material-icons-round">skip_next</i>
         </figure>
         <figure v-on:click="showPlayer()">
-          <md-icon class="md-size-2x">music_video</md-icon>
+          <i class="material-icons-round">music_video</i>
         </figure>
         <!--Volume control-->
         <div class="volume-control">
           <div class="mutePlayer-container">
             <figure v-if="!muted" v-on:click="playerMute">
-              <md-icon class="md-size-2x">volume_up</md-icon>
+              <i class="material-icons-round">volume_up</i>
             </figure>
             <figure v-if="muted" v-on:click="playerMute">
-              <md-icon  class="md-size-2x">volume_off</md-icon>
+              <i class="material-icons-round">volume_off</i>
             </figure>
           </div>
           <input

@@ -79,30 +79,26 @@ export default {
   flex-direction: column;
   width: 100%;
 }
+
 .queueHeader {
-  background: rgb(0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: rgb(255, 255, 255)
+  color: rgb(255, 255, 255);
+  padding:10px
 }
+
 tbody > div {
   display: flex;
   flex-direction: column;
 }
 tr {
   display: flex;
-  color: white;
-  background-color: black;
 }
 td {
   flex-grow: 1;
 }
 .md-button {
   background-color: rgba(255, 255, 255, 0.822);
-}
-.emptyQueueHeader {
-  background-color: black;
-  color: white;
 }
 </style>

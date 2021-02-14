@@ -3,6 +3,79 @@
   margin: 0;
   font-family: $mainFont;
   font-weight: 500;
+  background-color: $color-primary-4;
+  color: $mainFontColor;
+}
+
+.homeContainer {
+  display: grid;
+  grid-template-columns: 200px auto 400px;
+  grid-template-rows: 163px 600px auto;
+  height: 100%;
+}
+
+.leftBar {
+  /* @TODO: Remove all colors */
+  grid-row: 1 / span 2;
+}
+
+.centerContent {
+  display: flex;
+  grid-row: 1 / span 2;
+}
+
+.rightBar {
+  grid-row: 1 / span 3;
+  border-left: 3px solid $color-primary-0;
+  background-color: $color-primary-3;
+
+  .rightBarTop {
+    display: flex;
+    min-height: 50%;
+  }
+
+  .rightBarBottom {
+    display: flex;
+    flex-direction: column;
+    min-height: 50%;
+  }
+
+  .queueContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .queueHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+  }
+
+  tbody {
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  tr {
+    display: flex;
+  }
+  td {
+    flex-grow: 1;
+  }
+  .md-button {
+    background-color: rgba(255, 255, 255, 0.822);
+    &.md-theme-default.md-raised:not([disabled]).md-accent {
+      background-color: transparent;
+    }
+  }
+}
+
+.rightBar *{
+  background-color:inherit !important;
 }
 
 .centerContent {
@@ -12,7 +85,7 @@
 .bottomBar {
   background-color: rgb(4, 179, 19);
   grid-row: 3;
-  grid-column: 1 / span 3;
+  grid-column: 1 / span 2;
   min-height: 20vh;
 
   .player {
@@ -25,8 +98,7 @@
     }
 
     .controls-container {
-      $test: calc(100% - 600px);
-      width: $test;
+      width: 100%;
       padding: 0 20px;
 
       &-seekbar {
@@ -50,35 +122,35 @@
         padding: 20px;
         & .playPause {
           text-align: center;
-          cursor:pointer;
+          cursor: pointer;
         }
         .volume-control {
           display: flex;
 
-          &.mutePlayer-container{
-            cursor:pointer;
+          & .mutePlayer-container {
+            cursor: pointer;
+            margin-right: 20px;
           }
-          
+
           & > input {
             flex: auto;
           }
         }
 
-        & > figure {
+        & figure {
           cursor: pointer;
           text-align: center;
-        }
 
-        i.md-icon {
-          color: black;
+          & i {
+            font-size: 50px;
+          }
         }
       }
     }
   }
   .thumbnail-container {
     width: 200px;
-    height:200px;
-    background-color:rgb(36, 36, 36);
+    height: 200px;
   }
 }
 
