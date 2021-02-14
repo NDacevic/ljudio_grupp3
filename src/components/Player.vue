@@ -7,7 +7,7 @@
       />
     </div>
     <section class="controls-container">
-      <section class="controls-container-seekbar">
+      <div class="controls-container-seekbar">
         <p v-if="currentSong.artist == undefined"></p>
         <p v-if="currentSong.artist != undefined">
           {{ currentSong.artist.name + " - " + currentSong.name }}
@@ -19,8 +19,8 @@
           v-on:click="playFromTime"
           v-bind:value="songProgress"
         />
-      </section>
-      <section class="controls-container-buttons">
+      </div>
+      <div class="controls-container-buttons">
         <figure v-on:click="playPrev()">
           <i class="material-icons-round">skip_previous</i>
         </figure>
@@ -56,7 +56,7 @@
             @mouseup="setVolume"
           />
         </div>
-      </section>
+      </div>
     </section>
   </div>
 </template>
@@ -77,19 +77,10 @@ export default {
     pause() {
       window.player.pauseVideo();
     },
-    playNext() {
-      let media;
-      if (this.$store.getters.getQueuedTracks.length > 0) {
-        media = this.$store.state.queuedTracks[0];
-        this.$store.dispatch("setSongToPlay", media);
-        this.$store.commit("removeTopFromQueue");
-        return true;
-      } else {
-        return false;
-      }
-    },
+    playNext() {},
     showPlayer() {
       let player = document.getElementById("yt-player");
+
       if (player.style.display == "none") {
         player.style.display = "block";
       } else {
@@ -147,16 +138,21 @@ export default {
           2 – paused
           3 – buffering
           5 – video cued */
+
+      let media;
       switch (event.data) {
         case -1:
           console.log("unstarted");
           this.songDuration = window.player.getDuration();
-          this.playing = false;
           break;
         case 0:
           console.log("ended");
-          if (!this.playNext()) {
-            window.player.stopVideo();
+
+          //find the index of the current song in the tracklist;
+          if (this.$store.getters.getQueuedTracks.length > 0) {
+            media = this.$store.state.queuedTracks[0];
+            this.$store.dispatch("setSongToPlay", media);
+            this.$store.commit("removeTopFromQueue");
           }
           break;
         case 1:
