@@ -1,0 +1,52 @@
+.rightBar {
+    grid-row: 1 / span 3;
+    border-left: 3px solid $color-primary-0;
+    background-color: $color-primary-3;
+  
+    .rightBarTop {
+      display: flex;
+      height: 50%;
+    }
+  
+    .rightBarBottom {
+      display: flex;
+      flex-direction: column;
+      height: 50%;
+    }
+  
+    .queueContainer {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .queueHeader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+  
+    tbody {
+      & > div {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    tr {
+      display: flex;
+    }
+    td {
+      flex-grow: 1;
+    }
+    .md-button {
+      background-color: rgba(255, 255, 255, 0.822);
+      &.md-theme-default.md-raised:not([disabled]).md-accent {
+        background-color: transparent;
+      }
+    }
+  }
+  
+  .rightBar * {
+    background-color: inherit !important;
+  }

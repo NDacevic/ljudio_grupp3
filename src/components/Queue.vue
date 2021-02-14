@@ -3,7 +3,7 @@
     <div class="queueHeader">
       <h1>Queue</h1>
     </div>
-    <md-table v-model="queuedTracks" md-fixed-header>
+    <md-table v-model="queuedTracks" md-fixed-header class="md-scrollbar">
     <h3 class="emptyQueueHeader" v-if="queuedTracks.length === 0">No tracks in queue</h3>
       <draggable
         v-model="queuedTracks"
@@ -72,33 +72,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.queueContainer {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.queueHeader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgb(255, 255, 255);
-  padding:10px
-}
-
-tbody > div {
-  display: flex;
-  flex-direction: column;
-}
-tr {
-  display: flex;
-}
-td {
-  flex-grow: 1;
-}
-.md-button {
-  background-color: rgba(255, 255, 255, 0.822);
-}
-</style>
