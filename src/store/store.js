@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    user:{},
     searchResults: [],
     currentSong: {},
     nextSong: {},
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
+    updateUser(state,newUser) {
+      state.user = newUser;
+    }
   },
   actions: {
     async setSongToPlay({ commit }, song) {
@@ -55,6 +59,12 @@ export default new Vuex.Store({
       }
       commit("setSearchResults", searchResults.content);
     },
+    //  async createUser(user) {
+    //    alert(user.username)
+    //    this.state.user=user;
+    //   let response =  fetch('/api/users',(user, response))
+    //   alert(JSON.stringify(response))
+    // }
   },
   getters: {
     getSearchContent(state) {
@@ -69,6 +79,9 @@ export default new Vuex.Store({
     getQueuedTracks(state) {
       return state.queuedTracks;
     },
+    getUser(state) {
+      return state.user;
+    }
   },
   modules: {},
 });
