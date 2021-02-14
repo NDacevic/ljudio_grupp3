@@ -47,9 +47,8 @@ export default {
       this.queuedTracks.splice(index, 1);
     },
     playTrackAndRemoveFromQueue(index) {
-      window.player.loadVideoById(this.queuedTracks[index].videoId);
-      window.player.playVideo();
-      window.player.setVolume(10);
+      let media = this.queuedTracks[index];
+      this.$store.dispatch("setSongToPlay", media);
       this.queuedTracks.splice(index, 1);
     },
     clearQueue() {
