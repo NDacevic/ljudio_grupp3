@@ -1,14 +1,14 @@
 .bottomBar {
-  background-color: rgb(4, 179, 19);
   grid-row: 3;
   grid-column: 1 / span 2;
   min-height: 20vh;
-
+  border-top: 3px solid $color-primary-0;
+  
   .player {
     display: flex;
-
+    height: 100%;
     img {
-      width: 200px;
+      width: 100%;
       max-width: 200px;
       height: auto;
     }
@@ -74,7 +74,7 @@
   }
   .thumbnail-container {
     width: 200px;
-    height: 200px;
+    height: 100%;
   }
 }
 

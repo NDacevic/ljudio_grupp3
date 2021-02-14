@@ -5,11 +5,17 @@
   font-weight: 500;
   background-color: $color-primary-4;
   color: $mainFontColor;
+  box-sizing: border-box;
 }
+
+#app{
+  height:100vh;
+}
+
 .homeContainer {
   display: grid;
   grid-template-columns: 200px auto 400px;
-  grid-template-rows: 163px 600px auto;
+  grid-template-rows: 20% 60% 20%;
   height: 100%;
 }
 
