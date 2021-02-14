@@ -221,12 +221,16 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
+  background-image: url("../assets/Ljudio_logo_Large.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-position: 50% 75%;
 
   .headers {
     width: 95%;
     display: grid;
     grid-template-columns: 57.5fr 23fr 23fr 13fr;
-    color: rgb(196, 196, 196);
+    // color: rgb(196, 196, 196);
     margin: 20px auto 0 auto;
     border-bottom: 2px white solid;
 
@@ -262,12 +266,12 @@ export default {
     height: 100%;
     text-align: left;
     justify-content: space-between;
-    background-color: rgb(27, 27, 27);
+    // background-color: rgb(27, 27, 27);
     border: none;
 
     & > p {
       font-size: 14px;
-      color: rgb(196, 196, 196);
+      //color: rgb(196, 196, 196);
       margin: auto 0 auto 0;
       &:hover {
         color: royalblue;
@@ -297,7 +301,7 @@ export default {
     border-radius: 50px;
     padding-left: 20px;
     font-size: 20px;
-    color: rgb(51, 51, 51);
+    //color: rgb(51, 51, 51);
 
     &:focus {
       outline: none;
@@ -311,12 +315,12 @@ export default {
 
   #tab-container {
     margin-top: 20px;
-    background-color: rgb(27, 27, 27);
+    //background-color: rgb(27, 27, 27);
     z-index: 0;
   }
 
   button {
-    color: rgb(196, 196, 196);
+    //color: rgb(196, 196, 196);
     font-size: 20px;
   }
 
