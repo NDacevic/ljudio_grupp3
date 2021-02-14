@@ -16,12 +16,11 @@
           :key="track.id"
           @dblclick="playTrackAndRemoveFromQueue(index)"
         >
-          <md-table-cell md-label="Title">{{ track.name }}</md-table-cell>
-          <md-table-cell md-label="Artist">{{ track.artist.name }}</md-table-cell>
+          <md-table-cell md-label="Track"><div>{{ track.name }}</div><div>{{ track.artist.name }}</div></md-table-cell>
           <md-table-cell md-label="Duration">{{ track.duration }}</md-table-cell>
           <md-table-cell class="buttonCell" md-label="">
             <md-button @click="removeFromQueue(index)" class="md-icon-button md-raised md-accent">
-              <md-icon>delete</md-icon>
+              <i class="material-icons-round">delete</i>
             </md-button>
           </md-table-cell>
         </md-table-row>
