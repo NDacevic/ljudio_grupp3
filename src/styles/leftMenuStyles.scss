@@ -27,6 +27,20 @@
   text-align: center;
   margin-left: 10px;
   font-weight: bold;
+
+  
+}
+
+#noNewNotifications {
+  width: 20px;
+  height: min-content;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  margin-left: 10px;
+  font-weight: bold;
+  background-color: gray;
+  border: 1px gray solid;
 }
 
 #searchButton, #logOutButton {

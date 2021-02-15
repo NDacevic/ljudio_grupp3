@@ -68,6 +68,15 @@ module.exports = (app, db) => {
     data = data.recordset;
     response.json(data)
   })
+
+  // search for playlists
+  app.get('/api/notification/:userId', async (request, response) => {
+    let data = await db.pool.request()
+      .input('userId', db.Int, request.params.userId)
+      .query("SELECT * FROM [Notification] WHERE UserId = @searchString")
+    data = data.recordset;
+    response.json(data)
+  })
   
 
   // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************
