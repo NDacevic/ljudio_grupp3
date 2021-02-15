@@ -17,7 +17,8 @@ export default new Vuex.Store({
     selectedArtistBrowseId: "",
     selectedArtist: {},
     selectedAlbumBrowseId: "",
-    selectedAlbum: {}
+    selectedAlbum: {},
+    newNotifications: []
   },
   mutations: {
 
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     },
     setSelectedAlbum(state, album) {
       state.selectedAlbum = album;
+    },
+    setNewNotifications(state, newNotifications) {
+      state.newNotifications = newNotifications;
     }
   },
   actions: {
@@ -140,6 +144,11 @@ export default new Vuex.Store({
       const album = await response.json();
       commit("setSelectedAlbum", album);
     },
+    async getNewNotifications({commit}) {
+      const response = await fetch(`/api/notification/${this.state.user.userId}`);
+      const newNotifications = await response.json();
+      commit("setNewNotifications", newNotifications);
+    }
   },
   getters: {
     getSearchContent(state) {
