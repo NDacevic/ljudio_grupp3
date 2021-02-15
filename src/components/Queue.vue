@@ -18,12 +18,16 @@
           :key="track.id"
           @dblclick="playTrackAndRemoveFromQueue(index)"
         >
-          <md-table-cell md-label="Track"
+          <md-table-cell md-label="Track" v-if="track.type==='song'"
             ><div>{{ track.name }}</div>
             <div>{{ track.artist.name }}</div></md-table-cell
           >
+          <md-table-cell md-label="Track" v-if="track.type==='video'"
+            ><div>{{ track.name }}</div>
+            <div>{{ track.author }}</div></md-table-cell
+          >
           <md-table-cell md-label="Duration">{{
-            track.duration
+            convertMillisecondsToTimeString(track.duration)
           }}</md-table-cell>
           <md-table-cell class="buttonCell" md-label="">
             <md-button
@@ -51,6 +55,16 @@ export default {
     draggable,
   },
   methods: {
+    convertMillisecondsToTimeString(milliseconds) {
+      let seconds = milliseconds / 1000;
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      if (remainingSeconds.toString().length === 1) {
+        return minutes + ":0" + remainingSeconds;
+      } else {
+        return minutes + ":" + remainingSeconds;
+      }
+    },
     setSelectedRow(index) {
       this.selectedIndex = index;
     },

@@ -122,6 +122,7 @@
             <p>{{ media.PlaylistName }}</p>
           </button>
            <button
+            @contextmenu.prevent.stop="showOptionsOnClick($event, media)"
             class="listButton"
             id="videoButton"
             v-if="searchMedia === 'videos'"
@@ -143,7 +144,7 @@
 </template>
 
 <script>
-let song = {};
+let track = {};
 import OptionsMenu from "../components/OptionsMenu";
 
 export default {
@@ -186,12 +187,12 @@ export default {
       }
     },
     showOptionsOnClick(event, media) {
-      song = media;
+      track = media;
       this.$refs.OptionsMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
-        this.queuedTracks.push(song);
+        this.queuedTracks.push(track);
       }
       if (event.option.slug == "add") {
         //Add to playlist
