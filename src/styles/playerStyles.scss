@@ -3,7 +3,7 @@
   grid-column: 1 / span 2;
   min-height: 20vh;
   border-top: 3px solid $color-primary-0;
-  
+
   .player {
     display: flex;
     height: 100%;
@@ -61,10 +61,7 @@
 
           & i {
             font-size: 50px;
-          }
-
-          &:hover {
-            & i {
+            &:hover {
               color: $color-secondary-1-2;
             }
           }
@@ -78,10 +75,10 @@
   }
 }
 
-.active > i{
-  color:rgb(58, 58, 58);
+.active > i {
+  color: rgb(58, 58, 58);
 
-  &:hover{
-    color:rgb(58, 58, 58) !important;
+  &:hover {
+    color: rgb(58, 58, 58) !important;
   }
 }
