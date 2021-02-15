@@ -40,7 +40,7 @@ export default {
   methods: {
     setAlbumBrowseId(album) {
       this.$store.commit("setSelectedAlbumBrowseId", album.browseId);
-      this.$store.commit("setComponentToRenderInHomeCenter", album.type);
+      this.$store.commit("setComponentToRenderInHomeCenter", "album");
     }
   }
 }
