@@ -1,0 +1,51 @@
+#leftMenu {
+  display: grid;
+  grid-template-rows: 1fr 1fr 5fr;
+  height: 100%;
+  border-right: 3px solid $color-primary-0;
+}
+
+#notifications {
+  font-weight: bold;
+  display: flex;
+  width: min-content;
+  border-radius: 20px;
+  padding: 5px;
+  border: 1px white solid;
+  background-color: black;
+  height: min-content;
+  padding: 8px;
+  margin: auto;
+}
+
+#newNotifications {
+  width: 23px;
+  height: min-content;
+  border-radius: 50%;
+  color: white;
+  background-color: red;
+  text-align: center;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+#searchButton, #logOutButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+    margin: 0 10px;
+  width: auto;
+  height: 40px;
+  background-color: black;
+  border-radius: 5px;
+
+  & > p {
+      margin: auto;
+      background-color: black;
+  }
+}
+
+#logOutButton {
+    margin: auto 10px 10px 10px
+}
+
