@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     playSong(track) {
-      this.$store.dispatch('setSongToPlay', track);
+      this.$store.dispatch('setTrackToPlay', track);
     },    
     showOptionsOnClick(event, track) {
       this.selectedTrack = track;

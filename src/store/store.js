@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import router from '../router/index'
+import router from "../router/index";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -10,8 +10,7 @@ export default new Vuex.Store({
     searchResults: [],
     playlists: [],
     currentSong: {},
-    nextSong: {},
-    prevSong: {},
+    trackHistory: [],
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
     searchHasBeenPerformed: false, //Used to render search headers (or not)
@@ -22,7 +21,6 @@ export default new Vuex.Store({
     newNotifications: []
   },
   mutations: {
-
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
     },
@@ -44,12 +42,17 @@ export default new Vuex.Store({
     removeTopFromQueue(state) {
       state.queuedTracks.shift();
     },
+    addTrackToHistory(state, trackToAdd) {
+      state.trackHistory.push(trackToAdd);
+    },
+    addTrackToTopOfQueue(state, trackToAdd) {
+      state.queuedTracks.unshift(trackToAdd);
+    },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
     updateUser(state, newUser) {
       state.user = newUser;
-
     },
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
@@ -71,10 +74,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async setSongToPlay({ commit }, song) {
+    async setTrackToPlay({ commit }, song) {
+      if (
+        this.state.currentSong !== null ||
+        this.state.currentSong !== undefined
+      ) {
+        commit("addTrackToHistory", this.state.currentSong);
+      }
       window.player.loadVideoById(song.videoId);
       window.player.playVideo();
       commit("playSong", song);
+    },
+    async playPrevTrack({ commit, dispatch }) {
+      commit("addTrackToTopOfQueue", this.state.currentSong);
+      dispatch("setTrackToPlay", this.state.getLatestTrackFromHistory);
     },
     async getSearchResults({ commit }, searchParameters) {
       let response;
@@ -130,16 +143,16 @@ export default new Vuex.Store({
       await response.json();
       commit("modifyPlaylist", playlistId)
       },
-     async createUser() {
-      const response = await fetch('/api/users/', {
-        method: 'POST',
+    async createUser() {
+      const response = await fetch("/api/users/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(this.state.user)
+        body: JSON.stringify(this.state.user),
       });
       if (response.status == '200') {
-        alert("User have been created")
+        alert("User has been created")
         router.go()
       }
       else {
@@ -169,21 +182,21 @@ export default new Vuex.Store({
       const response = await fetch('/api/login/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(this.state.user)
+        body: JSON.stringify(this.state.user),
       });
-      if (response.status == '200') {
-        alert("logged in")
-        this.dispatch('checkAuth')
+      if (response.status == "200") {
+        alert("logged in");
+        this.dispatch("checkAuth");
       }
     },
     async checkAuth() {
-      let response = await fetch(`/api/login/`)
-      let data = await response.json()
-      this.state.user = data
-      router.push("/Home")
-     },
+      let response = await fetch(`/api/login/`);
+      let data = await response.json();
+      this.state.user = data;
+      router.push("/Home");
+    },
     async fetchArtistByBrowseId({ commit }, browseId) {
       const response = await fetch(`api/yt/artist/${browseId}`);
       const artist = await response.json();
@@ -219,6 +232,12 @@ export default new Vuex.Store({
     },
     getQueuedTracks(state) {
       return state.queuedTracks;
+    },
+    getLatestTrackFromHistory(state) {
+      return state.trackHistory.shift();
+    },
+    getTrackHistoryLength(state) {
+      return state.trackHistory.length;
     },
     getUser(state) {
       return state.user;

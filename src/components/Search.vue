@@ -201,10 +201,10 @@ export default {
     performActionWhenMediaIsClicked(media) {
       switch (media.type) {
         case "song":
-          this.$store.dispatch("setSongToPlay", media);
+          this.$store.dispatch("setTrackToPlay", media);
           break;
         case "video":
-        this.$store.dispatch("setSongToPlay", media);
+        this.$store.dispatch("setTrackToPlay", media);
         break;
         default:
           //for artist, album and playlist

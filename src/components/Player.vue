@@ -44,7 +44,9 @@
         </div>
       </div>
       <div class="controls-container-buttons">
-        <figure v-on:click="playPrev()">
+        <figure
+        :class="{ active: this.$store.getters.getTrackHistoryLength < 1 }"
+         v-on:click="playPrev()">
           <i class="material-icons-round">skip_previous</i>
         </figure>
         <div class="playPause">
@@ -92,9 +94,9 @@ export default {
   name: "Player",
   methods: {
     playPrev() {
-      if (this.songProgress > 2) {
-        window.player.seekTo(0, true);
-        this.songProgress = 0;
+      console.log(this.$store.getters.getTrackHistoryLength);
+      if(this.$store.state.trackHistory.length > 0){
+        this.$store.dispatch("playPrevTrack");
       }
     },
     play() {
@@ -107,7 +109,7 @@ export default {
       let media;
       if (this.$store.getters.getQueuedTracks.length > 0) {
         media = this.$store.state.queuedTracks[0];
-        this.$store.dispatch("setSongToPlay", media);
+        this.$store.dispatch("setTrackToPlay", media);
         this.$store.commit("removeTopFromQueue");
         return true;
       } else {
