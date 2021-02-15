@@ -121,9 +121,8 @@
     overflow-y: scroll;
     margin: 0 auto;
   }
-  .md-active {
-    & .md-button-content {
-      color: $color-secondary-1-1;
-    }
+
+  .md-button {
+    margin-bottom: 5px;
   }
 }
