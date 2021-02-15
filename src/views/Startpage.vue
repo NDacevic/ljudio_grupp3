@@ -42,16 +42,14 @@ data(){
   },
 methods: {
     loginUser(){
-      alert("logga in")
-       this.$store.commit("updateUser",this.user); //updates user in store
-       this.$store.dispatch("loginUser")
-       
+       this.$store.commit("updateUser",this.user);
+       this.$store.dispatch("loginUser")     
        },
 
     createUser() {
         if(this.user.password==this.confirmPassword)
         {           
-            this.$store.commit("updateUser",this.user); //updates user in store
+            this.$store.commit("updateUser",this.user); 
             this.$store.dispatch("createUser")                
         }      
     },
