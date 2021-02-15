@@ -88,14 +88,12 @@ export default new Vuex.Store({
       }
     },
     async getPlaylists({commit}) {
-      let id =5;
-      let response = await fetch(`/api/getplaylist/${id}`);
+      let response = await fetch(`/api/getplaylist`);
       const playlists = await response.json();
       commit("setPlaylistList", playlists);
     },
     async unfollowPlaylist(playlistId) {
-      let id =5;
-      let response = await fetch(`/api/unfollowpPlaylist/${id}/${playlistId}`,{
+      let response = await fetch(`/api/unfollowpPlaylist/${playlistId}`,{
       method: 'delete' 
       });     
     await response.json(); 

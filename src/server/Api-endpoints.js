@@ -81,9 +81,9 @@ module.exports = (app, db) => {
   })
 
   //public get playlists with userId
-  app.get("/api/getplaylist/:id", async (request, response) => {
+  app.get("/api/getplaylist", async (request, response) => {
     let data = await db.pool.request()
-    .input('id', db.Int, request.params.id)
+    .input('id', db.Int, request.session.user.UserId)
     .query('SELECT [UserPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [UserPlaylist] left join [Playlist] on [UserPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where OwnerId = @id')
     response.json(data.recordset)
   })
@@ -123,7 +123,7 @@ module.exports = (app, db) => {
 })
 
  // delete from userplaylist with userid and playlistid
- app.delete("/api/unfollowpPlaylist/:id/:playlistId", async (request, response) => {
+ app.delete("/api/unfollowpPlaylist/:playlistId", async (request, response) => {
   // check if user exists before writing
   /*if(!request.session.user){
     response.status(403) // forbidden
@@ -131,7 +131,7 @@ module.exports = (app, db) => {
     return
   }*/
   let result = await db.pool.request()
-    .input('id', db.Int, request.params.id)
+    .input('id', db.Int, request.session.user.UserId)
     .input('playlistId', db.Int, request.params.playlistId)
     .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId AND UserId = @id")
   response.json(result)
