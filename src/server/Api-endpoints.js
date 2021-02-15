@@ -160,6 +160,14 @@ module.exports = (app, db) => {
   response.json(result)
 })
 
+//get musicplaylist 
+app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
+  let data = await db.pool.request()
+  .input('playlistId', db.Int, request.params.playlistId)
+  .query('SELECT * FROM [MusicPlaylist] where PlaylistId = @playlistId')
+  response.json(data.recordset)
+})
+
   // public get another table (happens to be a left joined view)
   app.get("/api/examples_with_colors", async (request, response) => {
     let data = await db.pool.request().query('SELECT * FROM [TABLE]')

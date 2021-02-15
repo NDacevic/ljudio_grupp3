@@ -4,7 +4,7 @@
     <li
       v-for="(playlist, index) in getPlaylists"
       :key="index"
-      v-on:click="goToPlaylist(playlist)"
+      v-on:click="goToPlaylist(playlist.PlaylistId)"
     >
       <div class="listItem">
         <p>{{ playlist.PlaylistName }}</p>
@@ -36,9 +36,9 @@ export default {
     }
   },
   methods: {
-    goToPlaylist(playlist) {
-      this.$store.commit("setCurrentPlaylist", playlist);
-      console.log(playlist);
+    goToPlaylist(playlistId) {
+      this.$store.commit("setCurrentPlaylistId", playlistId);
+      console.log(playlistId);
       this.$store.commit("setComponentToRenderInHomeCenter", "playlist");
     },
     unfollowPlaylist(id) {
