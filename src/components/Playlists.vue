@@ -41,6 +41,7 @@ export default {
   methods: {
     goToPlaylist() {
       //rendera playlistcomponent
+      this.$store.commit("setComponentToRenderInHomeCenter", "playlist")
     },
     unfollowPlaylist(id) {
       this.$store.dispatch("unfollowPlaylist", id)
