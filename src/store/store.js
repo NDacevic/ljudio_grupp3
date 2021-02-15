@@ -27,9 +27,9 @@ export default new Vuex.Store({
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
-
     updateUser(state,newUser) {
       state.user = newUser;
+
     },
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
@@ -70,12 +70,45 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
-    //  async createUser(user) {
-    //    alert(user.username)
-    //    this.state.user=user;
-    //   let response =  fetch('/api/users',(user, response))
-    //   alert(JSON.stringify(response))
-    // }
+     async createUser() {
+      const response = await fetch('/api/users/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',         
+        },
+        body: JSON.stringify(this.state.user)
+      });
+     if(response.status=='200')
+        {
+          alert("User have been created")
+          this.$router("/home")
+        }
+      else{
+        alert("Something went wrong, try again")
+      }      
+     },
+     async loginUser(){
+      
+      const response = await fetch('/api/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',         
+        },
+        body: JSON.stringify(this.state.user)
+      });
+      if(response.status=='200')
+      {
+        alert("logged in")
+        this.dispatch('checkAuth')       
+      }
+     },
+     async checkAuth(){
+        
+      let response = await fetch(`/api/login/`)
+      let data = await response.json()
+      this.state.user=data
+      this.$router.push('/Home')
+     }
   },
   getters: {
     getSearchContent(state) {

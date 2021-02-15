@@ -1,6 +1,18 @@
 <template>
   <div>
-    <form class="registerUser" @submit.prevent="createUser">
+     <form class="signInUser">
+      <h3>Login </h3>
+      <label>Username</label>
+      <input v-model="user.username"/>
+      <label>Password</label>
+      <input type="password" v-model="user.password"/>
+      <div>
+        <input class="submit" value="Register" type="submit" @click="register">
+        <input class="submit"  value="Log in" type="submit" @click="loginUser">
+      </div>
+    </form>
+
+    <form class="registerUser">
       <h3>Register user</h3>
       <label>Username</label>
       <input v-model="user.username"/>
@@ -9,8 +21,8 @@
       <label>Confirm password</label>
       <input v-model="confirmPassword" type="password" />
       <div>
-        <button>Cancel</button>
-        <button>Create account</button>
+        <input class="submit" value="Cancel" type="submit" @click="register">
+        <input class="submit"  value="Create account" type="submit" @click="createUser">
       </div>
     </form>
   </div>
@@ -26,15 +38,26 @@ data(){
     };
   },
 methods: {
+    loginUser(){
+      alert("logga in")
+       this.$store.commit("updateUser",this.user); //updates user in store
+       this.$store.dispatch("loginUser") 
+       
+    },
+    register(){
+    alert("regga")
+    },
     createUser() {
         if(this.user.password==this.confirmPassword)
         {
-            alert(JSON.stringify(this.user));
-             this.$store.dispatch("createUser", this.user);          
+           
+            this.$store.commit("updateUser",this.user); //updates user in store
+            this.$store.dispatch("createUser")    
+            
         }      
     },
     validateUsername(){
-        //TODO: Check if username is already taken
+        //TODO: Check if username is already taken  
     }
 }
 }
@@ -43,6 +66,9 @@ methods: {
 </script>
 
 <style scoped>
+.registerUser {
+ display:none
+}
 input {
   border-radius: 5px;
   width: 250px;
