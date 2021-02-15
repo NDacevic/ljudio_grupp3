@@ -2,33 +2,45 @@
   <div class="player">
     <div class="thumbnail-container">
       <img
-        v-if="currentSong.thumbnails !== undefined && currentSong.type==='song'"
+        v-if="
+          currentSong.thumbnails !== undefined && currentSong.type === 'song'
+        "
         :src="currentSong.thumbnails[1].url"
       />
       <img
-        v-if="currentSong.thumbnails !== undefined && currentSong.type==='video'"
+        v-if="
+          currentSong.thumbnails !== undefined && currentSong.type === 'video'
+        "
         :src="currentSong.thumbnails.url"
       />
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
-        <p v-if="currentSong.artist == undefined && currentSong.author == undefined"></p>
-        <p v-if="currentSong.artist != undefined && currentSong.type==='song'">
+        <p
+          v-if="
+            currentSong.artist == undefined && currentSong.author == undefined
+          "
+        ></p>
+        <p
+          v-if="currentSong.artist != undefined && currentSong.type === 'song'"
+        >
           {{ currentSong.artist.name + " - " + currentSong.name }}
         </p>
-        <p v-if="currentSong.author != undefined && currentSong.type==='video'">
+        <p
+          v-if="currentSong.author != undefined && currentSong.type === 'video'"
+        >
           {{ currentSong.author + " - " + currentSong.name }}
         </p>
         <div>
-        <p>{{ convertSecondsToTimeString(this.songProgress)}}</p>
-        <input
-          type="range"
-          min="0"
-          v-bind:max="songDuration"
-          v-on:click="playFromTime"
-          v-bind:value="songProgress"
-        />
-        <p>{{convertSecondsToTimeString(this.songDuration)}}</p>
+          <p>{{ convertSecondsToTimeString(this.songProgress) }}</p>
+          <input
+            type="range"
+            min="0"
+            v-bind:max="songDuration"
+            v-on:click="playFromTime"
+            v-bind:value="songProgress"
+          />
+          <p>{{ convertSecondsToTimeString(this.songDuration) }}</p>
         </div>
       </div>
       <div class="controls-container-buttons">
@@ -187,7 +199,9 @@ export default {
       }
     },
     convertSecondsToTimeString(inputSeconds) {
-      let seconds = Math.floor(inputSeconds)
+      if (isNaN(inputSeconds)) return "0:00";
+      
+      let seconds = Math.floor(inputSeconds);
       let minutes = Math.floor(seconds / 60);
       let remainingSeconds = seconds % 60;
       if (remainingSeconds.toString().length === 1) {
@@ -195,7 +209,7 @@ export default {
       } else {
         return minutes + ":" + remainingSeconds;
       }
-    }
+    },
   },
   data() {
     return {
