@@ -102,7 +102,7 @@ module.exports = (app, db) => {
 
   // send notifications
   app.post("/api/notification", async (request, response) => {
-    let data = await db.pool
+    await db.pool
       .request()
       .input("userId", db.Int, request.body.userId)
       .input("senderName", db.NVarChar, request.body.senderName)
@@ -113,9 +113,6 @@ module.exports = (app, db) => {
       .query(
         "INSERT INTO [Notification] VALUES (@userId, @senderName, @unread, @url, @contentType, @playlistId)"
       );
-    data = data.recordset;
-    console.log(data);
-    response.json(data);
   });
 
   // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************

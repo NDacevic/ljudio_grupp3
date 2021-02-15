@@ -286,7 +286,6 @@ export default new Vuex.Store({
     },
     // eslint-disable-next-line no-unused-vars
     async sendNotification({ commit }, notification) {
-      console.log("notif to send",JSON.stringify(notification));
       const response = await fetch(`api/notification`, {
         method: "POST",
         headers: {
@@ -294,8 +293,12 @@ export default new Vuex.Store({
         },
         body: JSON.stringify(notification),
       });
-      const result = await response.json();
-      console.log(result);
+      const result = await response;
+      if (result.ok) {
+        console.log("notification recrded in db");
+      } else {
+        console.log("ERROR", response.status);
+      }
       //commit("sentNotification",result);
     },
   },
