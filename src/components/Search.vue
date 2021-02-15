@@ -223,8 +223,8 @@ export default {
         //Add to playlist
       } else if (event.option.slug == "share") {
         let notificationToSend = {
-          userId: 5,
-          senderName: "Nebbe",
+          userId: this.$state.user.userId,
+          senderName: this.$state.user.Username,
           unread: true,
           url: track.videoId,
           contentType: track.type,
