@@ -187,6 +187,10 @@ export default {
                 media.type
               );
           break;
+        case "artist":
+          this.$store.commit("setSelectedArtistBrowseId", media.browseId);
+          this.$store.commit("setComponentToRenderInHomeCenter", media.type);
+          break;
       }
     },
   },
