@@ -69,11 +69,11 @@ module.exports = (app, db) => {
     response.json(data)
   })
 
-  // search for playlists
+  // search for new notifications
   app.get('/api/notification/:userId', async (request, response) => {
     let data = await db.pool.request()
       .input('userId', db.Int, request.params.userId)
-      .query("SELECT * FROM [Notification] WHERE UserId = @searchString")
+      .query("SELECT * FROM [Notification] WHERE UserId = @userId AND Unread = 1")
     data = data.recordset;
     response.json(data)
   })
