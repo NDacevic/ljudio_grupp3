@@ -2,12 +2,13 @@
   <div class="playlistContent">
       <h3>Playlist</h3>
     <li
-      v-for="(song, index) in playlist"
+      v-for="(media, index) in playlist"
       :key="index"
-      @dblclick="playSong(song)"
+      @dblclick="playSong(media)"
     >
       <div class="listItem">
-        <p>{{song}}</p>
+            <p>{{ media.name }}</p>
+            <p>{{ media.artist.name }}</p>
       </div>
     </li>
   </div>
