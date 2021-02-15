@@ -1,0 +1,98 @@
+.bottomBar {
+  grid-row: 3;
+  grid-column: 1 / span 2;
+  min-height: 20vh;
+  border-top: 3px solid $color-primary-0;
+
+  .player {
+    display: flex;
+    height: 100%;
+    img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+    }
+
+    .controls-container {
+      width: 100%;
+      padding: 0 20px;
+
+      &-seekbar {
+        & input[type="range"] {
+          width: 100%;
+        }
+
+        & > p {
+          $height: 40px;
+          height: $height;
+          line-height: $height;
+          font-size: 30px;
+        }
+
+        & > div{
+          display: flex;
+
+          & > p{
+            font-size: 20px;
+            width: 100px;
+            padding: 20px;
+          }
+        }
+      }
+
+      &-buttons {
+        display: grid;
+        grid-template-columns: repeat(6, auto);
+        gap: 20px;
+        // position:relative;
+        padding: 10px;
+
+        & .playPause {
+          text-align: center;
+          cursor: pointer;
+        }
+
+        .volume-control {
+          display: flex;
+
+          & .mutePlayer-container {
+            cursor: pointer;
+            margin-right: 20px;
+          }
+
+          & > input {
+            flex: auto;
+          }
+        }
+
+        & figure {
+          cursor: pointer;
+          text-align: center;
+
+          & i {
+            font-size: 50px;
+            &:hover {
+              color: $color-secondary-1-2;
+            }
+          }
+        }
+      }
+    }
+  }
+  .thumbnail-container {
+    width: 180px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: black;
+  }
+}
+
+.active > i {
+  color: rgb(58, 58, 58);
+
+  &:hover {
+    color: rgb(58, 58, 58) !important;
+  }
+}

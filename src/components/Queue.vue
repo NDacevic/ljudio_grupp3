@@ -3,43 +3,68 @@
     <div class="queueHeader">
       <h1>Queue</h1>
     </div>
-    <md-table v-model="queuedTracks" md-fixed-header>
-    <h3 class="emptyQueueHeader" v-if="queuedTracks.length === 0">No tracks in queue</h3>
+    <md-table v-model="queuedTracks" md-fixed-header class="md-scrollbar">
+      <h3 class="emptyQueueHeader" v-if="queuedTracks.length === 0">
+        No tracks in queue
+      </h3>
       <draggable
         v-model="queuedTracks"
-        @start="drag=true" 
-        @end="drag=false"
+        @start="drag = true"
+        @end="drag = false"
       >
         <md-table-row
-          class="listItem" 
-          v-for="(track, index) in queuedTracks" 
+          class="listItem"
+          v-for="(track, index) in queuedTracks"
           :key="track.id"
           @dblclick="playTrackAndRemoveFromQueue(index)"
         >
-          <md-table-cell md-label="Title">{{ track.name }}</md-table-cell>
-          <md-table-cell md-label="Artist">{{ track.artist.name }}</md-table-cell>
-          <md-table-cell md-label="Duration">{{ track.duration }}</md-table-cell>
+          <md-table-cell md-label="Track" v-if="track.type==='song'"
+            ><div>{{ track.name }}</div>
+            <div>{{ track.artist.name }}</div></md-table-cell
+          >
+          <md-table-cell md-label="Track" v-if="track.type==='video'"
+            ><div>{{ track.name }}</div>
+            <div>{{ track.author }}</div></md-table-cell
+          >
+          <md-table-cell md-label="Duration">{{
+            convertMillisecondsToTimeString(track.duration)
+          }}</md-table-cell>
           <md-table-cell class="buttonCell" md-label="">
-            <md-button @click="removeFromQueue(index)" class="md-icon-button md-raised md-accent">
-              <md-icon>delete</md-icon>
+            <md-button
+              @click="removeFromQueue(index)"
+              class="md-icon-button md-raised md-accent"
+            >
+              <i class="material-icons-round">delete</i>
             </md-button>
           </md-table-cell>
         </md-table-row>
       </draggable>
-      <md-button v-if="queuedTracks.length !== 0" @click="clearQueue">Clear Queue</md-button>
+      <md-button v-if="queuedTracks.length !== 0" @click="clearQueue"
+        >Clear Queue</md-button
+      >
     </md-table>
   </div>
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+import draggable from "vuedraggable";
 
 export default {
   name: "Queue",
   components: {
-    draggable
+    draggable,
   },
   methods: {
+    convertMillisecondsToTimeString(milliseconds) {
+      let seconds = milliseconds / 1000;
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      if (remainingSeconds.toString().length === 1) {
+        return minutes + ":0" + remainingSeconds;
+      } else {
+        return minutes + ":" + remainingSeconds;
+      }
+    },
     setSelectedRow(index) {
       this.selectedIndex = index;
     },
@@ -53,56 +78,22 @@ export default {
     },
     clearQueue() {
       this.queuedTracks = [];
-    }
+    },
   },
   computed: {
     queuedTracks: {
-        get() {
-            return this.$store.getters.getQueuedTracks;
-        },
-        set(newQueue) {
-            this.$store.commit('updateQueue', newQueue);
-        }
-    }
+      get() {
+        return this.$store.getters.getQueuedTracks;
+      },
+      set(newQueue) {
+        this.$store.commit("updateQueue", newQueue);
+      },
+    },
   },
   data() {
     return {
-      selectedIndex: null
-    }
-  }
-}
+      selectedIndex: null,
+    };
+  },
+};
 </script>
-
-<style scoped>
-.queueContainer {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-.queueHeader {
-  background: rgb(0, 0, 0);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgb(255, 255, 255)
-}
-tbody > div {
-  display: flex;
-  flex-direction: column;
-}
-tr {
-  display: flex;
-  color: white;
-  background-color: black;
-}
-td {
-  flex-grow: 1;
-}
-.md-button {
-  background-color: rgba(255, 255, 255, 0.822);
-}
-.emptyQueueHeader {
-  background-color: black;
-  color: white;
-}
-</style>

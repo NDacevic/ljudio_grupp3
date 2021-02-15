@@ -2,16 +2,25 @@
   <div class="player">
     <div class="thumbnail-container">
       <img
-        v-if="currentSong.thumbnails != undefined"
+        v-if="currentSong.thumbnails !== undefined && currentSong.type==='song'"
         :src="currentSong.thumbnails[1].url"
+      />
+      <img
+        v-if="currentSong.thumbnails !== undefined && currentSong.type==='video'"
+        :src="currentSong.thumbnails.url"
       />
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
-        <p v-if="currentSong.artist == undefined"></p>
-        <p v-if="currentSong.artist != undefined">
+        <p v-if="currentSong.artist == undefined && currentSong.author == undefined"></p>
+        <p v-if="currentSong.artist != undefined && currentSong.type==='song'">
           {{ currentSong.artist.name + " - " + currentSong.name }}
         </p>
+        <p v-if="currentSong.author != undefined && currentSong.type==='video'">
+          {{ currentSong.author + " - " + currentSong.name }}
+        </p>
+        <div>
+        <p>{{ convertSecondsToTimeString(this.songProgress)}}</p>
         <input
           type="range"
           min="0"
@@ -19,33 +28,38 @@
           v-on:click="playFromTime"
           v-bind:value="songProgress"
         />
+        <p>{{convertSecondsToTimeString(this.songDuration)}}</p>
+        </div>
       </div>
       <div class="controls-container-buttons">
         <figure v-on:click="playPrev()">
-          <md-icon class="md-size-2x">skip_previous</md-icon>
+          <i class="material-icons-round">skip_previous</i>
         </figure>
         <div class="playPause">
           <figure v-if="!playing" v-on:click="play()">
-            <md-icon class="md-size-2x">play_arrow</md-icon>
+            <i class="material-icons-round">play_arrow</i>
           </figure>
           <figure v-if="playing" v-on:click="pause()">
-            <md-icon class="md-size-2x">pause</md-icon>
+            <i class="material-icons-round">pause</i>
           </figure>
         </div>
-        <figure v-on:click="playNext()">
-          <md-icon class="md-size-2x">skip_next</md-icon>
+        <figure
+          :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }"
+          v-on:click="playNext()"
+        >
+          <i class="material-icons-round">skip_next</i>
         </figure>
         <figure v-on:click="showPlayer()">
-          <md-icon class="md-size-2x">music_video</md-icon>
+          <i class="material-icons-round">music_video</i>
         </figure>
         <!--Volume control-->
         <div class="volume-control">
           <div class="mutePlayer-container">
             <figure v-if="!muted" v-on:click="playerMute">
-              <md-icon class="md-size-2x">volume_up</md-icon>
+              <i class="material-icons-round">volume_up</i>
             </figure>
             <figure v-if="muted" v-on:click="playerMute">
-              <md-icon  class="md-size-2x">volume_off</md-icon>
+              <i class="material-icons-round">volume_off</i>
             </figure>
           </div>
           <input
@@ -77,7 +91,17 @@ export default {
     pause() {
       window.player.pauseVideo();
     },
-    playNext() {},
+    playNext() {
+      let media;
+      if (this.$store.getters.getQueuedTracks.length > 0) {
+        media = this.$store.state.queuedTracks[0];
+        this.$store.dispatch("setSongToPlay", media);
+        this.$store.commit("removeTopFromQueue");
+        return true;
+      } else {
+        return false;
+      }
+    },
     showPlayer() {
       let player = document.getElementById("yt-player");
 
@@ -145,7 +169,9 @@ export default {
           break;
         case 0:
           console.log("ended");
-          //load next song in playlist
+          if (!this.playNext()) {
+            window.player.stopVideo();
+          }
           break;
         case 1:
           console.log("playing");
@@ -160,6 +186,16 @@ export default {
           break;
       }
     },
+    convertSecondsToTimeString(inputSeconds) {
+      let seconds = Math.floor(inputSeconds)
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      if (remainingSeconds.toString().length === 1) {
+        return minutes + ":0" + remainingSeconds;
+      } else {
+        return minutes + ":" + remainingSeconds;
+      }
+    }
   },
   data() {
     return {
@@ -168,7 +204,7 @@ export default {
       updateTrackInterval: Object,
       volume: 100,
       playing: false,
-      muted:false
+      muted: false,
     };
   },
   computed: {

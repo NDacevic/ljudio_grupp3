@@ -13,7 +13,10 @@ export default new Vuex.Store({
     prevSong: {},
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
-    searchHasBeenPerformed: false //Used to render search headers (or not)
+    searchHasBeenPerformed: false, //Used to render search headers (or not)
+    selectedArtistBrowseId: "",
+    selectedArtist: {},
+    selectedAlbumBrowseId: "",
   },
   mutations: {
     
@@ -26,6 +29,9 @@ export default new Vuex.Store({
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
     },
+    removeTopFromQueue(state) {
+      state.queuedTracks.shift();
+    },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
@@ -35,6 +41,15 @@ export default new Vuex.Store({
     },
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
+    },
+    setSelectedArtistBrowseId(state, browseId) {
+      state.selectedArtistBrowseId = browseId;
+    },
+    setSelectedArtist(state, artist) {
+      state.selectedArtist = artist;
+    },
+    setSelectedAlbumBrowseId(state, browseId) {
+      state.selectedAlbumBrowseId = browseId;
     },
   },
   actions: {
@@ -72,6 +87,7 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
+
      async createUser() {
       const response = await fetch('/api/users/', {
         method: 'POST',
@@ -82,12 +98,11 @@ export default new Vuex.Store({
       });
      if(response.status=='200')
         {
-          alert("User have been created")
-         
+          alert("User have been created")        
         }
       else{
         alert("Something went wrong, try again")
-      }      
+          }      
      },
      async loginUser(){
       
@@ -111,7 +126,18 @@ export default new Vuex.Store({
       this.state.user=data
       router.push("/Home")
 
-     }
+     },
+
+    async fetchArtistByBrowseId({ commit }, browseId) {
+      const response = await fetch(`api/yt/artist/${browseId}`);
+      const artist = await response.json();
+      commit("setSelectedArtist", {
+        name: artist.name,
+        artist: artist,
+        albums: artist.products.albums.content,
+      });
+    },
+
   },
   getters: {
     getSearchContent(state) {
@@ -126,10 +152,21 @@ export default new Vuex.Store({
     getUser(state) {
       return state.user;
     },
+    getQueuedTracksLength(state) {
+      return state.queuedTracks.length;
+    },
     getSearchHasBeenPerformed(state) {
       return state.searchHasBeenPerformed;
-
-    }
+    },
+    getSelectedArtistBrowseId(state) {
+      return state.selectedArtistBrowseId;
+    },
+    getSelectedArtist(state) {
+      return state.selectedArtist;
+    },
+    getSelectedAlbumBrowseId(state) {
+      return state.selectedAlbumBrowseId;
+    },
   },
   modules: {},
 });
