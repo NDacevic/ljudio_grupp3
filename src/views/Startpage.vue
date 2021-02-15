@@ -1,7 +1,7 @@
 <template>
   <div class="formHolder">
 
-     <form  v-show='toggle' @submit="checkForm" >
+     <form  v-show='toggle' @submit.prevent="checkForm" >
       <p v-if="errors.length">
          <b>Please correct the following error(s):</b>
            <ul>
@@ -19,7 +19,7 @@
       </div>
     </form>
 
-    <form v-show='!toggle' @submit="checkForm">
+    <form v-show='!toggle' @submit.prevent="checkForm">
      <p v-if="errors.length">
        <b>Please correct the following error(s):</b>
          <ul> 
