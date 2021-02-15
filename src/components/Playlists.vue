@@ -9,7 +9,7 @@
       <div class="listItem">
         <p>{{playlist.PlaylistName}}</p>
         <button
-          v-if="playlist.OwnerId === login.userId"
+          v-if="playlist.OwnerId === user.UserId"
           v-on:click="deletePlaylist(playlist.PlaylistId)"
         >
           Delete
@@ -23,19 +23,15 @@
 <script>
 export default {
   name: "Playlists",
-  components: {},
-  data() {
-    return {
-      login: [
-        {
-          userId: 6,
-        },
-      ],
-    };
-  },
   computed: {
     getPlaylists() {
         return this.$store.getters.getPlaylists;
+    },
+    user: {
+      get() {
+          console.log(this.$store.getters.getUser)
+        return this.$store.getters.getUser;
+      }
     }
   },
   methods: {
