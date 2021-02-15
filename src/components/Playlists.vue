@@ -4,17 +4,19 @@
     <li
       v-for="(playlist, index) in getPlaylists"
       :key="index"
-      v-on:click="goToPlaylist(index)"
+      v-on:click="goToPlaylist(playlist)"
     >
       <div class="listItem">
-        <p>{{playlist.PlaylistName}}</p>
+        <p>{{ playlist.PlaylistName }}</p>
         <button
           v-if="playlist.OwnerId === user.UserId"
           v-on:click="deletePlaylist(playlist.PlaylistId)"
         >
           Delete
         </button>
-        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)">Unfollow</button>
+        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)">
+          Unfollow
+        </button>
       </div>
     </li>
   </div>
@@ -34,19 +36,21 @@ export default {
     }
   },
   methods: {
-    goToPlaylist() {
-      this.$store.commit("setComponentToRenderInHomeCenter", "playlist")
+    goToPlaylist(playlist) {
+      this.$store.commit("setCurrentPlaylist", playlist);
+      console.log(playlist);
+      this.$store.commit("setComponentToRenderInHomeCenter", "playlist");
     },
     unfollowPlaylist(id) {
-      this.$store.dispatch("unfollowPlaylist", id)
+      this.$store.dispatch("unfollowPlaylist", id);
     },
     deletePlaylist(id) {
-      this.$store.dispatch("deletePlaylist", id)  
+      this.$store.dispatch("deletePlaylist", id);
     },
   },
-  mounted(){
-      this.$store.dispatch("getPlaylists")
-  }
+  mounted() {
+    this.$store.dispatch("getPlaylists");
+  },
 };
 </script>
 

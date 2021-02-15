@@ -20,6 +20,7 @@ export default new Vuex.Store({
     selectedAlbum: {},
     newNotifications: [],
     createPlaylistBool:false,
+    currentPlaylist: {}
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -88,6 +89,9 @@ export default new Vuex.Store({
     setcreatePlaylistHasBeenClicked(state, createPlaylistBool) {
       state.createPlaylistBool = createPlaylistBool;
     },
+    setCurrentPlaylist(state, playlist) {
+      state.currentPlaylist = playlist;
+    }
   },
   actions: {
     async setTrackToPlay({ commit }, payload) {
@@ -284,6 +288,9 @@ export default new Vuex.Store({
     getcreatePlaylistBool(state){
       return state.createPlaylistBool;
     },
+    getCurrentPlaylist(state) {
+      return state.currentPlaylist;
+    }
   },
   modules: {},
 });
