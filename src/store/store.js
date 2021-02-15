@@ -11,7 +11,10 @@ export default new Vuex.Store({
     prevSong: {},
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
-    searchHasBeenPerformed: false //Used to render search headers (or not)
+    searchHasBeenPerformed: false, //Used to render search headers (or not)
+    selectedArtistBrowseId: "",
+    selectedArtist: {},
+    selectedAlbumBrowseId: ""
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -29,6 +32,15 @@ export default new Vuex.Store({
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
     },
+    setSelectedArtistBrowseId(state, browseId) {
+      state.selectedArtistBrowseId = browseId;
+    },
+    setSelectedArtist(state, artist) {
+      state.selectedArtist = artist;
+    },
+    setSelectedAlbumBrowseId(state, browseId) {
+      state.selectedAlbumBrowseId = browseId;
+    }
   },
   actions: {
     async setSongToPlay({ commit }, song) {
@@ -65,6 +77,15 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
+    async fetchArtistByBrowseId({ commit }, browseId) {
+      const response = await fetch(`api/yt/artist/${browseId}`);
+      const artist = await response.json();
+      commit("setSelectedArtist", {
+        name: artist.name,
+        artist: artist,
+        albums: artist.products.albums.content
+      });
+    }
   },
   getters: {
     getSearchContent(state) {
@@ -78,6 +99,15 @@ export default new Vuex.Store({
     },
     getSearchHasBeenPerformed(state) {
       return state.searchHasBeenPerformed;
+    },
+    getSelectedArtistBrowseId(state) {
+      return state.selectedArtistBrowseId;
+    },
+    getSelectedArtist(state) {
+      return state.selectedArtist;
+    },
+    getSelectedAlbumBrowseId(state) {
+      return state.selectedAlbumBrowseId;
     }
   },
   modules: {},
