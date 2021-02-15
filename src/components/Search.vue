@@ -219,9 +219,18 @@ export default {
     setOption(event) {
       if (event.option.slug == "queue") {
         this.queuedTracks.push(track);
-      }
-      if (event.option.slug == "add") {
-        this.$store.commit("setcreatePlaylistHasBeenClicked", true);
+      } else if (event.option.slug == "add") {
+        //Add to playlist
+      } else if (event.option.slug == "share") {
+        let notificationToSend = {
+          userId: 5,
+          senderName: "Nebbe",
+          unread: true,
+          url: track.videoId,
+          contentType: track.type,
+          playlistId: null,
+        };
+        this.$store.dispatch("sendNotification", notificationToSend);
       }
     },
     performActionWhenMediaIsClicked(media) {
