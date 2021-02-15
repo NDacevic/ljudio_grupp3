@@ -1,8 +1,7 @@
 <template>
   <div class="homeContainer">
     <div class="leftBar">
-      <p>Left Sidebar</p>
-      <!-- Komponent 1 -->
+      <LeftMenu/>
     </div>
     <div class="centerContent">
       <Search v-if="renderCenterComponent === 'search'" />
@@ -28,6 +27,7 @@
 </template>
 
 <script>
+import LeftMenu from "../components/LeftMenu";
 import Search from "../components/Search";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
@@ -39,6 +39,7 @@ import PlaylistContent from "../components/PlaylistContent";
 export default {
   name: "Home",
   components: {
+    LeftMenu,
     Search,
     Player,
     Queue,
