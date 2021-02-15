@@ -12,14 +12,15 @@
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
-        <p v-if="currentSong.artist == undefined && currentSong.type==='song'"></p>
+        <p v-if="currentSong.artist == undefined && currentSong.author == undefined"></p>
         <p v-if="currentSong.artist != undefined && currentSong.type==='song'">
           {{ currentSong.artist.name + " - " + currentSong.name }}
         </p>
-        <p v-if="currentSong.author == undefined && currentSong.type==='video'"></p>
         <p v-if="currentSong.author != undefined && currentSong.type==='video'">
           {{ currentSong.author + " - " + currentSong.name }}
         </p>
+        <div>
+        <p>{{ convertSecondsToTimeString(this.songProgress)}}</p>
         <input
           type="range"
           min="0"
@@ -27,6 +28,8 @@
           v-on:click="playFromTime"
           v-bind:value="songProgress"
         />
+        <p>{{convertSecondsToTimeString(this.songDuration)}}</p>
+        </div>
       </div>
       <div class="controls-container-buttons">
         <figure v-on:click="playPrev()">
@@ -183,6 +186,16 @@ export default {
           break;
       }
     },
+    convertSecondsToTimeString(inputSeconds) {
+      let seconds = Math.floor(inputSeconds)
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      if (remainingSeconds.toString().length === 1) {
+        return minutes + ":0" + remainingSeconds;
+      } else {
+        return minutes + ":" + remainingSeconds;
+      }
+    }
   },
   data() {
     return {
