@@ -23,7 +23,7 @@
         }
 
         & > p {
-          $height: 60px;
+          $height: 40px;
           height: $height;
           line-height: $height;
           font-size: 30px;
@@ -45,7 +45,7 @@
         grid-template-columns: repeat(6, auto);
         gap: 20px;
         // position:relative;
-        padding: 20px;
+        padding: 10px;
 
         & .playPause {
           text-align: center;
