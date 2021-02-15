@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-
+const { response } = require("express");
 
 module.exports = (app, db) => {
 
@@ -13,8 +13,25 @@ module.exports = (app, db) => {
       .input('Password', db.VarChar, password)
       .query("INSERT INTO [User](Username,Password) VALUES (@username,@password)")
     response.json(result)
+  }),
+  //Check if username already exists
+  app.post("/api/checkUser",async (request,response) => {
+    let user = await db.pool.request()
+      .input("Username", db.VarChar, request.body.username)
+      .query("SELECT * FROM [User] WHERE Username = @Username")
+    user = user.recordset[0];
+    if(user!=undefined)
+    {
+      if(user.Username==request.body.username)
+      {
+        response.status(403); 
+        response.json({ message:"Username already exists" });
+      }
+    }
+    else
+    response.status(200)
+    response.json({ message:"User dont exist" });
   })
-
   // authentication: perform login
   app.post("/api/login", async (request, response) => {
     let user = await db.pool

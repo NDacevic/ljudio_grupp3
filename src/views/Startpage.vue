@@ -22,7 +22,7 @@
       <input v-model="confirmPassword" type="password" />
       <div>
         <input class="submit" value="Cancel" type="submit" @click='toggle = !toggle'>
-        <input class="submit"  value="Create account" type="submit" @click="createUser">
+        <input class="submit"  value="Create account" type="submit" @click="validateUsername">
       </div>
     </form>
   </div>
@@ -30,12 +30,12 @@
 
 <script>
 
-
 export default {
 name: 'Startpage',
 data(){
     return{
         user:{},
+        confirmPassword:String,
         toggle: true,
               
     };
@@ -46,16 +46,14 @@ methods: {
        this.$store.dispatch("loginUser")     
        },
 
-    createUser() {
+    validateUsername() {
         if(this.user.password==this.confirmPassword)
         {           
             this.$store.commit("updateUser",this.user); 
-            this.$store.dispatch("createUser")                
+            this.$store.dispatch("validateUsername")                
         }      
     },
-    validateUsername(){
-        //TODO: Check if username is already taken  
-    }
+
 }
 }
 
