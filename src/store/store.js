@@ -226,6 +226,7 @@ export default new Vuex.Store({
     async getCurrentPlaylist({commit}, playlistId){
       let response = await fetch(`/api/getMusicPlaylist/${playlistId}`);
       let playlist = await response.json();
+      //foreach matcha url:er i array mot yt-api?
       commit("setCurrentPlaylist", playlist); 
     },
     async fetchArtistByBrowseId({ commit }, browseId) {
