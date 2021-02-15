@@ -63,13 +63,29 @@
     &.md-theme-default.md-raised:not([disabled]).md-accent {
       background-color: transparent;
     }
+
+    &-content{
+      &:hover {
+        color: $color-secondary-1-1;
+      }
+    }
+  }
+  .md-table {
+    &-row {
+      &:hover {
+        & p, div {
+          color: $color-secondary-1-1;
+        }
+      }
+    }
+
+    &-cell-container {
+      padding: 6px 10px !important;
+      cursor: default;
+    }
   }
 }
 
 .rightBar * {
   background-color: inherit !important;
-}
-
-.md-table-cell-container {
-  padding: 6px 10px !important;
 }
