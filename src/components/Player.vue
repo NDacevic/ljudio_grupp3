@@ -32,7 +32,10 @@
             <i class="material-icons-round">pause</i>
           </figure>
         </div>
-        <figure :class="{active: this.$store.getters.getQueuedTracksLength < 1}" v-on:click="playNext()">
+        <figure
+          :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }"
+          v-on:click="playNext()"
+        >
           <i class="material-icons-round">skip_next</i>
         </figure>
         <figure v-on:click="showPlayer()">
@@ -77,7 +80,17 @@ export default {
     pause() {
       window.player.pauseVideo();
     },
-    playNext() {},
+    playNext() {
+      let media;
+      if (this.$store.getters.getQueuedTracks.length > 0) {
+        media = this.$store.state.queuedTracks[0];
+        this.$store.dispatch("setSongToPlay", media);
+        this.$store.commit("removeTopFromQueue");
+        return true;
+      } else {
+        return false;
+      }
+    },
     showPlayer() {
       let player = document.getElementById("yt-player");
 
@@ -138,8 +151,6 @@ export default {
           2 – paused
           3 – buffering
           5 – video cued */
-
-      let media;
       switch (event.data) {
         case -1:
           console.log("unstarted");
@@ -147,12 +158,8 @@ export default {
           break;
         case 0:
           console.log("ended");
-
-          //find the index of the current song in the tracklist;
-          if (this.$store.getters.getQueuedTracks.length > 0) {
-            media = this.$store.state.queuedTracks[0];
-            this.$store.dispatch("setSongToPlay", media);
-            this.$store.commit("removeTopFromQueue");
+          if (!this.playNext()) {
+            window.player.stopVideo();
           }
           break;
         case 1:
