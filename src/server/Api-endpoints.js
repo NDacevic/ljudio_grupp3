@@ -22,11 +22,8 @@ module.exports = (app, db) => {
     user = user.recordset[0];
     if(user!=undefined)
     {
-      if(user.Username==request.body.username)
-      {
         response.status(403); 
         response.json({ message:"Username already exists" });
-      }
     }
     else
     response.status(200)
