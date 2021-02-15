@@ -35,6 +35,7 @@
         >
           {{ currentTrack.author + " - " + currentTrack.name }}
         </p>
+        <p v-else></p>
         <div>
           <p>{{ convertSecondsToTimeString(this.trackProgress) }}</p>
           <input

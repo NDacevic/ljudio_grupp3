@@ -158,7 +158,6 @@ export default new Vuex.Store({
       });
     await response.json(); 
     },
-    
     async deletePlaylist({ commit }, playlistId) {
       let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
         method: "delete",
@@ -284,7 +283,21 @@ export default new Vuex.Store({
           break;
       }
       commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType)
-    }
+    },
+    // eslint-disable-next-line no-unused-vars
+    async sendNotification({ commit }, notification) {
+      console.log("notif to send",JSON.stringify(notification));
+      const response = await fetch(`api/notification`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(notification),
+      });
+      const result = await response.json();
+      console.log(result);
+      //commit("sentNotification",result);
+    },
   },
   getters: {
     getSearchContent(state) {
