@@ -140,8 +140,8 @@ export default {
       }
     },
     getMedia() {
-      if(this.searchMedia === "") {
-        this.searchMedia = "songs"
+      if (this.searchMedia === "") {
+        this.searchMedia = "songs";
       }
       if (this.searchString !== "") {
         this.$store.dispatch("getSearchResults", {
