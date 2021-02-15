@@ -28,7 +28,7 @@ export default {
     return {
       login: [
         {
-          userId: 5,
+          userId: 6,
         },
       ],
     };
@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     goToPlaylist() {
-      //rendera playlistcomponent
       this.$store.commit("setComponentToRenderInHomeCenter", "playlist")
     },
     unfollowPlaylist(id) {
