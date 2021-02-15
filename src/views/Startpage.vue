@@ -1,6 +1,9 @@
 <template>
-  <div class="formHolder">
-
+<div>
+        <div class="imgDiv">
+          <img src="../assets/Ljudio_logo_Large.png" >
+      </div>
+    <div class="formHolder"> 
      <form  v-show='toggle' @submit.prevent="checkForm" >
       <p v-if="errors.length">
          <b>Please correct the following error(s):</b>
@@ -39,6 +42,8 @@
       </div>
     </form>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -94,8 +99,17 @@ methods: {
 </script>
 
 <style scoped>
+.imgDiv{
+  display:flex;
+  justify-content:center;
+  scale:80%;
+}
 .submit {
   width:45%;
+}
+form {
+  display: flex;
+  flex-direction: column;
 }
 form div {
   margin-top:10px
@@ -111,9 +125,6 @@ input {
   width: 250px;
   height: 30px;
 }
-form {
-  display: flex;
-  flex-direction: column;
-}
+
 
 </style>
