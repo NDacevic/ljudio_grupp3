@@ -115,12 +115,14 @@ export default {
       }
     },
     showPlayer() {
-      let player = document.getElementById("yt-player");
+      if (window.YT.player !== null || window.YT.player !== undefined) {
+        let player = document.getElementById("yt-player");
 
-      if (player.style.display == "none") {
-        player.style.display = "block";
-      } else {
-        player.style.display = "none";
+        if (player.style.display == "none") {
+          player.style.display = "block";
+        } else {
+          player.style.display = "none";
+        }
       }
     },
     playFromTime: function(event) {
@@ -152,18 +154,25 @@ export default {
       );
     },
     initYoutubePlayer() {
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
       window.onYouTubeIframeAPIReady = () => {
-        window.player = new window.YT.Player("yt-player", {
-          height: "640",
-          width: "480",
-          playerVars: {
-            controls: 0,
-            showInfo: 0,
-          },
-          events: {
-            onStateChange: this.onPlayerStateChange,
-          },
-        });
+        if (window.player === undefined || window.player === null) {
+          window.player = new window.YT.Player("yt-player", {
+            height: "640",
+            width: "480",
+            playerVars: {
+              controls: 0,
+              showInfo: 0,
+            },
+            events: {
+              onStateChange: this.onPlayerStateChange,
+            },
+          });
+        }
       };
     },
     onPlayerStateChange(event) {

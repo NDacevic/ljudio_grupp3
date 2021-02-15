@@ -72,11 +72,6 @@ export default new Vuex.Store({
   },
   actions: {
     async setSongToPlay({ commit }, song) {
-
-      if(window.player === undefined || window.player === null){
-        console.log("Youtube player is null or undef");
-      }
-      
       window.player.loadVideoById(song.videoId);
       window.player.playVideo();
       commit("playSong", song);
