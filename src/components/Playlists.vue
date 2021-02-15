@@ -29,7 +29,6 @@ export default {
     },
     user: {
       get() {
-          console.log(this.$store.getters.getUser)
         return this.$store.getters.getUser;
       }
     }
