@@ -1,10 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
+import router from '../router/index'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    router ,
+    user:{},
     searchResults: [],
     currentSong: {},
     nextSong: {},
@@ -17,6 +19,7 @@ export default new Vuex.Store({
     selectedAlbumBrowseId: "",
   },
   mutations: {
+    
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
     },
@@ -31,6 +34,10 @@ export default new Vuex.Store({
     },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
+    },
+    updateUser(state,newUser) {
+      state.user = newUser;
+
     },
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
@@ -80,6 +87,47 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
+
+     async createUser() {
+      const response = await fetch('/api/users/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',         
+        },
+        body: JSON.stringify(this.state.user)
+      });
+     if(response.status=='200')
+        {
+          alert("User have been created")        
+        }
+      else{
+        alert("Something went wrong, try again")
+          }      
+     },
+     async loginUser(){
+      
+      const response = await fetch('/api/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',         
+        },
+        body: JSON.stringify(this.state.user)
+      });
+      if(response.status=='200')
+      {
+        alert("logged in")
+        this.dispatch('checkAuth')       
+      }
+     },
+     async checkAuth(){
+        
+      let response = await fetch(`/api/login/`)
+      let data = await response.json()
+      this.state.user=data
+      router.push("/Home")
+
+     },
+
     async fetchArtistByBrowseId({ commit }, browseId) {
       const response = await fetch(`api/yt/artist/${browseId}`);
       const artist = await response.json();
@@ -89,6 +137,7 @@ export default new Vuex.Store({
         albums: artist.products.albums.content,
       });
     },
+
   },
   getters: {
     getSearchContent(state) {
@@ -99,6 +148,9 @@ export default new Vuex.Store({
     },
     getQueuedTracks(state) {
       return state.queuedTracks;
+    },
+    getUser(state) {
+      return state.user;
     },
     getQueuedTracksLength(state) {
       return state.queuedTracks.length;
