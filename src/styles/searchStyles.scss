@@ -12,7 +12,6 @@
     width: 95%;
     display: grid;
     grid-template-columns: 57.5fr 23fr 23fr 13fr;
-    // color: rgb(196, 196, 196);
     margin: 20px auto 0 auto;
     border-bottom: 4px $color-secondary-1-3 solid;
 
@@ -55,11 +54,15 @@
       font-size: 14px;
       //color: rgb(196, 196, 196);
       margin: auto 0 auto 0;
-      &:hover {
-        color: royalblue;
-      }
+
       &:first-child {
         margin-left: 20px;
+      }
+    }
+
+    &:hover {
+      p {
+        color: $color-secondary-1-1;
       }
     }
   }
@@ -118,9 +121,8 @@
     overflow-y: scroll;
     margin: 0 auto;
   }
-  .md-active {
-    & .md-button-content {
-      color: $color-secondary-1-1;
-    }
+
+  .md-button {
+    margin-bottom: 5px;
   }
 }

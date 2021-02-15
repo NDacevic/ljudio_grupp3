@@ -7,7 +7,6 @@ module.exports = (app, db) => {
 
   // register user
   app.post('/api/users', async (request, response) => {
-
     let password = await bcrypt.hash(request.body.password, 10);
     let result = await db.pool.request()
       .input('Username', db.VarChar, request.body.username)
@@ -17,34 +16,36 @@ module.exports = (app, db) => {
   })
 
   // authentication: perform login
-  app.post('/api/login', async (request, response) => {
-    let user = await db.pool.request()
-      .input('username', db.VarChar, request.body.username)
-      .query('SELECT * FROM [User] WHERE username = @username')
-    user = user.recordset[0]
-    if(user && user.username && await bcrypt.compare(request.body.password, user.password)){
-      request.session.user = user
-      user.loggedIn = true
-      response.json({loggedIn: true})
-    }else{
-      response.status(401) // unauthorized  https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-      response.json({message:"no matching user"})
+  app.post("/api/login", async (request, response) => {
+    let user = await db.pool
+      .request()
+      .input("Username", db.VarChar, request.body.username)
+      .query("SELECT * FROM [User] WHERE Username = @Username")
+    user = user.recordset[0];
+    if ( user && user.Username &&(await bcrypt.compare(request.body.password, user.Password))) 
+    {
+      request.session.user = user;
+      user.loggedIn = true;
+      response.json({ loggedIn: true });
+    } else {
+      response.status(401); 
+      response.json({ message: "no matching user" });
     }
-  })
+  });
 
   // authentication: get logged in user
   app.get('/api/login', async (request, response) => {
     let user
-    if(request.session.user){
+    if(request.session.user){    
       user = await db.pool.request()
-        .input('username', db.VarChar, request.session.user.username)
-        .input('password', db.VarChar, request.session.user.password)
-        .query('SELECT * FROM [User] WHERE username = @username AND password = @password', [request.session.user.username, request.session.user.password])
+        .input('username', db.VarChar, request.session.user.Username)
+        .input('password', db.VarChar, request.session.user.Password)
+        .query('SELECT * FROM [User] WHERE username = @username AND password = @password', [request.session.user.Username, request.session.user.Password])
       user = user.recordset[0]
     }
-    if(user && user.username){
+    if(user && user.Username){
       user.loggedIn = true
-      delete(user.password)
+      delete(user.Password)
       response.json(user)
     }else{
       response.status(401) // unauthorized  https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
