@@ -30,7 +30,6 @@ export default {
     },
     selectedArtist: {
       get() {
-        console.log(this.$store.getters.getSelectedArtist);
         return this.$store.getters.getSelectedArtist ?? {};
       }
     },
