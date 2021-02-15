@@ -54,11 +54,15 @@
       font-size: 14px;
       //color: rgb(196, 196, 196);
       margin: auto 0 auto 0;
-      &:hover {
-        color: royalblue;
-      }
+
       &:first-child {
         margin-left: 20px;
+      }
+    }
+
+    &:hover {
+      p {
+        color: $color-secondary-1-1;
       }
     }
   }
