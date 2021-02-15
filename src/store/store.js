@@ -180,7 +180,10 @@ export default new Vuex.Store({
     },
     getSelectedAlbum(state) {
       return state.selectedAlbum;
-    }
+    },
+    getNewNotifications(state) {
+      return state.newNotifications;
+    },
   },
   modules: {},
 });
