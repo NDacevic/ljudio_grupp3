@@ -33,6 +33,11 @@
         md-label="Playlists"
         @click="setSearchMediaType('playlists'), getMedia()"
       ></md-tab>
+      <md-tab
+        id="tab-video"
+        md-label="Videos"
+        @click="setSearchMediaType('videos'), getMedia()"
+      ></md-tab>
     </md-tabs>
     <div id="searchResultsContainer" v-if="getSearchHasBeenPerformed === true">
       <div v-if="this.searchMedia === 'songs'" class="headers">
@@ -63,6 +68,15 @@
         class="headers"
       >
         <h3>Title</h3>
+      </div>
+      <div
+        v-if="this.searchMedia === 'videos'"
+        id="videoHeaders"
+        class="headers"
+      >
+        <h3>Title</h3>
+        <h3>Artist</h3>
+        <h3>Duration</h3>
       </div>
       <div id="searchResults" class="md-scrollbar">
         <div
@@ -106,6 +120,16 @@
             @dblclick="performActionWhenMediaIsClicked(media)"
           >
             <p>{{ media.PlaylistName }}</p>
+          </button>
+           <button
+            class="listButton"
+            id="videoButton"
+            v-if="searchMedia === 'videos'"
+            @dblclick="performActionWhenMediaIsClicked(media)"
+          >
+            <p>{{ media.name }}</p>
+            <p>{{ media.author }}</p>
+            <p>{{ convertMillisecondsToTimeString(media.duration) }}</p>
           </button>
         </div>
       </div>
@@ -178,6 +202,9 @@ export default {
         case "song":
           this.$store.dispatch("setSongToPlay", media);
           break;
+        case "video":
+        this.$store.dispatch("setSongToPlay", media);
+        break;
         default:
           //for artist, album and playlist
           media.type === undefined

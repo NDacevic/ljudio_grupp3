@@ -2,15 +2,23 @@
   <div class="player">
     <div class="thumbnail-container">
       <img
-        v-if="currentSong.thumbnails != undefined"
+        v-if="currentSong.thumbnails !== undefined && currentSong.type==='song'"
         :src="currentSong.thumbnails[1].url"
+      />
+      <img
+        v-if="currentSong.thumbnails !== undefined && currentSong.type==='video'"
+        :src="currentSong.thumbnails.url"
       />
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
-        <p v-if="currentSong.artist == undefined"></p>
-        <p v-if="currentSong.artist != undefined">
+        <p v-if="currentSong.artist == undefined && currentSong.type==='song'"></p>
+        <p v-if="currentSong.artist != undefined && currentSong.type==='song'">
           {{ currentSong.artist.name + " - " + currentSong.name }}
+        </p>
+        <p v-if="currentSong.author == undefined && currentSong.type==='video'"></p>
+        <p v-if="currentSong.author != undefined && currentSong.type==='video'">
+          {{ currentSong.author + " - " + currentSong.name }}
         </p>
         <input
           type="range"
