@@ -81,5 +81,6 @@ export default {
   margin-left: 20px;
   margin-top: 50px;
   background-color: transparent;
+  filter: drop-shadow(0px 0px 5px rgb(26, 26, 26));
 }
 </style>
