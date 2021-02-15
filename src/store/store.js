@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
+import router from '../router/index'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    router ,
     user:{},
     searchResults: [],
     currentSong: {},
@@ -15,6 +16,7 @@ export default new Vuex.Store({
     searchHasBeenPerformed: false //Used to render search headers (or not)
   },
   mutations: {
+    
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
     },
@@ -81,7 +83,7 @@ export default new Vuex.Store({
      if(response.status=='200')
         {
           alert("User have been created")
-          this.$router("/home")
+         
         }
       else{
         alert("Something went wrong, try again")
@@ -107,7 +109,8 @@ export default new Vuex.Store({
       let response = await fetch(`/api/login/`)
       let data = await response.json()
       this.state.user=data
-      this.$router.push('/Home')
+      router.push("/Home")
+
      }
   },
   getters: {
