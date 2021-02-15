@@ -64,7 +64,7 @@
       background-color: transparent;
     }
 
-    &-content{
+    &-content {
       &:hover {
         color: $color-secondary-1-1;
       }
@@ -73,7 +73,8 @@
   .md-table {
     &-row {
       &:hover {
-        & p, div {
+        & p,
+        div {
           color: $color-secondary-1-1;
         }
       }
