@@ -68,7 +68,7 @@ export default {
     list-style-type: none;
 
     &:hover {
-        background-color: rgb(233, 232, 232) !important;
+        background-color: #44507F !important;
     & > p {
         color: #448aff;
     }
@@ -85,16 +85,17 @@ export default {
   }
 
   & button {
-    background-color: rgb(233, 232, 232);
-    color: black;
+    //background-color: rgb(56, 54, 54) !important;
+    color: white;
     border: 0;
     margin: 0;
     padding-inline: 2%;
     border-radius: 0;
-    font-size: x-small;
+    font-size: small;
 
     &:hover {
-      background-color: rgb(150, 150, 150);
+      background-color: #44507F !important;
+      color: #448aff;
     }
   }
 
