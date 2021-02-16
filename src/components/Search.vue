@@ -245,6 +245,10 @@ export default {
           this.$store.commit("setSelectedArtistBrowseId", media.browseId);
           this.$store.commit("setComponentToRenderInHomeCenter", media.type);
           break;
+        case "album":
+        this.$store.commit("setSelectedAlbumBrowseId", media.browseId);
+        this.$store.commit("setComponentToRenderInHomeCenter", media.type);
+        break;
       }
     },
   },
