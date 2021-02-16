@@ -3,48 +3,55 @@
     <div class="thumbnail-container">
       <img
         v-if="
-          currentSong.thumbnails !== undefined && currentSong.type === 'song'
+          currentTrack.thumbnails !== undefined && currentTrack.type === 'song'
         "
-        :src="currentSong.thumbnails[1].url"
+        :src="currentTrack.thumbnails[1].url"
       />
       <img
         v-if="
-          currentSong.thumbnails !== undefined && currentSong.type === 'video'
+          currentTrack.thumbnails !== undefined && currentTrack.type === 'video'
         "
-        :src="currentSong.thumbnails.url"
+        :src="currentTrack.thumbnails.url"
       />
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
         <p
           v-if="
-            currentSong.artist == undefined && currentSong.author == undefined
+            currentTrack.artist == undefined && currentTrack.author == undefined
           "
         ></p>
         <p
-          v-if="currentSong.artist != undefined && currentSong.type === 'song'"
+          v-if="
+            currentTrack.artist != undefined && currentTrack.type === 'song'
+          "
         >
-          {{ currentSong.artist.name + " - " + currentSong.name }}
+          {{ currentTrack.artist.name + " - " + currentTrack.name }}
         </p>
         <p
-          v-if="currentSong.author != undefined && currentSong.type === 'video'"
+          v-if="
+            currentTrack.author != undefined && currentTrack.type === 'video'
+          "
         >
-          {{ currentSong.author + " - " + currentSong.name }}
+          {{ currentTrack.author + " - " + currentTrack.name }}
         </p>
         <div>
-          <p>{{ convertSecondsToTimeString(this.songProgress) }}</p>
+          <p>{{ convertSecondsToTimeString(this.trackProgress) }}</p>
           <input
             type="range"
             min="0"
-            v-bind:max="songDuration"
+            v-bind:max="trackDuration"
             v-on:click="playFromTime"
-            v-bind:value="songProgress"
+            v-bind:value="trackProgress"
           />
-          <p>{{ convertSecondsToTimeString(this.songDuration) }}</p>
+          <p>{{ convertSecondsToTimeString(this.trackDuration) }}</p>
         </div>
       </div>
       <div class="controls-container-buttons">
-        <figure v-on:click="playPrev()">
+        <figure
+          :class="{ active: this.$store.getters.getTrackHistoryLength < 1 }"
+          v-on:click="playPrev()"
+        >
           <i class="material-icons-round">skip_previous</i>
         </figure>
         <div class="playPause">
@@ -91,12 +98,6 @@
 export default {
   name: "Player",
   methods: {
-    playPrev() {
-      if (this.songProgress > 2) {
-        window.player.seekTo(0, true);
-        this.songProgress = 0;
-      }
-    },
     play() {
       window.player.playVideo();
     },
@@ -107,20 +108,31 @@ export default {
       let media;
       if (this.$store.getters.getQueuedTracks.length > 0) {
         media = this.$store.state.queuedTracks[0];
-        this.$store.dispatch("setSongToPlay", media);
+        this.$store.dispatch("setTrackToPlay", { media, caller: "playNext" });
         this.$store.commit("removeTopFromQueue");
         return true;
       } else {
         return false;
       }
     },
+    playPrev() {
+      console.log(this.$store.getters.getTrackHistoryLength);
+      if (this.$store.state.trackHistory.length > 0) {
+        let media = this.$store.state.trackHistory[this.$store.state.trackHistory.length-1];
+        this.$store.commit("addTrackToTopOfQueue", this.$store.state.currentTrack)
+        this.$store.dispatch("setTrackToPlay", { media, caller: "playPrev" });
+        this.$store.commit("removeFromBottomOfHistory");
+      }
+    },
     showPlayer() {
-      let player = document.getElementById("yt-player");
+      if (window.YT.player !== null || window.YT.player !== undefined) {
+        let player = document.getElementById("yt-player");
 
-      if (player.style.display == "none") {
-        player.style.display = "block";
-      } else {
-        player.style.display = "none";
+        if (player.style.display == "none") {
+          player.style.display = "block";
+        } else {
+          player.style.display = "none";
+        }
       }
     },
     playFromTime: function(event) {
@@ -144,7 +156,7 @@ export default {
         function() {
           if (window.player != null) {
             if (window.player.getPlayerState() > 0) {
-              this.songProgress = window.player.getCurrentTime();
+              this.trackProgress = window.player.getCurrentTime();
             }
           }
         }.bind(this),
@@ -152,19 +164,35 @@ export default {
       );
     },
     initYoutubePlayer() {
-      window.onYouTubeIframeAPIReady = () => {
-        window.player = new window.YT.Player("yt-player", {
-          height: "640",
-          width: "480",
-          playerVars: {
-            controls: 0,
-            showInfo: 0,
-          },
-          events: {
-            onStateChange: this.onPlayerStateChange,
-          },
-        });
-      };
+      var tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      if (window.YT.loaded === 1 && window.player == null) {
+        if (window.player === undefined || window.player === null) {
+          this.createPlayer();
+        }
+      } else {
+        window.onYouTubeIframeAPIReady = () => {
+          if (window.player == null) {
+            this.createPlayer();
+          }
+        };
+      }
+    },
+    createPlayer() {
+      window.player = new window.YT.Player("yt-player", {
+        height: "640",
+        width: "480",
+        playerVars: {
+          controls: 0,
+          showInfo: 0,
+        },
+        events: {
+          onStateChange: this.onPlayerStateChange,
+        },
+      });
     },
     onPlayerStateChange(event) {
       /* STATES
@@ -176,31 +204,31 @@ export default {
           5 – video cued */
       switch (event.data) {
         case -1:
-          console.log("unstarted");
-          this.songDuration = window.player.getDuration();
+          // console.log("unstarted");
+          this.trackDuration = window.player.getDuration();
           break;
         case 0:
-          console.log("ended");
+          // console.log("ended");
           if (!this.playNext()) {
             window.player.stopVideo();
           }
           break;
         case 1:
-          console.log("playing");
+          // console.log("playing");
           this.playing = true;
           break;
         case 2:
-          console.log("paused");
+          // console.log("paused");
           this.playing = false;
           break;
         case 3:
-          console.log("buffering");
+          //  console.log("buffering");
           break;
       }
     },
     convertSecondsToTimeString(inputSeconds) {
       if (isNaN(inputSeconds)) return "0:00";
-      
+
       let seconds = Math.floor(inputSeconds);
       let minutes = Math.floor(seconds / 60);
       let remainingSeconds = seconds % 60;
@@ -222,7 +250,7 @@ export default {
     };
   },
   computed: {
-    songDuration: {
+    trackDuration: {
       get: function() {
         return this.duration;
       },
@@ -230,7 +258,7 @@ export default {
         this.duration = value;
       },
     },
-    songProgress: {
+    trackProgress: {
       get: function() {
         return this.progress;
       },
@@ -240,8 +268,8 @@ export default {
         }
       },
     },
-    currentSong() {
-      return this.$store.state.currentSong;
+    currentTrack() {
+      return this.$store.state.currentTrack;
     },
   },
   mounted() {

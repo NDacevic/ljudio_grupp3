@@ -43,10 +43,13 @@
           </md-table-cell>
         </md-table-row>
       </draggable>
-      <md-button v-if="queuedTracks.length !== 0" @click="clearQueue"
-        >Clear Queue</md-button
-      >
     </md-table>
+    <md-button 
+      v-if="queuedTracks.length !== 0" 
+      @click="clearQueue"
+    >
+      Clear Queue
+    </md-button>
   </div>
 </template>
 
@@ -77,7 +80,7 @@ export default {
     },
     playTrackAndRemoveFromQueue(index) {
       let media = this.queuedTracks[index];
-      this.$store.dispatch("setSongToPlay", media);
+      this.$store.dispatch("setTrackToPlay",{media, caller:"Queue"} );
       this.queuedTracks.splice(index, 1);
     },
     clearQueue() {
