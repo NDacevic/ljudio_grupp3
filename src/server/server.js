@@ -49,5 +49,4 @@ require("./youtube-endpoints.js")(app, db);
 // start the server
 app.listen(port, async () => {
   await connectToMsSql();
-  console.log("server running");
 });

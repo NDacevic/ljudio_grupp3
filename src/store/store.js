@@ -123,7 +123,6 @@ export default new Vuex.Store({
     await response.json(); 
     },
     async deletePlaylist({commit}, playlistId) {
-      console.log("test", playlistId)
       let response = await fetch(`/api/deletePlaylist/${playlistId}`,{
         method: 'delete' 
         });
@@ -194,9 +193,11 @@ export default new Vuex.Store({
       });
     },
     async fetchAlbumByBrowseId({ commit }, browseId) {
-      const response = await fetch(`api/yt/album/${browseId}`);
-      const album = await response.json();
-      commit("setSelectedAlbum", album);
+      return fetch(`api/yt/album/${browseId}`)
+        .then(async (res) => {
+          const album = await res.json();
+          commit("setSelectedAlbum", album);
+        })
     },
     async getNewNotifications({commit}) {
       const response = await fetch(`/api/notification/${this.state.user.userId}`);
