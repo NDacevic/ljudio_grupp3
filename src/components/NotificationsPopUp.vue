@@ -22,11 +22,11 @@
                 notification.SharedContentType === 'video'
             "
           >
-            <button>Play now</button>
-            <button @click="addMediaToQueue(notification)">Add to queue</button>
+            <button @click="addTrackToQueueOrPlay(notification, false)">Play now</button>
+            <button @click="addTrackToQueueOrPlay(notification, true)">Add to queue</button>
           </div>
 
-          <button v-else>Load {{notification.SharedContentType}}</button>
+          <button v-else @click="loadMediaContent(notification)">Load {{notification.SharedContentType}}</button>
         </div>
       </div>
     </div>
@@ -43,10 +43,14 @@ export default {
     setRenderNotificationsModalFalse() {
       this.$store.commit("setRenderNotificationsModal", false);
     },
-      addMediaToQueue(notification) {
-        //this.$store.dispatch("getSearchResults", {sharedContentType: notification.SharedContentType, sharedContentId: notification.SharedContentId })
-        console.log(notification)
+    addTrackToQueueOrPlay(notification, addToQueue) {
+      this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {addToQueue: addToQueue, sharedContentType: notification.SharedContentType, sharedContentId: notification.SharedContentId })
+    },
+    loadMediaContent(notification) {
+      console.log(notification.SharedContentId)
+      this.$store.dispatch("getMediaContentAndRender", {sharedContentType: notification.SharedContentType, sharedContentId: notification.SharedContentId })
     }
+
   },
   computed: {
     newNotifications() {
