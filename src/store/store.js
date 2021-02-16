@@ -21,8 +21,10 @@ export default new Vuex.Store({
     selectedArtistBrowseId: "",
     selectedArtist: {},
     selectedAlbumBrowseId: "",
-    currentPlaylist: []
-
+    currentPlaylist: [],
+    selectedAlbum: {},
+    newNotifications: [],
+    renderNotificationsModal: false
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -96,6 +98,9 @@ export default new Vuex.Store({
     },
     setcreatePlaylistHasBeenClicked(state, createPlaylistBool) {
       state.createPlaylistBool = createPlaylistBool;
+    },
+    setRenderNotificationsModal(state, render) {
+      state.renderNotificationsModal = render;
     }
   },
   actions: {
@@ -111,7 +116,6 @@ export default new Vuex.Store({
     async getSearchResults({ commit }, searchParameters) {
       let response;
       if (searchParameters.searchMedia === "playlists") {
-        //Todo: Create endpoint when there are playlists available
         response = await fetch(
           `/api/playlist/${searchParameters.searchString}`
         );
@@ -133,9 +137,11 @@ export default new Vuex.Store({
       }
       if (searchParameters.searchMedia === "playlists") {
         commit("setSearchResults", searchResults);
+        console.log(searchResults);
       } else {
         commit("setSearchResults", searchResults.content);
       }
+      console.log(searchResults.content);
     },
     async getPlaylists({ commit }) {
       try {
@@ -245,13 +251,29 @@ export default new Vuex.Store({
           commit("setSelectedAlbum", album);
         })
     },
+
     async getNewNotifications({ commit }) {
-      const response = await fetch(
-        `/api/notification/${this.state.user.userId}`
-      );
+      const response = await fetch(`/api/notification/5`);
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
     },
+    async getNewNotificationMediaObject ({commit}, sharedContent) {
+      let response;
+      switch (sharedContent.sharedContentType) {
+        default: //artist and video
+          response= await fetch(`/api/yt/${sharedContent.sharedContentType}s/${searchParameters.sharedContentId}`);
+          //add to queue
+          break;
+        case "album":
+          //
+          break;
+        case "artist":
+          //
+          break;
+        case "playlist":
+        break;
+      }
+    }
   },
   getters: {
     getSearchContent(state) {
@@ -304,7 +326,10 @@ export default new Vuex.Store({
     },
     getcreatePlaylistBool(state){
       return state.createPlaylistBool;
-    }
+    },
+    getRenderNotificationsModalStatus(state) {
+      return state.renderNotificationsModal;
+    },
   },
   modules: {},
 });
