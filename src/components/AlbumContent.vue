@@ -1,16 +1,18 @@
 <template>
   <div class="artistContainer">
     <div class="albumImage">
-      <img class="image" :src="selectedAlbum.thumbnails[2].url">
+      <img class="image" :src="selectedAlbum.thumbnails[2].url" />
       <div class="infoContainer">
         <h1 class="albumHeader">{{ selectedAlbum.title }}</h1>
-        <p class="albumDescription">{{ `${selectedAlbum.description.substring(0, 200)}...` }}</p>
+        <p class="albumDescription">
+          {{ `${selectedAlbum.description.substring(0, 200)}...` }}
+        </p>
       </div>
     </div>
     <md-table v-model="selectedAlbum" md-fixed-header>
-      <md-table-row 
-        v-for="(track, index) in selectedAlbum.tracks" 
-        :key="index" 
+      <md-table-row
+        v-for="(track, index) in selectedAlbum.tracks"
+        :key="index"
         @dblclick="playSong(track)"
         @contextmenu.prevent.stop="showOptionsOnClick($event, track)"
       >
@@ -31,18 +33,18 @@ import OptionsMenu from "./OptionsMenu";
 
 export default {
   components: {
-    OptionsMenu
+    OptionsMenu,
   },
   computed: {
     selectedAlbumBrowseId: {
       get() {
         return this.$store.getters.getSelectedAlbumBrowseId;
-      }
+      },
     },
     selectedAlbum: {
       get() {
         return this.$store.getters.getSelectedAlbum ?? {};
-      }
+      },
     },
     queuedTracks: {
       get() {
@@ -51,15 +53,18 @@ export default {
       set(newQueue) {
         this.$store.commit("updateQueue", newQueue);
       },
-    }
+    },
   },
   created() {
-    this.$store.dispatch('fetchAlbumByBrowseId', this.selectedAlbumBrowseId);
+    this.$store.dispatch("fetchAlbumByBrowseId", this.selectedAlbumBrowseId);
   },
   methods: {
     playSong(track) {
-      this.$store.dispatch('setTrackToPlay', track);
-    },    
+      this.$store.dispatch("setTrackToPlay", {
+        media: track,
+        caller: "search",
+      });
+    },
     showOptionsOnClick(event, track) {
       this.selectedTrack = track;
       this.$refs.OptionsMenu.showMenu(event);
@@ -72,14 +77,14 @@ export default {
       if (event.option.slug == "add") {
         //Add to playlist
       }
-    }
+    },
   },
   data() {
     return {
-      selectedTrack: Object
-    }
-  }
-}
+      selectedTrack: Object,
+    };
+  },
+};
 </script>
 
 <style scoped>

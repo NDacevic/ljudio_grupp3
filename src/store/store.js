@@ -9,7 +9,7 @@ export default new Vuex.Store({
     user: {},
     searchResults: [],
     playlists: [],
-    currentSong: {},
+    currentTrack: {},
     trackHistory: [],
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
@@ -18,7 +18,7 @@ export default new Vuex.Store({
     selectedArtist: {},
     selectedAlbumBrowseId: "",
     selectedAlbum: {},
-    newNotifications: []
+    newNotifications: [],
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -27,20 +27,32 @@ export default new Vuex.Store({
     setPlaylistList(state, playlists) {
       state.playlists = playlists;
     },
-    setSongToPlay(state, song) {
-      state.currentSong = song.videoId;
+    playTrack(state, track) {
+      state.currentTrack = track;
     },
-    playSong(state, song) {
-      state.currentSong = song;
+    removeLatestHistory(state) {
+      let track = state.trackHistory.splice(
+        state.trackHistory.length - 1,
+        1
+      )[0];
+      return track;
     },
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
     },
     modifyPlaylist(state, playlistId) {
-      state.playlists.splice(state.playlists.indexOf(state.playlists.find(x => x.PlaylistId === playlistId)), 1);
+      state.playlists.splice(
+        state.playlists.indexOf(
+          state.playlists.find((x) => x.PlaylistId === playlistId)
+        ),
+        1
+      );
     },
     removeTopFromQueue(state) {
       state.queuedTracks.shift();
+    },
+    removeFromBottomOfHistory(state){
+      state.trackHistory.pop();
     },
     addTrackToHistory(state, trackToAdd) {
       state.trackHistory.push(trackToAdd);
@@ -71,23 +83,17 @@ export default new Vuex.Store({
     },
     setNewNotifications(state, newNotifications) {
       state.newNotifications = newNotifications;
-    }
+    },
   },
   actions: {
-    async setTrackToPlay({ commit }, song) {
-      if (
-        this.state.currentSong !== null ||
-        this.state.currentSong !== undefined
-      ) {
-        commit("addTrackToHistory", this.state.currentSong);
+    async setTrackToPlay({ commit }, payload) {
+      if (this.state.currentTrack.videoId != null) {
+        if (payload.caller === "playNext")
+          commit("addTrackToHistory", this.state.currentTrack);
       }
-      window.player.loadVideoById(song.videoId);
+      window.player.loadVideoById(payload.media.videoId);
       window.player.playVideo();
-      commit("playSong", song);
-    },
-    async playPrevTrack({ commit, dispatch }) {
-      commit("addTrackToTopOfQueue", this.state.currentSong);
-      dispatch("setTrackToPlay", this.state.getLatestTrackFromHistory);
+      commit("playTrack", payload.media);
     },
     async getSearchResults({ commit }, searchParameters) {
       let response;
@@ -118,31 +124,30 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
-    async getPlaylists({commit}) {
+    async getPlaylists({ commit }) {
       try {
         let response = await fetch(`/api/getplaylist/`);
         const playlists = await response.json();
         commit("setPlaylistList", playlists);
-      }
-      catch {
+      } catch {
         let playlists = [];
         commit("setPlaylistList", playlists);
       }
     },
     async unfollowPlaylist(playlistId) {
-      let response = await fetch(`/api/unfollowpPlaylist/${playlistId}`,{
-      method: 'delete' 
-      });     
-    await response.json(); 
-    },
-    async deletePlaylist({commit}, playlistId) {
-      console.log("test", playlistId)
-      let response = await fetch(`/api/deletePlaylist/${playlistId}`,{
-        method: 'delete' 
-        });
+      let response = await fetch(`/api/unfollowpPlaylist/${playlistId}`, {
+        method: "delete",
+      });
       await response.json();
-      commit("modifyPlaylist", playlistId)
-      },
+    },
+    async deletePlaylist({ commit }, playlistId) {
+      console.log("test", playlistId);
+      let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
+        method: "delete",
+      });
+      await response.json();
+      commit("modifyPlaylist", playlistId);
+    },
     async createUser() {
       const response = await fetch("/api/users/", {
         method: "POST",
@@ -151,36 +156,30 @@ export default new Vuex.Store({
         },
         body: JSON.stringify(this.state.user),
       });
-      if (response.status == '200') {
-        alert("User has been created")
-        router.go()
+      if (response.status == "200") {
+        alert("User has been created");
+        router.go();
+      } else {
+        alert("Something went wrong, try again");
       }
-      else {
-        alert("Something went wrong, try again")
-          }      
-     },
-     async validateUsername()
-     {
-      const response = await fetch('/api/checkUser/', {
-        method: 'POST',
+    },
+    async validateUsername() {
+      const response = await fetch("/api/checkUser/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',         
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(this.state.user)
+        body: JSON.stringify(this.state.user),
       });
-      if(response.status=='200')
-      {
-        this.dispatch('createUser')       
+      if (response.status == "200") {
+        this.dispatch("createUser");
+      } else {
+        alert("Username already exists,choose another");
       }
-      else
-      {
-        alert("Username already exists,choose another")
-      }
-     
-     },
-     async loginUser(){
-      const response = await fetch('/api/login/', {
-        method: 'POST',
+    },
+    async loginUser() {
+      const response = await fetch("/api/login/", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -211,11 +210,13 @@ export default new Vuex.Store({
       const album = await response.json();
       commit("setSelectedAlbum", album);
     },
-    async getNewNotifications({commit}) {
-      const response = await fetch(`/api/notification/${this.state.user.userId}`);
+    async getNewNotifications({ commit }) {
+      const response = await fetch(
+        `/api/notification/${this.state.user.userId}`
+      );
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
-    }
+    },
   },
   getters: {
     getSearchContent(state) {
@@ -224,17 +225,14 @@ export default new Vuex.Store({
     getPlaylists(state) {
       return state.playlists;
     },
-    getCurrentSong(state) {
-      return state.currentSong;
+    getCurrentTrack(state) {
+      return state.currentTrack;
     },
     getCenterComponentForHome(state) {
       return state.componentToRenderInHomeCenter;
     },
     getQueuedTracks(state) {
       return state.queuedTracks;
-    },
-    getLatestTrackFromHistory(state) {
-      return state.trackHistory.shift();
     },
     getTrackHistoryLength(state) {
       return state.trackHistory.length;
