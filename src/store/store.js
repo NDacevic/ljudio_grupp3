@@ -8,6 +8,7 @@ export default new Vuex.Store({
     router,
     user: {},
     searchResults: [],
+    playlists: [],
     currentSong: {},
     nextSong: {},
     prevSong: {},
@@ -17,18 +18,28 @@ export default new Vuex.Store({
     selectedArtistBrowseId: "",
     selectedArtist: {},
     selectedAlbumBrowseId: "",
-    selectedAlbum: {}
+    selectedAlbum: {},
+    newNotifications: []
   },
   mutations: {
 
     setSearchResults(state, searchResults) {
       state.searchResults = searchResults;
     },
+    setPlaylistList(state, playlists) {
+      state.playlists = playlists;
+    },
+    setSongToPlay(state, song) {
+      state.currentSong = song.videoId;
+    },
     playSong(state, song) {
       state.currentSong = song;
     },
     updateQueue(state, newQueue) {
       state.queuedTracks = newQueue;
+    },
+    modifyPlaylist(state, playlistId) {
+      state.playlists.splice(state.playlists.indexOf(state.playlists.find(x => x.PlaylistId === playlistId)), 1);
     },
     removeTopFromQueue(state) {
       state.queuedTracks.shift();
@@ -54,6 +65,9 @@ export default new Vuex.Store({
     },
     setSelectedAlbum(state, album) {
       state.selectedAlbum = album;
+    },
+    setNewNotifications(state, newNotifications) {
+      state.newNotifications = newNotifications;
     }
   },
   actions: {
@@ -91,7 +105,26 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
-    async createUser() {
+    async getPlaylists({commit}) {
+      let response = await fetch(`/api/getplaylist/`);
+      const playlists = await response.json();
+      commit("setPlaylistList", playlists);
+    },
+    async unfollowPlaylist(playlistId) {
+      let response = await fetch(`/api/unfollowpPlaylist/${playlistId}`,{
+      method: 'delete' 
+      });     
+    await response.json(); 
+    },
+    async deletePlaylist({commit}, playlistId) {
+      console.log("test", playlistId)
+      let response = await fetch(`/api/deletePlaylist/${playlistId}`,{
+        method: 'delete' 
+        });
+      await response.json();
+      commit("modifyPlaylist", playlistId)
+      },
+     async createUser() {
       const response = await fetch('/api/users/', {
         method: 'POST',
         headers: {
@@ -144,8 +177,7 @@ export default new Vuex.Store({
       let data = await response.json()
       this.state.user = data
       router.push("/Home")
-
-    },
+     },
     async fetchArtistByBrowseId({ commit }, browseId) {
       const response = await fetch(`api/yt/artist/${browseId}`);
       const artist = await response.json();
@@ -160,10 +192,21 @@ export default new Vuex.Store({
       const album = await response.json();
       commit("setSelectedAlbum", album);
     },
+    async getNewNotifications({commit}) {
+      const response = await fetch(`/api/notification/${this.state.user.userId}`);
+      const newNotifications = await response.json();
+      commit("setNewNotifications", newNotifications);
+    }
   },
   getters: {
     getSearchContent(state) {
       return state.searchResults;
+    },
+    getPlaylists(state) {
+      return state.playlists;
+    },
+    getCurrentSong(state) {
+      return state.currentSong;
     },
     getCenterComponentForHome(state) {
       return state.componentToRenderInHomeCenter;
@@ -191,7 +234,10 @@ export default new Vuex.Store({
     },
     getSelectedAlbum(state) {
       return state.selectedAlbum;
-    }
+    },
+    getNewNotifications(state) {
+      return state.newNotifications;
+    },
   },
   modules: {},
 });

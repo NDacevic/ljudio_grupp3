@@ -82,6 +82,15 @@ module.exports = (app, db) => {
     data = data.recordset;
     response.json(data)
   })
+
+  // search for new notifications
+  app.get('/api/notification/:userId', async (request, response) => {
+    let data = await db.pool.request()
+      .input('userId', db.Int, request.params.userId)
+      .query("SELECT * FROM [Notification] WHERE UserId = @userId AND Unread = 1")
+    data = data.recordset;
+    response.json(data)
+  })
   
 
   // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************
@@ -91,9 +100,66 @@ module.exports = (app, db) => {
     let data = await db.pool.request()
       .input('id', db.Int, request.params.id)
       .query('SELECT * FROM [TABLE] WHERE id = @id')
-    data = data.recordset[0] // single row
+    data = data.recordset[0] // single row3
     response.json(data)
   })
+
+  //public get playlists with userId
+  app.get("/api/getplaylist", async (request, response) => {
+    let data = await db.pool.request()
+    .input('id', db.Int, request.session.user.UserId)
+    .query('SELECT [UserPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [UserPlaylist] left join [Playlist] on [UserPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where OwnerId = @id')
+    response.json(data.recordset)
+  })
+
+  //alt get playlists with userId
+/*  app.get("/api/userplaylist/:id", async (request, response) => {
+    //check user
+    if(!request.session.user){
+      response.status(401) // unauthorised
+      response.json({error:'not logged in'})
+      return;
+    }
+    let data = await db.pool.request()
+    .query('SELECT * FROM [UserPlaylist] WHERE UserId = ?', [request.session.user.id])
+    response.json(data.recordset)
+  })*/
+
+ // unfollow/delete from userplaylist
+ app.delete("/api/deletePlaylist/:playlistId", async (request, response) => {
+  // check if user exists before writing
+  /*if(!request.session.user){
+    response.status(403) // forbidden
+    response.json({error:'not logged in'})
+    return
+  }*/
+  let result = await db.pool.request()
+    //.input('id', db.Int, request.params.id)
+    .input('playlistId', db.Int, request.params.playlistId)
+    .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId")
+  response.json(result)
+
+  let result2 = await db.pool.request()
+    .input('playlistId', db.Int, request.params.playlistId)
+    .query("DELETE FROM [Playlist] WHERE PlaylistId = @playlistId")
+  response.json(result2)
+
+})
+
+ // delete from userplaylist with userid and playlistid
+ app.delete("/api/unfollowpPlaylist/:playlistId", async (request, response) => {
+  // check if user exists before writing
+  /*if(!request.session.user){
+    response.status(403) // forbidden
+    response.json({error:'not logged in'})
+    return
+  }*/
+  let result = await db.pool.request()
+    .input('id', db.Int, request.session.user.UserId)
+    .input('playlistId', db.Int, request.params.playlistId)
+    .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId AND UserId = @id")
+  response.json(result)
+})
 
   // public get another table (happens to be a left joined view)
   app.get("/api/examples_with_colors", async (request, response) => {
