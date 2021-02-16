@@ -85,7 +85,7 @@
           :key="index"
         >
           <button
-            @contextmenu.prevent.stop="showOptionsOnClick($event, media)"
+            @contextmenu.prevent.stop="showOptionsOnClick($event ,media)"
             class="listButton"
             v-if="media.type === 'song'"
             @dblclick="performActionWhenMediaIsClicked(media)"
@@ -96,6 +96,7 @@
             <p>{{ convertMillisecondsToTimeString(media.duration) }}</p>
           </button>
           <button
+           @contextmenu.prevent.stop="showOptionsOnClick($event ,media)"
             class="listButton"
             id="albumButton"
             v-if="media.type === 'album'"
@@ -106,6 +107,7 @@
             <p>{{ media.year }}</p>
           </button>
           <button
+           @contextmenu.prevent.stop="showArtistOptionOnClick($event ,media)"
             class="listButton"
             id="artistButton"
             v-if="media.type === 'artist'"
@@ -114,6 +116,7 @@
             <p>{{ media.name }}</p>
           </button>
           <button
+           @contextmenu.prevent.stop="showPlaylistOptionOnClick($event ,media)"
             class="listButton"
             id="playlistButton"
             v-if="searchMedia === 'playlists'"
@@ -122,7 +125,7 @@
             <p>{{ media.PlaylistName }}</p>
           </button>
            <button
-            @contextmenu.prevent.stop="showOptionsOnClick($event, media)"
+            @contextmenu.prevent.stop="showOptionsOnClick($event ,media)"
             class="listButton"
             id="videoButton"
             v-if="searchMedia === 'videos'"
@@ -136,8 +139,21 @@
       </div>
     </div>
     <OptionsMenu
-      :elementId="'myUniqueId'"
-      :ref="'OptionsMenu'"
+      :elementId="'optionMenuId'"
+      :options="menuOptions"
+      :ref="'optionMenu'"
+      @option-clicked="setOption"
+    />
+    <OptionsMenu
+      :elementId="'playlistMenuId'"
+      :options="playlistOptions"
+      :ref="'playlistMenu'"
+      @option-clicked="setOption"
+    />
+    <OptionsMenu
+      :elementId="'artistMenuId'"
+      :options="artistOptions"
+      :ref="'artistMenu'"
       @option-clicked="setOption"
     />
   </div>
@@ -186,9 +202,17 @@ export default {
         this.$store.commit("setSearchHasBeenPerformed", true);
       }
     },
-    showOptionsOnClick(event, media) {
+    showOptionsOnClick(event,media) {      
       track = media;
-      this.$refs.OptionsMenu.showMenu(event);
+      this.$refs.optionMenu.showMenu(event);
+    },
+    showPlaylistOptionOnClick(event,media) {
+      track = media;
+      this.$refs.playlistMenu.showMenu(event);
+    },
+    showArtistOptionOnClick(event,media) {
+      track = media;
+      this.$refs.artistMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
@@ -242,6 +266,36 @@ export default {
     return {
       searchString: "",
       searchMedia: "songs",
+       menuOptions:[
+        {
+          name: 'Add to playlist',
+          slug: 'add'
+        },
+       {
+          name: 'Add to queue',
+          slug: 'queue'
+        },
+        {
+          name: 'Share',
+          slug: 'share'
+        },
+      ],
+      artistOptions:[
+         {
+          name: 'Share',
+          slug: 'share'
+        },
+      ],
+      playlistOptions:[
+        {
+          name: 'Add to queue',
+          slug: 'queue'
+        },
+        {
+          name: 'Share',
+          slug: 'share'
+        },
+      ],
     };
   },
 };
