@@ -121,7 +121,7 @@
           >
             <p>{{ media.PlaylistName }}</p>
           </button>
-           <button
+          <button
             @contextmenu.prevent.stop="showOptionsOnClick($event, media)"
             class="listButton"
             id="videoButton"
@@ -201,11 +201,11 @@ export default {
     performActionWhenMediaIsClicked(media) {
       switch (media.type) {
         case "song":
-          this.$store.dispatch("setSongToPlay", media);
+          this.$store.dispatch("setTrackToPlay", { media, caller: "search" });
           break;
         case "video":
-        this.$store.dispatch("setSongToPlay", media);
-        break;
+          this.$store.dispatch("setTrackToPlay", { media, caller: "search" });
+          break;
         default:
           //for artist, album and playlist
           media.type === undefined

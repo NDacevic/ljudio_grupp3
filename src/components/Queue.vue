@@ -80,7 +80,7 @@ export default {
     },
     playTrackAndRemoveFromQueue(index) {
       let media = this.queuedTracks[index];
-      this.$store.dispatch("setSongToPlay", media);
+      this.$store.dispatch("setTrackToPlay",{media, caller:"Queue"} );
       this.queuedTracks.splice(index, 1);
     },
     clearQueue() {
