@@ -15,7 +15,7 @@
       <Queue />
     </div>
     <div class="rightBarBottom">
-      <p>Right Sidebar Bottom</p>
+      <Playlists />
       <!-- Komponent 4 -->
     </div>
     </section>
@@ -29,6 +29,7 @@
 <script>
 import LeftMenu from "../components/LeftMenu";
 import Search from "../components/Search";
+import Playlists from "../components/Playlists";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
 
@@ -41,6 +42,7 @@ export default {
   components: {
     LeftMenu,
     Search,
+    Playlists,
     Player,
     Queue,
     AlbumContent,
@@ -52,8 +54,40 @@ export default {
       return this.$store.getters.getCenterComponentForHome;
     },
   },
-  beforeCreated(){
+    beforeCreated(){
     this.$store.dispatch("getNewNotifications");
   }
 };
+
 </script>
+
+<style scoped>
+.homeContainer {
+  display: grid;
+  grid-template-columns: 200px auto 400px;
+  grid-template-rows: 40vh 40vh auto;
+  height: 100%;
+}
+
+.leftBar {
+  /* @TODO: Remove all colors */
+  background-color: rgb(4, 97, 179);
+  grid-row: 1 / span 2;
+}
+
+.centerContent {
+  display: flex;
+  background-color: rgb(0, 0, 0);
+  grid-row: 1 / span 2;
+}
+
+.rightBarTop {
+  display: flex;
+  background-color: rgb(0, 0, 0);
+  grid-row: 1;
+}
+
+.rightBarBottom {
+  grid-row: 2;
+}
+</style>
