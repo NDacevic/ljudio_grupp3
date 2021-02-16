@@ -45,8 +45,9 @@
       </div>
       <div class="controls-container-buttons">
         <figure
-        :class="{ active: this.$store.getters.getTrackHistoryLength < 1 }"
-         v-on:click="playPrev()">
+          :class="{ active: this.$store.getters.getTrackHistoryLength < 1 }"
+          v-on:click="playPrev()"
+        >
           <i class="material-icons-round">skip_previous</i>
         </figure>
         <div class="playPause">
@@ -95,7 +96,7 @@ export default {
   methods: {
     playPrev() {
       console.log(this.$store.getters.getTrackHistoryLength);
-      if(this.$store.state.trackHistory.length > 0){
+      if (this.$store.state.trackHistory.length > 0) {
         this.$store.dispatch("playPrevTrack");
       }
     },
@@ -161,21 +162,30 @@ export default {
       var firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-      window.onYouTubeIframeAPIReady = () => {
+      if (window.YT.loaded === 1 && window.player == null) {
         if (window.player === undefined || window.player === null) {
-          window.player = new window.YT.Player("yt-player", {
-            height: "640",
-            width: "480",
-            playerVars: {
-              controls: 0,
-              showInfo: 0,
-            },
-            events: {
-              onStateChange: this.onPlayerStateChange,
-            },
-          });
+          this.createPlayer();
         }
-      };
+      } else {
+        window.onYouTubeIframeAPIReady = () => {
+          if (window.player == null) {
+            this.createPlayer();
+          }
+        };
+      }
+    },
+    createPlayer() {
+      window.player = new window.YT.Player("yt-player", {
+        height: "640",
+        width: "480",
+        playerVars: {
+          controls: 0,
+          showInfo: 0,
+        },
+        events: {
+          onStateChange: this.onPlayerStateChange,
+        },
+      });
     },
     onPlayerStateChange(event) {
       /* STATES
@@ -211,7 +221,7 @@ export default {
     },
     convertSecondsToTimeString(inputSeconds) {
       if (isNaN(inputSeconds)) return "0:00";
-      
+
       let seconds = Math.floor(inputSeconds);
       let minutes = Math.floor(seconds / 60);
       let remainingSeconds = seconds % 60;
