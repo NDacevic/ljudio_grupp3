@@ -43,10 +43,13 @@
           </md-table-cell>
         </md-table-row>
       </draggable>
-      <md-button v-if="queuedTracks.length !== 0" @click="clearQueue"
-        >Clear Queue</md-button
-      >
     </md-table>
+    <md-button 
+      v-if="queuedTracks.length !== 0" 
+      @click="clearQueue"
+    >
+      Clear Queue
+    </md-button>
   </div>
 </template>
 

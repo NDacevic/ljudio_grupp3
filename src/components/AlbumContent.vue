@@ -7,6 +7,11 @@
         <p class="albumDescription">{{ `${selectedAlbum.description.substring(0, 200)}...` }}</p>
       </div>
     </div>
+    <div class="artistFooter">
+      <md-button @click="playAlbum(selectedAlbum)">Play</md-button>
+      <md-button>Add to Playlist</md-button>
+      <md-button>Share Album</md-button>
+    </div>
     <md-table v-model="selectedAlbum" md-fixed-header>
       <md-table-row 
         v-for="(track, index) in selectedAlbum.tracks" 
@@ -66,12 +71,21 @@ export default {
     },
     setOption(event) {
       if (event.option.slug == "queue") {
-        console.log(this.selectedTrack);
         this.queuedTracks.push(this.selectedTrack);
       }
       if (event.option.slug == "add") {
         //Add to playlist
       }
+    },
+    playAlbum(album) {
+      this.$store.dispatch('setSongToPlay', album.tracks[0]);
+      this.queuedTracks = album.tracks.slice(1, album.tracks.length);
+    },
+    addAlbumToPlaylist(/* album */) {
+      //@TODO: Add album to playlist
+    },
+    shareAlbum(/* album */) {
+      //@TODO: Share album
     }
   },
   data() {
@@ -123,5 +137,9 @@ export default {
 }
 .infoContainer {
   display: inline-block;
+}
+.artistFooter {
+  display: inline-block;
+  margin-left: auto;
 }
 </style>
