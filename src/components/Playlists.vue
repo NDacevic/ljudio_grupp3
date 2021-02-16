@@ -1,6 +1,6 @@
 <template>
   <div class="playlistBar">
-    <h3>Playlists</h3>
+    <h3>My playlists</h3>
     <li
       v-for="(playlist, index) in getPlaylists"
       :key="index"
