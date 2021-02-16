@@ -9,7 +9,7 @@
     <button id="searchButton" @click="renderEmptySearchPageInCenter()">
       <p>Search</p>
     </button>
-    <button id="logOutButton">
+    <button id="logOutButton" @click="logOut">
       <p>Log out</p>
     </button>
   </div>
@@ -23,6 +23,9 @@ export default {
       this.$store.commit("setComponentToRenderInHomeCenter", "search");
       this.$store.commit("setSearchResults", []);
       this.$store.commit("setSearchHasBeenPerformed", false);
+    },
+    logOut() {
+      this.$store.dispatch("logOut")  
     },
   },
   computed: {

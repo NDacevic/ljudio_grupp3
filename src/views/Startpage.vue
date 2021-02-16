@@ -18,11 +18,11 @@
       <input type="password" v-model="user.password"/>
       <div>
         <input class="submit" value="Register" type="submit" @click='toggle = !toggle'>
-        <input class="submit"  value="Log in" type="submit" @click="loginUser">
+        <input class="submit"  value="Log in" type="submit">
       </div>
     </form>
 
-    <form v-show='!toggle' @submit.prevent="checkForm">
+    <form v-show='!toggle' @submit.prevent="checkFormReg">
      <p v-if="errors.length">
        <b>Please correct the following error(s):</b>
          <ul> 
@@ -38,7 +38,7 @@
       <input v-model="confirmPassword" type="password" />
       <div>
         <input class="submit" value="Cancel" type="submit" @click='toggle = !toggle'>
-        <input class="submit"  value="Create account" type="submit" @click="validateUsername">
+        <input class="submit"  value="Create account" type="submit">
       </div>
     </form>
   </div>
@@ -55,19 +55,17 @@ data(){
     return{
         errors:[],
         user:{},
-        confirmPassword:String,
-        toggle: true,
-              
+        confirmPassword:"",
+        toggle: true,          
     };
   },
 methods: {
   checkForm: function(e){
+       this.errors = [];
     if(this.user.username && this.user.password)
     {
-      return true;
+      this.loginUser();
     }
-    this.errors = [];
-
     if(!this.user.username){
       this.errors.push('Username required');
     }
@@ -76,23 +74,35 @@ methods: {
     }
     e.preventDefault();
   },
-    loginUser(){
+    checkFormReg: function(e){
+       this.errors = [];
+    if(this.user.username && this.user.password && this.confirmPassword)
+    {   
+      this.validateUsername();   
+    }  
+    if(!this.user.username){
+      this.errors.push('Username required');
+    }
+    if(!this.user.password) {
+      this.errors.push('Password required');
+    }
+    if(!this.confirmPassword) {
+      this.errors.push('Confirmation password required');
+    }
+    e.preventDefault();
+  },
+   loginUser(){
        this.$store.commit("updateUser",this.user);
        this.$store.dispatch("loginUser")     
        },
 
-    validateUsername() {
-        if(this.user.password!=this.confirmPassword)
-        {           
-          this.errors.push('The passwords doesn´t match, try again');
-        }
-        else
-        {
-            this.$store.commit("updateUser",this.user); 
-            this.$store.dispatch("validateUsername")      
-        }      
+  validateUsername() {
+    if(this.user.password != this.confirmPassword)
+    {
+     this.errors.push('Password doesn´t match');
+    }
+    else{ this.$store.dispatch("validateUsername")}   
     },
-
 }
 }
 

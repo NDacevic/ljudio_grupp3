@@ -140,12 +140,7 @@ export default new Vuex.Store({
       });
     await response.json(); 
     },
-    async deletePlaylist({commit}, playlistId) {
-      let response = await fetch(`/api/deletePlaylist/${playlistId}`,{
-        method: 'delete' 
-        });
-      await response.json();
-    },
+    
     async deletePlaylist({ commit }, playlistId) {
       console.log("test", playlistId);
       let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
@@ -183,6 +178,18 @@ export default new Vuex.Store({
         alert("Username already exists,choose another");
       }
     },
+    async logOut() {
+      const response = await fetch("/api/login/", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.state.user),
+      });
+      if (response.status == "200") {
+        router.push("/");
+      }      
+    },
     async loginUser() {
       const response = await fetch("/api/login/", {
         method: "POST",
@@ -195,6 +202,7 @@ export default new Vuex.Store({
         alert("logged in");
         this.dispatch("checkAuth");
       }
+      else {alert("Wrong username and/or password")}
     },
     async checkAuth() {
       let response = await fetch(`/api/login/`);
