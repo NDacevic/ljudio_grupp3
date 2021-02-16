@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-
+const { response } = require("express");
 
 module.exports = (app, db) => {
 
@@ -13,8 +13,22 @@ module.exports = (app, db) => {
       .input('Password', db.VarChar, password)
       .query("INSERT INTO [User](Username,Password) VALUES (@username,@password)")
     response.json(result)
+  }),
+  //Check if username already exists
+  app.post("/api/checkUser",async (request,response) => {
+    let user = await db.pool.request()
+      .input("Username", db.VarChar, request.body.username)
+      .query("SELECT * FROM [User] WHERE Username = @Username")
+    user = user.recordset[0];
+    if(user!=undefined)
+    {
+        response.status(403); 
+        response.json({ message:"Username already exists" });
+    }
+    else
+    response.status(200)
+    response.json({ message:"User dont exist" });
   })
-
   // authentication: perform login
   app.post("/api/login", async (request, response) => {
     let user = await db.pool
@@ -65,6 +79,15 @@ module.exports = (app, db) => {
     let data = await db.pool.request()
       .input('searchString', db.NVarChar(db.MAX), request.params.searchString)
       .query("SELECT * FROM [Playlist] WHERE PlaylistName LIKE '%' + @searchString + '%'")
+    data = data.recordset;
+    response.json(data)
+  })
+
+  // search for new notifications
+  app.get('/api/notification/:userId', async (request, response) => {
+    let data = await db.pool.request()
+      .input('userId', db.Int, request.params.userId)
+      .query("SELECT * FROM [Notification] WHERE UserId = @userId AND Unread = 1")
     data = data.recordset;
     response.json(data)
   })

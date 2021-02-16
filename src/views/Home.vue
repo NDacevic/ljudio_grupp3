@@ -1,8 +1,7 @@
 <template>
   <div class="homeContainer">
     <div class="leftBar">
-      <p>Left Sidebar</p>
-      <!-- Komponent 1 -->
+      <LeftMenu/>
     </div>
     <div class="centerContent">
       <Search v-if="renderCenterComponent === 'search'" />
@@ -28,7 +27,7 @@
 </template>
 
 <script>
-
+import LeftMenu from "../components/LeftMenu";
 import Search from "../components/Search";
 import Playlists from "../components/Playlists";
 import Player from "../components/Player";
@@ -41,6 +40,7 @@ import PlaylistContent from "../components/PlaylistContent";
 export default {
   name: "Home",
   components: {
+    LeftMenu,
     Search,
     Playlists,
     Player,
@@ -52,9 +52,13 @@ export default {
   computed: {
     renderCenterComponent() {
       return this.$store.getters.getCenterComponentForHome;
-    }
+    },
+  },
+    beforeCreated(){
+    this.$store.dispatch("getNewNotifications");
   }
-}
+};
+
 </script>
 
 <style scoped>

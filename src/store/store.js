@@ -18,7 +18,8 @@ export default new Vuex.Store({
     selectedArtistBrowseId: "",
     selectedArtist: {},
     selectedAlbumBrowseId: "",
-    selectedAlbum: {}
+    selectedAlbum: {},
+    newNotifications: []
   },
   mutations: {
 
@@ -64,6 +65,9 @@ export default new Vuex.Store({
     },
     setSelectedAlbum(state, album) {
       state.selectedAlbum = album;
+    },
+    setNewNotifications(state, newNotifications) {
+      state.newNotifications = newNotifications;
     }
   },
   actions: {
@@ -133,9 +137,28 @@ export default new Vuex.Store({
       }
       else {
         alert("Something went wrong, try again")
+          }      
+     },
+     async validateUsername()
+     {
+      const response = await fetch('/api/checkUser/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',         
+        },
+        body: JSON.stringify(this.state.user)
+      });
+      if(response.status=='200')
+      {
+        this.dispatch('createUser')       
       }
-    },
-    async loginUser() {
+      else
+      {
+        alert("Username already exists,choose another")
+      }
+     
+     },
+     async loginUser(){
       const response = await fetch('/api/login/', {
         method: 'POST',
         headers: {
@@ -168,6 +191,11 @@ export default new Vuex.Store({
       const album = await response.json();
       commit("setSelectedAlbum", album);
     },
+    async getNewNotifications({commit}) {
+      const response = await fetch(`/api/notification/${this.state.user.userId}`);
+      const newNotifications = await response.json();
+      commit("setNewNotifications", newNotifications);
+    }
   },
   getters: {
     getSearchContent(state) {
@@ -205,7 +233,10 @@ export default new Vuex.Store({
     },
     getSelectedAlbum(state) {
       return state.selectedAlbum;
-    }
+    },
+    getNewNotifications(state) {
+      return state.newNotifications;
+    },
   },
   modules: {},
 });
