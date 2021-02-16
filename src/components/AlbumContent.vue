@@ -76,6 +76,9 @@ export default {
       if (event.option.slug == "add") {
         //Add to playlist
       }
+      if (event.option.slug == "share") {
+        //@TODO: Share selectedTrack
+      }
     },
     playAlbum(album) {
       this.$store.dispatch('setSongToPlay', album.tracks[0]);

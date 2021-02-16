@@ -83,7 +83,10 @@ export default {
         this.queuedTracks.push(...this.selectedAlbum.tracks);
       }
       if (event.option.slug == "add") {
-        //Add to playlist
+        // Add selectedAlbum to playlist
+      }
+      if (event.option.slug == "share") {
+        //@TODO: Share selectedAlbum
       }
     },
     async fetchSelectedAlbum(album, playAlbum) {
