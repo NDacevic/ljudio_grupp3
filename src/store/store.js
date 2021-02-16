@@ -45,12 +45,7 @@ export default new Vuex.Store({
       state.queuedTracks = newQueue;
     },
     modifyPlaylist(state, playlistId) {
-      state.playlists.splice(
-        state.playlists.indexOf(
-          state.playlists.find((x) => x.PlaylistId === playlistId)
-        ),
-        1
-      );
+      state.playlists.splice(state.playlists.findIndex(x => x.PlaylistId === playlistId), 1);
     },
     removeTopFromQueue(state) {
       state.queuedTracks.shift();
