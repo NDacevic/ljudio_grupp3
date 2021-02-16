@@ -138,11 +138,9 @@ export default new Vuex.Store({
       }
       if (searchParameters.searchMedia === "playlists") {
         commit("setSearchResults", searchResults);
-        console.log(searchResults);
       } else {
         commit("setSearchResults", searchResults.content);
       }
-      console.log(searchResults.content);
     },
     async getPlaylists({ commit }) {
       try {
@@ -162,7 +160,6 @@ export default new Vuex.Store({
     },
     
     async deletePlaylist({ commit }, playlistId) {
-      console.log("test", playlistId);
       let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
         method: "delete",
       });
@@ -254,6 +251,7 @@ export default new Vuex.Store({
     },
 
     async getNewNotifications({ commit }) {
+      //Todo: Change back route to /api/notification/${state.user.userId}
       const response = await fetch(`/api/notification/5`);
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
@@ -273,23 +271,18 @@ export default new Vuex.Store({
       }
 
     },
-    async getMediaContentAndRender({ commit }, sharedContent) {
-      let response;
-      console.log("in store",sharedContent.sharedContentType)
-      if (sharedContent.sharedContentType !== "playlist")
-      {
-        response = await fetch(`/api/yt/${sharedContent.sharedContentType}/${sharedContent.sharedContentId}`);
+    async getMediaContentAndRender({ commit, dispatch }, sharedContent) {
+      switch (sharedContent.sharedContentType){
+        case "artist":
+          dispatch("fetchArtistByBrowseId", sharedContent.sharedContentId);
+          break;
+        case "album":
+          dispatch("fetchAlbumByBrowseId", sharedContent.sharedContentId)
+          break;
+        case "playlist":
+          dispatch("getCurrentPlaylist", sharedContent.sharedContentId)
+          break;
       }
-      else {
-        response = await fetch(`/api/getMusicPlaylist/${sharedContent.sharedContentId}`);
-      }
-
-      const media = await response.json();
-      commit("setSelectedArtist", {
-        name: media.name,
-        artist: media,
-        albums: media.products.albums.content,
-      });
       commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType)
     }
   },
