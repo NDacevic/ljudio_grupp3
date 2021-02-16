@@ -162,6 +162,12 @@ export default new Vuex.Store({
       await response.json();
       commit("modifyPlaylist", playlistId);
     },
+    async getCurrentPlaylist({ commit }, playlistId) {
+      let response = await fetch(`/api/getMusicPlaylist/${playlistId}`);
+      let playlist = await response.json();
+      console.log(playlist)
+      commit("setCurrentPlaylist", playlist);
+    },
     async createUser() {
       const response = await fetch("/api/users/", {
         method: "POST",
@@ -222,12 +228,6 @@ export default new Vuex.Store({
       let data = await response.json();
       this.state.user = data;
       router.push("/Home");
-    },
-    async getCurrentPlaylist({commit}, playlistId){
-      let response = await fetch(`/api/getMusicPlaylist/${playlistId}`);
-      let playlist = await response.json();
-      //foreach matcha url:er i array mot yt-api?
-      commit("setCurrentPlaylist", playlist); 
     },
     async fetchArtistByBrowseId({ commit }, browseId) {
       const response = await fetch(`api/yt/artist/${browseId}`);

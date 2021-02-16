@@ -68,9 +68,11 @@ export default {
     list-style-type: none;
 
     &:hover {
-      background-color: rgb(233, 232, 232);
-      color: #448aff;
+        background-color: rgb(233, 232, 232) !important;
+    & > p {
+        color: #448aff;
     }
+  }
   }
 
   li::marker {

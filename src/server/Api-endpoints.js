@@ -151,7 +151,8 @@ module.exports = (app, db) => {
 app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
   let data = await db.pool.request()
   .input('playlistId', db.Int, request.params.playlistId)
-  .query('SELECT * FROM [MusicPlaylist] left join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] where PlaylistId = @playlistId')
+  //.query('SELECT * FROM [MusicPlaylist] join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] join [Playlist] on [MusicPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where [Playlist].[PlaylistId] = @playlistId')
+  .query('SELECT [Music].*, [MusicPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [MusicPlaylist] join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] join [Playlist] on [MusicPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where Playlist.PlaylistId = @playlistId')
   response.json(data.recordset)
 })
 
