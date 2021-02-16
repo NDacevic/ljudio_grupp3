@@ -101,6 +101,7 @@ export default new Vuex.Store({
       });
       if (response.status == '200') {
         alert("User have been created")
+        router.go()
       }
       else {
         alert("Something went wrong, try again")
