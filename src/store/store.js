@@ -22,9 +22,7 @@ export default new Vuex.Store({
     selectedArtist: {},
     selectedAlbumBrowseId: "",
     currentPlaylist: [],
-    selectedAlbum: {},
-    newNotifications: [],
-    renderNotificationsModal: false
+    renderNotificationsModal: false,
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -101,6 +99,9 @@ export default new Vuex.Store({
     },
     setRenderNotificationsModal(state, render) {
       state.renderNotificationsModal = render;
+    },
+    addTrackFromNotificationToQueue(state, track){
+      state.queuedTracks.push(track);
     }
   },
   actions: {
@@ -257,22 +258,39 @@ export default new Vuex.Store({
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
     },
-    async getNewNotificationMediaObject ({commit}, sharedContent) {
+    async getMediaObjectAndAddToQueueOrPlay({ commit, dispatch }, sharedContent) {
       let response;
-      switch (sharedContent.sharedContentType) {
-        default: //artist and video
-          response= await fetch(`/api/yt/${sharedContent.sharedContentType}s/${searchParameters.sharedContentId}`);
-          //add to queue
-          break;
-        case "album":
-          //
-          break;
-        case "artist":
-          //
-          break;
-        case "playlist":
-        break;
+      response = await fetch(
+        `/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`
+      );
+      const track = await response.json();
+      
+      if (sharedContent.addToQueue) {
+        commit("addTrackFromNotificationToQueue",track.content[0])
       }
+      else {
+        dispatch("setSongToPlay", track.content[0]);
+      }
+
+    },
+    async getMediaContentAndRender({ commit }, sharedContent) {
+      let response;
+      console.log("in store",sharedContent.sharedContentType)
+      if (sharedContent.sharedContentType !== "playlist")
+      {
+        response = await fetch(`/api/yt/${sharedContent.sharedContentType}/${sharedContent.sharedContentId}`);
+      }
+      else {
+        response = await fetch(`/api/getMusicPlaylist/${sharedContent.sharedContentId}`);
+      }
+
+      const media = await response.json();
+      commit("setSelectedArtist", {
+        name: media.name,
+        artist: media,
+        albums: media.products.albums.content,
+      });
+      commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType)
     }
   },
   getters: {
