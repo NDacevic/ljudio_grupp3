@@ -108,9 +108,28 @@ export default new Vuex.Store({
       }
       else {
         alert("Something went wrong, try again")
+          }      
+     },
+     async validateUsername()
+     {
+      const response = await fetch('/api/checkUser/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',         
+        },
+        body: JSON.stringify(this.state.user)
+      });
+      if(response.status=='200')
+      {
+        this.dispatch('createUser')       
       }
-    },
-    async loginUser() {
+      else
+      {
+        alert("Username already exists,choose another")
+      }
+     
+     },
+     async loginUser(){
       const response = await fetch('/api/login/', {
         method: 'POST',
         headers: {
