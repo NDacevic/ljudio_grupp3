@@ -1,7 +1,8 @@
 <template>
   <div class="homeContainer">
+    <Share v-if="shareRendered" :track="track" @hide-share="hideShare" />
     <div class="leftBar">
-      <LeftMenu/>
+      <LeftMenu />
     </div>
     <div class="centerContent">
       <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"/>
@@ -12,13 +13,13 @@
       <div id="yt-player" style="display:none"></div>
     </div>
     <section class="rightBar">
-    <div class="rightBarTop">
-      <Queue />
-    </div>
-    <div class="rightBarBottom">
-      <Playlists />
-      <!-- Komponent 4 -->
-    </div>
+      <div class="rightBarTop">
+        <Queue />
+      </div>
+      <div class="rightBarBottom">
+        <Playlists />
+        <!-- Komponent 4 -->
+      </div>
     </section>
     <div class="bottomBar">
       <Player />
@@ -37,6 +38,7 @@ import AddPlaylist from "../components/AddPlaylist"
 import AlbumContent from "../components/AlbumContent";
 import ArtistContent from "../components/ArtistContent";
 import PlaylistContent from "../components/PlaylistContent";
+import Share from "../components/ShareComponent";
 
 export default {
   name: "Home",
@@ -50,6 +52,13 @@ export default {
     ArtistContent,
     PlaylistContent,
     AddPlaylist,
+    Share,
+  },
+  data() {
+    return {
+      track: {},
+      shareRendered: false,
+    };
   },
   computed: {
     renderCenterComponent() {
@@ -58,9 +67,17 @@ export default {
   },
     beforeMount(){
     this.$store.dispatch("getNewNotifications");
-  }
+  },
+  methods: {
+    renderShare(track, show) {
+      this.track = track;
+      this.shareRendered = show;
+    },
+    hideShare() {
+      this.shareRendered = false;
+    },
+  },
 };
-
 </script>
 
 <style scoped>
