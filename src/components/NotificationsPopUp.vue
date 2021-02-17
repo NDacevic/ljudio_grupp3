@@ -1,5 +1,5 @@
 <template>
-  <div id="shareBackground">
+  <div id="notificationBackground">
     <div id="notificationsPopUp">
       <h3>New notifications</h3>
       <div id="scroll" class="md-scrollbar">
