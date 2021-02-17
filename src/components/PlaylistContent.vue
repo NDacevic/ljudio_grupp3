@@ -3,7 +3,7 @@
     <div class="head">
       <h1 v-if="playlist[0] !== undefined">{{ playlist[0].PlaylistName }}</h1>
       <h1 v-else>Playlist error</h1>
-      <button v-on:click="addToQueue(playlist)">Add to queue</button>
+      <button v-on:click="addToQueue()">Add to queue</button>
     </div>
 
     <div class="listContainer">
@@ -79,8 +79,11 @@ export default {
       console.log(track.videoId)
       this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {addToQueue:false, sharedContentType: track.contentType, sharedContentId: track.videoId});
     },
-    addToQueue(playlist) {
-      this.$store.commit("addPlaylistToQueue", playlist)
+    addToQueue() {
+      for(let track of this.playlist) {
+        this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {addToQueue:true, sharedContentType: track.contentType, sharedContentId: track.videoId});
+
+      }
     },
     showOptionsOnClick(event, track) {
       this.selectedTrack = track;      
@@ -91,7 +94,7 @@ export default {
         this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {addToQueue:true, sharedContentType: this.selectedTrack.contentType, sharedContentId: this.selectedTrack.videoId});
       }
       if (event.option.slug == "share") {
-        //@TODO: Share selectedAlbum
+        //@TODO: Share track
       }
     },
   },
