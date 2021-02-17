@@ -1,6 +1,6 @@
 <template>
   <div class="homeContainer">
-    <Share v-if="shareRendered" :track="track" @hide-share="hideShare" />
+    <Share v-if="this.$store.getters.getShareComponentVisible" :track="this.$store.getters.getShareMedia" />
     <div class="leftBar">
       <LeftMenu />
     </div>
@@ -56,7 +56,6 @@ export default {
   },
   data() {
     return {
-      track: {},
       shareRendered: false,
     };
   },
@@ -67,15 +66,6 @@ export default {
   },
     beforeMount(){
     this.$store.dispatch("getNewNotifications");
-  },
-  methods: {
-    renderShare(track, show) {
-      this.track = track;
-      this.shareRendered = show;
-    },
-    hideShare() {
-      this.shareRendered = false;
-    },
   },
 };
 </script>
