@@ -139,6 +139,8 @@
         </div>
       </div>
     </div>
+    <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"
+    :ref="'addsongtoplaylist'"/>
     <OptionsMenu
       :elementId="'optionMenuId'"
       :options="menuOptions"
@@ -163,12 +165,14 @@
 <script>
 let track = {};
 import OptionsMenu from "../components/OptionsMenu";
+import AddPlaylist from "../components/AddPlaylist";
 
 export default {
   name: "Search",
 
   components: {
     OptionsMenu,
+    AddPlaylist
 
   },
   methods: {
@@ -222,6 +226,7 @@ export default {
       }
       if (event.option.slug == "add") {
         this.$store.commit("setcreatePlaylistHasBeenClicked", true);
+        this.$refs.addsongtoplaylist.getTrack(track)
       }
     },
     performActionWhenMediaIsClicked(media) {

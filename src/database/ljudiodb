@@ -1,8 +1,11 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> c906f08... felhant i db fil
-=======
-SELECT * FROM UserPlaylist
->>>>>>> 502abfb... style playlistcontent
+declare @myVal int;
+SET @myVal = (SELECT IDENT_CURRENT ('Playlist'))
+INSERT INTO [UserPlaylist](UserId,PlaylistId) VALUES (5,@myVal)
+
+SELECT * from [User]
+SELECT * from [UserPlaylist]
+SELECT * from [Music]
+SELECT * from [MusicPlaylist]
+SELECT * from [Playlist]
+

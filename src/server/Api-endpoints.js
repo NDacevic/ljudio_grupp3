@@ -16,8 +16,8 @@ module.exports = (app, db) => {
   //Check if username already exists
   app.post("/api/checkUser",async (request,response) => {
     let user = await db.pool.request()
-      .input("Username", db.VarChar, request.body.username)
-      .query("SELECT * FROM [User] WHERE Username = @Username")
+      .input('Username', db.VarChar, request.body.username)
+      .query("SELECT * FROM [User] WHERE Username = @username")
     user = user.recordset[0];
     if(user!=undefined)
     {
@@ -26,7 +26,6 @@ module.exports = (app, db) => {
     }
     else
     response.status(200)
-    response.json({ message:"User dont exist" });
   })
   // authentication: perform login
   app.post("/api/login", async (request, response) => {
@@ -94,15 +93,6 @@ module.exports = (app, db) => {
 
   // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************
 
-  // public get one table row
-  app.get("/api/examples/:id", async (request, response) => {
-    let data = await db.pool.request()
-      .input('id', db.Int, request.params.id)
-      .query('SELECT * FROM [TABLE] WHERE id = @id')
-    data = data.recordset[0] // single row3
-    response.json(data)
-  })
-
   //public get playlists with userId
   app.get("/api/getplaylist", async (request, response) => {
     let data = await db.pool.request()
@@ -156,28 +146,23 @@ app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
   response.json(data.recordset)
 })
 
-  // public get another table (happens to be a left joined view)
-  app.get("/api/examples_with_colors", async (request, response) => {
-    let data = await db.pool.request().query('SELECT * FROM [TABLE]')
-    response.json(data.recordset)
-  })
-
-  // private create one row
-  app.post("/api/examples", async (request, response) => {
+  // private create new playlist
+  app.post("/api/newPlaylist", async (request, response) => {
+    let user = request.session.user.UserId
     // check if user exists before writing
     if(!request.session.user){
       response.status(403) // forbidden
       response.json({error:'not logged in'})
       return
     }
-    // https://www.npmjs.com/package/mssql#data-types
-    let result = await db.pool.request()
-      .input('name', db.VarChar, request.body.name)
-      .input('slogan', db.VarChar, request.body.slogan)
-      .input('color', db.Int, request.body.color)
-      .query("INSERT INTO [TABLE] (name, slogan, color) VALUES (@name, @slogan, @color)")
-    response.json(result)
+    await db.pool.request()
+    .input('PlaylistName', db.VarChar, request.body.PlaylistName)
+    .input('Shared', db.VarChar, false)
+    .input('OwnerId', db.VarChar, request.session.user.UserId)
+    .input('ReadOnly', db.VarChar, false)
+    .query(`INSERT INTO [Playlist](PlaylistName,Shared,OwnerId,ReadOnly) VALUES (@playlistname,@shared,@ownerid,@readonly) declare @myVal int; SET @myVal = (SELECT IDENT_CURRENT ('Playlist')) INSERT INTO [UserPlaylist](UserId,PlaylistId) VALUES (${user},@myVal)`)
   })
+
 
   // private update one row
   app.put("/api/examples/:id", async (request, response) => {
