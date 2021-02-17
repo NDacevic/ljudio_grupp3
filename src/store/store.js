@@ -19,6 +19,7 @@ export default new Vuex.Store({
     selectedAlbumBrowseId: "",
     selectedAlbum: {},
     newNotifications: [],
+    createPlaylistBool:false,
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -83,6 +84,9 @@ export default new Vuex.Store({
     },
     setNewNotifications(state, newNotifications) {
       state.newNotifications = newNotifications;
+    },
+    setcreatePlaylistHasBeenClicked(state, createPlaylistBool) {
+      state.createPlaylistBool = createPlaylistBool;
     },
   },
   actions: {
@@ -276,6 +280,9 @@ export default new Vuex.Store({
     },
     getNewNotifications(state) {
       return state.newNotifications;
+    },
+    getcreatePlaylistBool(state){
+      return state.createPlaylistBool;
     },
   },
   modules: {},

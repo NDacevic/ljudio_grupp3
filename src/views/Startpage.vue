@@ -47,7 +47,6 @@
 </template>
 
 <script>
-
 export default {
 name: 'Startpage',
 data(){
@@ -55,7 +54,7 @@ data(){
     return{
         errors:[],
         user:{},
-        confirmPassword:"",
+        confirmPassword:"String",
         toggle: true,          
     };
   },

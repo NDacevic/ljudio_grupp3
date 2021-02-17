@@ -79,6 +79,7 @@
         <h3>Duration</h3>
       </div>
       <div id="searchResults" class="md-scrollbar">
+  
         <div
           class="mediaContainer"
           v-for="(media, index) in getSearchContent"
@@ -168,6 +169,7 @@ export default {
 
   components: {
     OptionsMenu,
+
   },
   methods: {
     convertMillisecondsToTimeString(milliseconds) {
@@ -219,7 +221,7 @@ export default {
         this.queuedTracks.push(track);
       }
       if (event.option.slug == "add") {
-        //Add to playlist
+        this.$store.commit("setcreatePlaylistHasBeenClicked", true);
       }
     },
     performActionWhenMediaIsClicked(media) {
@@ -252,6 +254,9 @@ export default {
     },
     getSearchHasBeenPerformed() {
       return this.$store.getters.getSearchHasBeenPerformed;
+    },
+    getcreatePlaylistBool() {
+      return this.$store.getters.getcreatePlaylistBool;
     },
     queuedTracks: {
       get() {
