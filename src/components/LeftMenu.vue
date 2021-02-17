@@ -2,9 +2,11 @@
   <div id="leftMenu">
     <div id="notifications">
       Notifications
-      <button v-if="getNewNotifications.length > 0" id="newNotifications">{{getNewNotifications.length}}</button>
+      <button v-if="getNewNotifications.length > 0" id="newNotifications" @click="setRenderNotificationsModalTrue">{{getNewNotifications.length}}</button>
       <button id="noNewNotifications" v-else>0</button>
     </div>
+    
+    <NotificationsPopUp v-if="renderNotificationsModal===true"/>
 
     <button id="searchButton" @click="renderEmptySearchPageInCenter()">
       <p>Search</p>
@@ -16,8 +18,14 @@
 </template>
 
 <script>
+
+import NotificationsPopUp from "./NotificationsPopUp"
+
 export default {
   name: "LeftMenu",
+  components: {
+    NotificationsPopUp
+  },
   methods: {
     renderEmptySearchPageInCenter() {
       this.$store.commit("setComponentToRenderInHomeCenter", "search");
@@ -27,11 +35,17 @@ export default {
     logOut() {
       this.$store.dispatch("logOut")  
     },
+    setRenderNotificationsModalTrue() {
+      this.$store.commit("setRenderNotificationsModal", true)
+    }
   },
   computed: {
     getNewNotifications() {
       return this.$store.getters.getNewNotifications;
     },
+    renderNotificationsModal() {
+      return this.$store.getters.getRenderNotificationsModalStatus;
+    }
   },
 };
 </script>
