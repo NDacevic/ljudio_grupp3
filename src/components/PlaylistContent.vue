@@ -1,7 +1,11 @@
 <template>
   <div class="playlistContent">
-    <h1 v-if="playlist[0] !== undefined">{{ playlist[0].PlaylistName }}</h1>
-    <h1 v-else>Playlist error</h1>
+    <div class="head">
+      <h1 v-if="playlist[0] !== undefined">{{ playlist[0].PlaylistName }}</h1>
+      <h1 v-else>Playlist error</h1>
+      <button v-on:click="addToQueue(playlist)">Add to queue</button>
+    </div>
+
     <div class="listContainer">
       <div class="headers">
         <h3>Title</h3>
@@ -11,24 +15,36 @@
       </div>
 
       <li
-        v-for="(media, index) in playlist"
+        v-for="(track, index) in playlist"
         :key="index"
-        @dblclick="playSong(media)"
+        @dblclick="playSong(track)"
+         @contextmenu.prevent.stop="showOptionsOnClick($event, track)"
       >
         <div class="listItem">
-          <p>{{ media.Title }}</p>
-          <p>{{ media.Artist }}</p>
-          <p>{{ media.AlbumName }}</p>
-          <p>{{ media.Duration }}</p>
+          <p>{{ track.Title }}</p>
+          <p>{{ track.Artist }}</p>
+          <p>{{ track.AlbumName }}</p>
+          <p>{{ track.Duration }}</p>
         </div>
       </li>
     </div>
+    <OptionsMenu
+      :elementId="'optionMenuId'"
+      :options="menuOptions"
+      :ref="'optionMenu'"
+      @option-clicked="setOption"
+    />
   </div>
 </template>
 
 <script>
+import OptionsMenu from "./OptionsMenu";
+
 export default {
   name: "PlaylistContent",
+  components: {
+    OptionsMenu
+  },
   computed: {
     queue: {
       get() {
@@ -42,12 +58,47 @@ export default {
       return this.$store.getters.getCurrentPlaylist;
     },
   },
+  data () {
+    return {
+        menuOptions:[
+        {
+          name: 'Add to playlist',
+          slug: 'add'
+        },
+       {
+          name: 'Add to queue',
+          slug: 'queue'
+        },
+        {
+          name: 'Share',
+          slug: 'share'
+        },
+      ],
+    }
+  },
   methods: {
-    playSong(media) {
-      this.$store.dispatch("setSongToPlay", media); //skicka url?
+    playSong(track) {
+      console.log(track)
+      this.$store.dispatch("setTrackToPlay", {media:track, caller: "playlist"}); 
+    },
+    addToQueue(playlist) {
+      this.$store.commit("addPlaylistToQueue", playlist)
+    },
+    showOptionsOnClick(event) {      
+      this.$refs.optionMenu.showMenu(event);
+    },
+    setOption(event) {
+      if (event.option.slug == "queue") {
+        this.queue.push(...this.playlist);
+      }
+      if (event.option.slug == "add") {
+        // Add selectedAlbum to playlist
+      }
+      if (event.option.slug == "share") {
+        //@TODO: Share selectedAlbum
+      }
     },
   },
-  addToQueue() {},
 };
 </script>
 
@@ -58,10 +109,21 @@ export default {
   height: 100%;
   grid-template-columns: 57.5fr 23fr 23fr 13fr;
 
-  & h1 {
+  & .head {
     margin-top: 5vh;
     margin-bottom: 10vh;
     margin-left: 1vw;
+
+    & button {
+      margin-top: 2vh;
+      border-radius: 50%;
+      font-weight: semi-bold;
+      border-radius: 20px;
+      padding: 5px;
+      border: 1px white solid;
+      background-color: black;
+      padding: 6px;
+    }
   }
   //   .col-1 {
   //   grid-column-start: 1;
