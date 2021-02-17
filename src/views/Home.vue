@@ -56,7 +56,7 @@ export default {
       return this.$store.getters.getCenterComponentForHome;
     },
   },
-    beforeCreated(){
+    beforeMount(){
     this.$store.dispatch("getNewNotifications");
   }
 };

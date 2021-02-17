@@ -21,8 +21,8 @@ export default new Vuex.Store({
     selectedArtistBrowseId: "",
     selectedArtist: {},
     selectedAlbumBrowseId: "",
-    currentPlaylist: []
-
+    currentPlaylist: [],
+    renderNotificationsModal: false,
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -96,6 +96,12 @@ export default new Vuex.Store({
     },
     setcreatePlaylistHasBeenClicked(state, createPlaylistBool) {
       state.createPlaylistBool = createPlaylistBool;
+    },
+    setRenderNotificationsModal(state, render) {
+      state.renderNotificationsModal = render;
+    },
+    addTrackFromNotificationToQueue(state, track){
+      state.queuedTracks.push(track);
     }
   },
   actions: {
@@ -111,7 +117,6 @@ export default new Vuex.Store({
     async getSearchResults({ commit }, searchParameters) {
       let response;
       if (searchParameters.searchMedia === "playlists") {
-        //Todo: Create endpoint when there are playlists available
         response = await fetch(
           `/api/playlist/${searchParameters.searchString}`
         );
@@ -155,7 +160,6 @@ export default new Vuex.Store({
     },
     
     async deletePlaylist({ commit }, playlistId) {
-      console.log("test", playlistId);
       let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
         method: "delete",
       });
@@ -245,13 +249,42 @@ export default new Vuex.Store({
           commit("setSelectedAlbum", album);
         })
     },
+
     async getNewNotifications({ commit }) {
-      const response = await fetch(
-        `/api/notification/${this.state.user.userId}`
-      );
+      //Todo: Change back route to /api/notification/${state.user.userId}
+      const response = await fetch(`/api/notification/5`);
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
     },
+    async getMediaObjectAndAddToQueueOrPlay({ commit, dispatch }, sharedContent) {
+      let response;
+      response = await fetch(
+        `/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`
+      );
+      const track = await response.json();
+      
+      if (sharedContent.addToQueue) {
+        commit("addTrackFromNotificationToQueue",track.content[0])
+      }
+      else {
+        dispatch("setSongToPlay", track.content[0]);
+      }
+
+    },
+    async getMediaContentAndRender({ commit, dispatch }, sharedContent) {
+      switch (sharedContent.sharedContentType){
+        case "artist":
+          dispatch("fetchArtistByBrowseId", sharedContent.sharedContentId);
+          break;
+        case "album":
+          dispatch("fetchAlbumByBrowseId", sharedContent.sharedContentId)
+          break;
+        case "playlist":
+          dispatch("getCurrentPlaylist", sharedContent.sharedContentId)
+          break;
+      }
+      commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType)
+    }
   },
   getters: {
     getSearchContent(state) {
@@ -304,7 +337,10 @@ export default new Vuex.Store({
     },
     getcreatePlaylistBool(state){
       return state.createPlaylistBool;
-    }
+    },
+    getRenderNotificationsModalStatus(state) {
+      return state.renderNotificationsModal;
+    },
   },
   modules: {},
 });
