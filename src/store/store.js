@@ -117,6 +117,9 @@ export default new Vuex.Store({
       else
         state.shuffleOn = true;
     },
+    updateNewNotifications(state, notification) {
+      state.newNotifications.splice(state.newNotifications.findIndex(n => n===notification),1);
+    }
   },
   actions: {
     async setTrackToPlay({ commit }, payload) {
@@ -259,14 +262,14 @@ export default new Vuex.Store({
     },
 
     async getNewNotifications({ commit }) {
-      //Todo: Change back route to /api/notification/${state.user.userId}
-      const response = await fetch(`/api/notification/5`);
+      const response = await fetch(`/api/notification/${this.state.user.UserId}`);
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
     },
     async getMediaObjectAndAddToQueueOrPlay({ commit, dispatch }, sharedContent) {
-      let response;
-      response = await fetch(`/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`);
+      const response = await fetch(
+        `/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`
+      );
       const track = await response.json();
 
       if (sharedContent.addToQueue) {
@@ -308,6 +311,21 @@ export default new Vuex.Store({
         console.log("ERROR", response.status);
       }
     },
+    async updateNotificationUnread ({commit}, notification) {
+      const response = await fetch(`/api/notification/`, { 
+        method: 'PUT', 
+        headers: { 
+          'Content-type': 'application/json'
+        }, 
+        body: JSON.stringify(notification) 
+      }); 
+      if (response.status === 200) {
+        commit("updateNewNotifications", notification)
+      }
+      else {
+        alert (`Your notification could not be dismissed at this point. Please try again later. ERROR CODE: ${response.status} ERROR MESSAGE: ${response.statusText}`)
+      }
+    }
   },
   getters: {
     getSearchContent(state) {
