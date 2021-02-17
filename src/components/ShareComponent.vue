@@ -42,7 +42,6 @@ export default {
         id = await this.checkUser(userInputText);
 
         if (id < 0) {
-          console.log("Username not found!");
           this.showMessage = !this.showMessage;
           const x = setInterval(() => {
             this.showMessage = !this.showMessage;
@@ -57,7 +56,7 @@ export default {
             sharedContentType: mediaType,
             sharedContentName: contentName,
           };
-          this.$store.dispatch("sendNotification", notificationToSend);
+         this.sendNotification(notificationToSend);
           this.$store.commit("setNotificationUser", -1);
           this.$store.commit("showShareComponent", false);
         }
@@ -69,7 +68,6 @@ export default {
       } else if (type === "album" || type === "artist") {
         return this.media.browseId;
       } else {
-        console.log("PLid", this.media.PlaylistId);
         return this.media.PlaylistId.toString();
       }
     },
@@ -77,18 +75,32 @@ export default {
       if (type != "") {
         return this.media.name;
       } else {
-        console.log("Plname", this.media.PlaylistName);
         return this.media.PlaylistName;
       }
     },
     exitShareComponent() {
       this.$store.commit("showShareComponent", false);
     },
+    async sendNotification(notification) {
+      const response = await fetch(`api/notification`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(notification),
+      }).catch(e => console.error(e.message));
+      const result = await response;
+
+      if (result.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   computed: {
     mediaName() {
       let mediaName = "";
-      console.log(this.media);
       switch (this.media.type) {
         case "song":
           mediaName = this.media.artist.name + " - " + this.media.name;
