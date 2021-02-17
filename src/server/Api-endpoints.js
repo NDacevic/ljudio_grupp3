@@ -105,14 +105,6 @@ module.exports = (app, db) => {
 
   //public get playlists with userId
   app.get("/api/getplaylist", async (request, response) => {
-  //alt get playlists with userId
-  /*  app.get("/api/userplaylist/:id", async (request, response) => {
-    //check user
-    if(!request.session.user){
-      response.status(401) // unauthorised
-      response.json({error:'not logged in'})
-      return;
-    }
     let data = await db.pool.request()
     .input('id', db.Int, request.session.user.UserId)
     .query('SELECT [UserPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [UserPlaylist] left join [Playlist] on [UserPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where OwnerId = @id')
