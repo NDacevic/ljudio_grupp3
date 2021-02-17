@@ -6,11 +6,10 @@
         <input type="text" value="Enter name">
         <input type="submit" value="Create playlist" >
       </form>
-     <select v-model="selected">
+     <select  v-model="selected">
        <option disabled value="">Please select one</option>
-       <option>Playlist 1</option>
-       <option>Playlist 2</option>
-       <option>Playlist 3</option>
+       <option  v-for="(playlist, index) in getPlaylists"
+      :key="index">{{playlist.PlaylistName}}</option>
        </select>
        <button>Add</button>
 
@@ -20,7 +19,16 @@
 
 <script>
 export default {
-  name: "LeftMenu"
+  name: "AddPlaylist",
+
+  methods: {
+
+  },
+  computed: {
+      getPlaylists() {
+        return this.$store.getters.getPlaylists;
+    },
+  },
 }
 </script>
 <style scoped>
