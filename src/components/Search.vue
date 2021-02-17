@@ -137,7 +137,8 @@ export default {
       } else if (event.option.slug == "add") {
         //Add to playlist
       } else if (event.option.slug == "share") {
-        this.$emit("show-share", this.track, true);
+        this.$store.commit("showShareComponent", true);
+        this.$store.commit("setShareMedia", this.track);
       }
     },
     performActionWhenMediaIsClicked(media) {

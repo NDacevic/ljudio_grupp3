@@ -54,11 +54,13 @@ export default {
             sharedContentName: this.track.name,
           };
           this.$store.dispatch("sendNotification", notificationToSend);
+          this.$store.commit("setNotificationUser", -1);
+          this.$store.commit("hideShareWindow");
         }
       }
     },
     exitShareComponent() {
-      this.$emit("hide-share");
+      this.$store.commit("showShareComponent", false);
     },
   },
 };

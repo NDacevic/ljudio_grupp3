@@ -24,6 +24,8 @@ export default new Vuex.Store({
     currentPlaylist: [],
     renderNotificationsModal: false,
     notificationUser: "",
+    shareComponentVisible: false,
+    shareMedia: {},
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -101,6 +103,12 @@ export default new Vuex.Store({
     },
     setNotificationUser(state, user) {
       state.notificationUser = user;
+    },
+    showShareComponent(state, visible) {
+      state.shareComponentVisible = visible;
+    },
+    setShareMedia(state, media) {
+      state.shareMedia = media;
     },
   },
   actions: {
@@ -368,6 +376,12 @@ export default new Vuex.Store({
       }
       return foundId;
     },
+    getShareComponentVisible(state) {
+      return state.shareComponentVisible;
+    },
+    getShareMedia(state){
+      return state.shareMedia;
+    }
   },
   modules: {},
 });
