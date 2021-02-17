@@ -61,10 +61,6 @@ export default {
   data () {
     return {
         menuOptions:[
-        {
-          name: 'Add to playlist',
-          slug: 'add'
-        },
        {
           name: 'Add to queue',
           slug: 'queue'
@@ -74,25 +70,25 @@ export default {
           slug: 'share'
         },
       ],
+      selectedTrack: Object
     }
   },
   methods: {
     playSong(track) {
-      console.log(track)
-      this.$store.dispatch("setTrackToPlay", {media:track, caller: "playlist"}); 
+      console.log(track.contentType)
+      console.log(track.videoId)
+      this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {addToQueue:false, sharedContentType: track.contentType, sharedContentId: track.videoId});
     },
     addToQueue(playlist) {
       this.$store.commit("addPlaylistToQueue", playlist)
     },
-    showOptionsOnClick(event) {      
+    showOptionsOnClick(event, track) {
+      this.selectedTrack = track;      
       this.$refs.optionMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
-        this.queue.push(...this.playlist);
-      }
-      if (event.option.slug == "add") {
-        // Add selectedAlbum to playlist
+        this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {addToQueue:true, sharedContentType: this.selectedTrack.contentType, sharedContentId: this.selectedTrack.videoId});
       }
       if (event.option.slug == "share") {
         //@TODO: Share selectedAlbum
