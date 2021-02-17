@@ -1,5 +1,5 @@
 <template>
-  <div class="artistContainer" v-if="selectedAlbum != undefined">
+  <div class="albumContainer" v-if="selectedAlbum != undefined">
     <div class="albumImage">
       <img class="image" :src="selectedAlbum.thumbnails[2].url"/>
       <div class="infoContainer">
@@ -9,7 +9,7 @@
         </p>
       </div>
     </div>
-    <div class="artistFooter">
+    <div class="albumFooter">
       <md-button @click="playAlbum(selectedAlbum)">Play</md-button>
       <md-button>Add to Playlist</md-button>
       <md-button>Share Album</md-button>
@@ -86,7 +86,10 @@ export default {
       }
     },
     playAlbum(album) {
-      this.$store.dispatch('setSongToPlay', album.tracks[0]);
+      this.$store.dispatch("setTrackToPlay", {
+        media: album.tracks[0],
+        caller: "search",
+      });
       this.queuedTracks = album.tracks.slice(1, album.tracks.length);
     },
     addAlbumToPlaylist(/* album */) {
@@ -108,7 +111,7 @@ export default {
 .albumImage {
   display: flex;
 }
-.artistContainer {
+.albumContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -146,7 +149,7 @@ export default {
 .infoContainer {
   display: inline-block;
 }
-.artistFooter {
+.albumFooter {
   display: inline-block;
   margin-left: auto;
 }
