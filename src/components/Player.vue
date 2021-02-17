@@ -31,6 +31,12 @@
         <figure :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }" v-on:click="playNext()">
           <i class="material-icons-round">skip_next</i>
         </figure>
+        <figure class="shuffle-off" v-if="shuffle===false" v-on:click="toggleShuffle()">
+          <i class="material-icons-round">shuffle</i>
+        </figure>
+        <figure class="shuffle-on" v-else v-on:click="toggleShuffle()">
+          <i class="material-icons-round">shuffle_on</i>
+        </figure>
         <figure v-on:click="showPlayer()">
           <i class="material-icons-round">music_video</i>
         </figure>
@@ -64,16 +70,20 @@ export default {
     playNext() {
       let media;
       if (this.$store.getters.getQueuedTracks.length > 0) {
-        media = this.$store.state.queuedTracks[0];
+        if (this.shuffle) {
+         let randomQueueIndex = Math.floor(Math.random() * this.$store.state.queuedTracks.length);
+         media = this.$store.state.queuedTracks[randomQueueIndex]
+        }
+        else
+          media = this.$store.state.queuedTracks[0];
         this.$store.dispatch("setTrackToPlay", { media, caller: "playNext" });
-        this.$store.commit("removeTopFromQueue");
+        this.$store.commit("removeFromQueue", media);
         return true;
       } else {
         return false;
       }
     },
     playPrev() {
-      console.log(this.$store.getters.getTrackHistoryLength);
       if (this.$store.state.trackHistory.length > 0) {
         let media = this.$store.state.trackHistory[this.$store.state.trackHistory.length - 1];
         this.$store.commit("addTrackToTopOfQueue", this.$store.state.currentTrack);
@@ -195,6 +205,10 @@ export default {
         return minutes + ":" + remainingSeconds;
       }
     },
+    toggleShuffle() {
+      this.$store.commit("toggleShuffle")
+    }
+
   },
   data() {
     return {
@@ -239,6 +253,9 @@ export default {
     currentTrack() {
       return this.$store.state.currentTrack;
     },
+    shuffle() {
+      return this.$store.getters.getShuffleStatus;
+    }
   },
 
   mounted() {
