@@ -1,5 +1,5 @@
 <template>
-  <div class="artistContainer">
+  <div class="artistContainer" v-if="selectedArtist.artist != undefined">
     <div class="artistImage">
       <h1 class="artistHeader">{{ selectedArtist.name }}</h1>
       <p class="artistDescription">
@@ -14,7 +14,7 @@
         @dblclick="setAlbumBrowseId(album)"
         @contextmenu.prevent.stop="fetchSelectedAlbum(album, false), showOptionsOnClick($event, album)"
       >
-        <div class="albumImage">
+        <md-table-cell class="albumImage">
           <button
             @click="fetchSelectedAlbum(album, true)"
             class="md-icon-button md-raised md-accent temp"
@@ -22,7 +22,7 @@
             <i class="material-icons-round">play_arrow</i>
           </button>
           <img :src="album.thumbnails[0].url">
-        </div>
+        </md-table-cell>
         <md-table-cell md-label="Albums">{{ album.name }}</md-table-cell>
         <md-table-cell md-label="Year">{{ album.year }}</md-table-cell>
       </md-table-row>
@@ -96,7 +96,10 @@ export default {
       }
     },
     playAlbum() {
-      this.$store.dispatch('setSongToPlay', this.selectedAlbum.tracks[0]);
+      this.$store.dispatch("setTrackToPlay", {
+        media: this.selectedAlbum.tracks[0],
+        caller: "search",
+      });
       this.queuedTracks = this.selectedAlbum.tracks.slice(1, this.selectedAlbum.tracks.length);
     }
   }
