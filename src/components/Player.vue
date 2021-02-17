@@ -31,6 +31,12 @@
         <figure :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }" v-on:click="playNext()">
           <i class="material-icons-round">skip_next</i>
         </figure>
+        <figure class="shuffle-off" v-if="shuffle===false" v-on:click="toggleShuffle()">
+          <i class="material-icons-round">shuffle</i>
+        </figure>
+        <figure class="shuffle-on" v-else v-on:click="toggleShuffle()">
+          <i class="material-icons-round">shuffle_on</i>
+        </figure>
         <figure v-on:click="showPlayer()">
           <i class="material-icons-round">music_video</i>
         </figure>
@@ -195,6 +201,10 @@ export default {
         return minutes + ":" + remainingSeconds;
       }
     },
+    toggleShuffle() {
+      this.$store.commit("toggleShuffle")
+    }
+
   },
   data() {
     return {
@@ -239,6 +249,9 @@ export default {
     currentTrack() {
       return this.$store.state.currentTrack;
     },
+    shuffle() {
+      return this.$store.getters.getShuffleStatus;
+    }
   },
 
   mounted() {

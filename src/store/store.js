@@ -26,6 +26,7 @@ export default new Vuex.Store({
     notificationUser: "",
     shareComponentVisible: false,
     shareMedia: {},
+    shuffleOn: false
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -109,6 +110,12 @@ export default new Vuex.Store({
     },
     setShareMedia(state, media) {
       state.shareMedia = media;
+    },
+    toggleShuffle(state) {
+      if (state.shuffleOn)
+        state.shuffleOn = false;
+      else
+        state.shuffleOn = true;
     },
   },
   actions: {
@@ -376,6 +383,9 @@ export default new Vuex.Store({
     getShareMedia(state) {
       return state.shareMedia;
     },
+    getShuffleStatus(state) {
+      return state.shuffleOn;
+    }
   },
   modules: {},
 });
