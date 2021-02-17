@@ -270,9 +270,10 @@ export default new Vuex.Store({
       const track = await response.json();
 
       if (sharedContent.addToQueue) {
-        commit("addTrackFromNotificationToQueue", track.content[0]);
-      } else {
-        dispatch("setSongToPlay", track.content[0]);
+        commit("addTrackFromNotificationToQueue",track.content[0])
+      }
+      else {
+        dispatch("setTrackToPlay", {media: track.content[0], caller: "notificationPopUp}"});
       }
     },
     async getMediaContentAndRender({ commit, dispatch }, sharedContent) {
