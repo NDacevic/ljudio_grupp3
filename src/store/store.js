@@ -272,7 +272,8 @@ export default new Vuex.Store({
         commit("addTrackFromNotificationToQueue",track.content[0])
       }
       else {
-        dispatch("setSongToPlay", track.content[0]);
+        dispatch("setTrackToPlay", {media:track.content[0], caller: "store"});
+         //this.$store.dispatch("setTrackToPlay", {media:track, caller: "playlist"}); 
       }
 
     },
