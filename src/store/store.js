@@ -16,13 +16,16 @@ export default new Vuex.Store({
     searchHasBeenPerformed: false, //Used to render search headers (or not)
     selectedAlbum: {},
     newNotifications: [],
-    createPlaylistBool:false,
+    createPlaylistBool: false,
     currentPlaylistId: "",
     selectedArtistBrowseId: "",
     selectedArtist: {},
     selectedAlbumBrowseId: "",
-    currentPlaylist: []
-
+    currentPlaylist: [],
+    renderNotificationsModal: false,
+    notificationUser: "",
+    shareComponentVisible: false,
+    shareMedia: {},
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -35,10 +38,7 @@ export default new Vuex.Store({
       state.currentTrack = track;
     },
     removeLatestHistory(state) {
-      let track = state.trackHistory.splice(
-        state.trackHistory.length - 1,
-        1
-      )[0];
+      let track = state.trackHistory.splice(state.trackHistory.length - 1, 1)[0];
       return track;
     },
     updateQueue(state, newQueue) {
@@ -46,16 +46,14 @@ export default new Vuex.Store({
     },
     modifyPlaylist(state, playlistId) {
       state.playlists.splice(
-        state.playlists.indexOf(
-          state.playlists.find((x) => x.PlaylistId === playlistId)
-        ),
+        state.playlists.findIndex((x) => x.PlaylistId === playlistId),
         1
       );
     },
     removeTopFromQueue(state) {
       state.queuedTracks.shift();
     },
-    removeFromBottomOfHistory(state){
+    removeFromBottomOfHistory(state) {
       state.trackHistory.pop();
     },
     addTrackToHistory(state, trackToAdd) {
@@ -96,13 +94,27 @@ export default new Vuex.Store({
     },
     setcreatePlaylistHasBeenClicked(state, createPlaylistBool) {
       state.createPlaylistBool = createPlaylistBool;
-    }
+    },
+    setRenderNotificationsModal(state, render) {
+      state.renderNotificationsModal = render;
+    },
+    addTrackFromNotificationToQueue(state, track) {
+      state.queuedTracks.push(track);
+    },
+    setNotificationUser(state, user) {
+      state.notificationUser = user;
+    },
+    showShareComponent(state, visible) {
+      state.shareComponentVisible = visible;
+    },
+    setShareMedia(state, media) {
+      state.shareMedia = media;
+    },
   },
   actions: {
     async setTrackToPlay({ commit }, payload) {
       if (this.state.currentTrack.videoId != null) {
-        if (payload.caller === "playNext")
-          commit("addTrackToHistory", this.state.currentTrack);
+        if (payload.caller === "playNext") commit("addTrackToHistory", this.state.currentTrack);
       }
       window.player.loadVideoById(payload.media.videoId);
       window.player.playVideo();
@@ -111,14 +123,9 @@ export default new Vuex.Store({
     async getSearchResults({ commit }, searchParameters) {
       let response;
       if (searchParameters.searchMedia === "playlists") {
-        //Todo: Create endpoint when there are playlists available
-        response = await fetch(
-          `/api/playlist/${searchParameters.searchString}`
-        );
+        response = await fetch(`/api/playlist/${searchParameters.searchString}`);
       } else {
-        response = await fetch(
-          `/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`
-        );
+        response = await fetch(`/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`);
       }
 
       let searchResults = await response.json();
@@ -168,11 +175,9 @@ export default new Vuex.Store({
       let response = await fetch(`/api/unfollowpPlaylist/${playlistId}`, {
         method: "delete",
       });
-    await response.json(); 
+      await response.json();
     },
-    
     async deletePlaylist({ commit }, playlistId) {
-      console.log("test", playlistId);
       let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
         method: "delete",
       });
@@ -183,7 +188,7 @@ export default new Vuex.Store({
       alert(playlistId)
       let response = await fetch(`/api/getMusicPlaylist/${playlistId}`);
       let playlist = await response.json();
-      console.log(playlist)
+      console.log(playlist);
       commit("setCurrentPlaylist", playlist);
     },
     async createUser() {
@@ -226,7 +231,7 @@ export default new Vuex.Store({
       });
       if (response.status == "200") {
         router.push("/");
-      }      
+      }
     },
     async loginUser() {
       const response = await fetch("/api/login/", {
@@ -239,8 +244,9 @@ export default new Vuex.Store({
       if (response.status == "200") {
         alert("logged in");
         this.dispatch("checkAuth");
+      } else {
+        alert("Wrong username and/or password");
       }
-      else {alert("Wrong username and/or password")}
     },
     async checkAuth() {
       let response = await fetch(`/api/login/`);
@@ -258,18 +264,60 @@ export default new Vuex.Store({
       });
     },
     async fetchAlbumByBrowseId({ commit }, browseId) {
-      return fetch(`api/yt/album/${browseId}`)
-        .then(async (res) => {
-          const album = await res.json();
-          commit("setSelectedAlbum", album);
-        })
+      return fetch(`api/yt/album/${browseId}`).then(async (res) => {
+        const album = await res.json();
+        commit("setSelectedAlbum", album);
+      });
     },
+
     async getNewNotifications({ commit }) {
-      const response = await fetch(
-        `/api/notification/${this.state.user.userId}`
-      );
+      //Todo: Change back route to /api/notification/${state.user.userId}
+      const response = await fetch(`/api/notification/5`);
       const newNotifications = await response.json();
       commit("setNewNotifications", newNotifications);
+    },
+    async getMediaObjectAndAddToQueueOrPlay({ commit, dispatch }, sharedContent) {
+      let response;
+      response = await fetch(`/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`);
+      const track = await response.json();
+
+      if (sharedContent.addToQueue) {
+        commit("addTrackFromNotificationToQueue", track.content[0]);
+      } else {
+        dispatch("setSongToPlay", track.content[0]);
+      }
+    },
+    async getMediaContentAndRender({ commit, dispatch }, sharedContent) {
+      switch (sharedContent.sharedContentType) {
+        case "artist":
+          dispatch("fetchArtistByBrowseId", sharedContent.sharedContentId);
+          break;
+        case "album":
+          dispatch("fetchAlbumByBrowseId", sharedContent.sharedContentId);
+          break;
+        case "playlist":
+          dispatch("getCurrentPlaylist", sharedContent.sharedContentId);
+          break;
+      }
+      commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType);
+    },
+    // eslint-disable-next-line no-unused-vars
+    async sendNotification(notification) {
+      console.log(notification);
+      const response = await fetch(`api/notification`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(notification),
+      }).catch(e => console.error(e.message));
+      const result = await response;
+
+      if (result.ok) {
+        console.log("notification recrded in db");
+      } else {
+        console.log("ERROR", response.status);
+      }
     },
   },
   getters: {
@@ -321,9 +369,32 @@ export default new Vuex.Store({
     getNewNotifications(state) {
       return state.newNotifications;
     },
-    getcreatePlaylistBool(state){
+    getcreatePlaylistBool(state) {
       return state.createPlaylistBool;
-    }
+    },
+    getRenderNotificationsModalStatus(state) {
+      return state.renderNotificationsModal;
+    },
+    getReceivedNotificationUserId(state) {
+      return state.receivedNotificationUserId;
+    },
+    async getNotificationUser(state) {
+      const response = await fetch(`api/notification/${state.notificationUser}`);
+      const foundIdArray = await response.json();
+      let foundId;
+      if (foundIdArray.length > 0) {
+        foundId = foundIdArray[0].UserId;
+      } else {
+        foundId = -1;
+      }
+      return foundId;
+    },
+    getShareComponentVisible(state) {
+      return state.shareComponentVisible;
+    },
+    getShareMedia(state) {
+      return state.shareMedia;
+    },
   },
   modules: {},
 });

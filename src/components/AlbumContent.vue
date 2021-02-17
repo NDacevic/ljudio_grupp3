@@ -1,7 +1,7 @@
 <template>
-  <div class="artistContainer">
+  <div class="albumContainer" v-if="selectedAlbum != undefined">
     <div class="albumImage">
-      <img class="image" :src="selectedAlbum.thumbnails[2].url" />
+      <img class="image" :src="selectedAlbum.thumbnails[2].url"/>
       <div class="infoContainer">
         <h1 class="albumHeader">{{ selectedAlbum.title }}</h1>
         <p class="albumDescription">
@@ -9,7 +9,7 @@
         </p>
       </div>
     </div>
-    <div class="artistFooter">
+    <div class="albumFooter">
       <md-button @click="playAlbum(selectedAlbum)">Play</md-button>
       <md-button>Add to Playlist</md-button>
       <md-button>Share Album</md-button>
@@ -86,7 +86,10 @@ export default {
       }
     },
     playAlbum(album) {
-      this.$store.dispatch('setSongToPlay', album.tracks[0]);
+      this.$store.dispatch("setTrackToPlay", {
+        media: album.tracks[0],
+        caller: "search",
+      });
       this.queuedTracks = album.tracks.slice(1, album.tracks.length);
     },
     addAlbumToPlaylist(/* album */) {
@@ -98,7 +101,7 @@ export default {
   },
   data() {
     return {
-      selectedTrack: Object,
+      selectedTrack: Object
     };
   },
 };
@@ -108,7 +111,7 @@ export default {
 .albumImage {
   display: flex;
 }
-.artistContainer {
+.albumContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -120,14 +123,6 @@ export default {
   color: rgb(255, 255, 255);
   filter: drop-shadow(0px 0px 5px rgb(26, 26, 26));
   background: none;
-}
-.md-content {
-  height: 100%;
-  max-height: 100%;
-}
-.md-content .md-table-content .md-scrollbar .md-theme-default {
-  height: 100%;
-  max-height: 100%;
 }
 .albumDescription {
   width: 50%;
@@ -146,7 +141,7 @@ export default {
 .infoContainer {
   display: inline-block;
 }
-.artistFooter {
+.albumFooter {
   display: inline-block;
   margin-left: auto;
 }

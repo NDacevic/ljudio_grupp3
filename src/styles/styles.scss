@@ -9,18 +9,20 @@
 }
 
 #app {
-  height: 100vh;
+  height: 930px;
+  width: 1916px;
+  position: relative;
 }
 
 .homeContainer {
   display: grid;
   grid-template-columns: 200px auto 400px;
-  grid-template-rows: 20% 60% 20%;
+  grid-template-rows: 19% 59% 22%;
   height: 100%;
+  position: relative;
 }
 
 .leftBar {
-  /* @TODO: Remove all colors */
   grid-row: 1 / span 2;
 }
 

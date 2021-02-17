@@ -1,57 +1,23 @@
 <template>
   <div class="player">
     <div class="thumbnail-container">
-      <img
-        v-if="
-          currentTrack.thumbnails !== undefined && currentTrack.type === 'song'
-        "
-        :src="currentTrack.thumbnails[1].url"
-      />
-      <img
-        v-if="
-          currentTrack.thumbnails !== undefined && currentTrack.type === 'video'
-        "
-        :src="currentTrack.thumbnails.url"
-      />
+      <img v-if="currentTrack.thumbnails !== undefined && currentTrack.type === 'song'" :src="currentTrack.thumbnails[1].url" />
+      <img v-if="currentTrack.thumbnails !== undefined && currentTrack.type === 'video'" :src="currentTrack.thumbnails.url" />
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
-        <p
-          v-if="
-            currentTrack.artist == undefined && currentTrack.author == undefined
-          "
-        ></p>
-        <p
-          v-if="
-            currentTrack.artist != undefined && currentTrack.type === 'song'
-          "
-        >
-          {{ currentTrack.artist.name + " - " + currentTrack.name }}
+        <p v-if="currentTrack.artist != null || currentTrack.author != null">
+          {{ truncatedTrackTitleArtistName }}
         </p>
-        <p
-          v-if="
-            currentTrack.author != undefined && currentTrack.type === 'video'
-          "
-        >
-          {{ currentTrack.author + " - " + currentTrack.name }}
-        </p>
+        <p v-else></p>
         <div>
           <p>{{ convertSecondsToTimeString(this.trackProgress) }}</p>
-          <input
-            type="range"
-            min="0"
-            v-bind:max="trackDuration"
-            v-on:click="playFromTime"
-            v-bind:value="trackProgress"
-          />
+          <input type="range" min="0" v-bind:max="trackDuration" v-on:click="playFromTime" v-bind:value="trackProgress" />
           <p>{{ convertSecondsToTimeString(this.trackDuration) }}</p>
         </div>
       </div>
       <div class="controls-container-buttons">
-        <figure
-          :class="{ active: this.$store.getters.getTrackHistoryLength < 1 }"
-          v-on:click="playPrev()"
-        >
+        <figure :class="{ active: this.$store.getters.getTrackHistoryLength < 1 }" v-on:click="playPrev()">
           <i class="material-icons-round">skip_previous</i>
         </figure>
         <div class="playPause">
@@ -62,10 +28,7 @@
             <i class="material-icons-round">pause</i>
           </figure>
         </div>
-        <figure
-          :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }"
-          v-on:click="playNext()"
-        >
+        <figure :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }" v-on:click="playNext()">
           <i class="material-icons-round">skip_next</i>
         </figure>
         <figure v-on:click="showPlayer()">
@@ -81,13 +44,7 @@
               <i class="material-icons-round">volume_off</i>
             </figure>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            :value="volume"
-            @mouseup="setVolume"
-          />
+          <input type="range" min="0" max="100" :value="volume" @mouseup="setVolume" />
         </div>
       </div>
     </section>
@@ -118,8 +75,8 @@ export default {
     playPrev() {
       console.log(this.$store.getters.getTrackHistoryLength);
       if (this.$store.state.trackHistory.length > 0) {
-        let media = this.$store.state.trackHistory[this.$store.state.trackHistory.length-1];
-        this.$store.commit("addTrackToTopOfQueue", this.$store.state.currentTrack)
+        let media = this.$store.state.trackHistory[this.$store.state.trackHistory.length - 1];
+        this.$store.commit("addTrackToTopOfQueue", this.$store.state.currentTrack);
         this.$store.dispatch("setTrackToPlay", { media, caller: "playPrev" });
         this.$store.commit("removeFromBottomOfHistory");
       }
@@ -268,10 +225,22 @@ export default {
         }
       },
     },
+    truncatedTrackTitleArtistName() {
+      let value;
+      if (this.currentTrack.artist != null) {
+        value = this.currentTrack.artist.name + " - " + this.currentTrack.name;
+      } else if (this.currentTrack.author != null) {
+        value = this.currentTrack.author + " - " + this.currentTrack.name;
+      }
+      let length = 70;
+      if (value == null || value.Length < length || value.indexOf(" ", length) == -1) return value;
+      return value.substring(0, value.indexOf(" ", length)) + "...";
+    },
     currentTrack() {
       return this.$store.state.currentTrack;
     },
   },
+
   mounted() {
     this.initYoutubePlayer();
     this.updateSeekBar();
