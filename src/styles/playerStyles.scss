@@ -27,6 +27,7 @@
           height: $height;
           line-height: $height;
           font-size: 30px;
+          padding-left: 20px ;
         }
 
         & > div{
@@ -80,7 +81,7 @@
     }
   }
   .thumbnail-container {
-    width: 180px;
+    width: 226px;
     height: 100%;
     display: flex;
     flex-direction: column;

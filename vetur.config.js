@@ -1,7 +1,7 @@
 // vetur.config.js
 /** @type {import('vls').VeturConfig} */
 module.exports = {
-    // **optional** default: `{}`
+    default: `{}`,
     // override vscode settings
     // Notice: It only affects the settings used by Vetur.
     settings: {
@@ -25,8 +25,8 @@ module.exports = {
         // **optional**
         // Where is TypeScript config file in the project?
         // It is relative to root property.
-        tsconfig: './tsconfig.json',
-        // **optional** default: `'./.vscode/vetur/snippets'`
+        //tsconfig: './tsconfig.json',
+        //default: `'./.vscode/vetur/snippets'`,
         // Where is vetur custom snippets folders?
         snippetFolder: './.vscode/vetur/snippets',
         // **optional** default: `[]`

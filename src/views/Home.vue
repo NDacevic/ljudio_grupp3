@@ -1,7 +1,8 @@
 <template>
   <div class="homeContainer">
+    <Share v-if="this.$store.getters.getShareComponentVisible" :track="this.$store.getters.getShareMedia" />
     <div class="leftBar">
-      <LeftMenu/>
+      <LeftMenu />
     </div>
     <div class="centerContent">
       <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"/>
@@ -12,13 +13,13 @@
       <div id="yt-player" style="display:none"></div>
     </div>
     <section class="rightBar">
-    <div class="rightBarTop">
-      <Queue />
-    </div>
-    <div class="rightBarBottom">
-      <Playlists />
-      <!-- Komponent 4 -->
-    </div>
+      <div class="rightBarTop">
+        <Queue />
+      </div>
+      <div class="rightBarBottom">
+        <Playlists />
+        <!-- Komponent 4 -->
+      </div>
     </section>
     <div class="bottomBar">
       <Player />
@@ -37,6 +38,7 @@ import AddPlaylist from "../components/AddPlaylist"
 import AlbumContent from "../components/AlbumContent";
 import ArtistContent from "../components/ArtistContent";
 import PlaylistContent from "../components/PlaylistContent";
+import Share from "../components/ShareComponent";
 
 export default {
   name: "Home",
@@ -50,6 +52,12 @@ export default {
     ArtistContent,
     PlaylistContent,
     AddPlaylist,
+    Share,
+  },
+  data() {
+    return {
+      shareRendered: false,
+    };
   },
   computed: {
     renderCenterComponent() {
@@ -58,38 +66,6 @@ export default {
   },
     beforeMount(){
     this.$store.dispatch("getNewNotifications");
-  }
+  },
 };
-
 </script>
-
-<style scoped>
-.homeContainer {
-  display: grid;
-  grid-template-columns: 200px auto 400px;
-  grid-template-rows: 40vh 40vh auto;
-  height: 100%;
-}
-
-.leftBar {
-  /* @TODO: Remove all colors */
-  background-color: rgb(4, 97, 179);
-  grid-row: 1 / span 2;
-}
-
-.centerContent {
-  display: flex;
-  background-color: rgb(0, 0, 0);
-  grid-row: 1 / span 2;
-}
-
-.rightBarTop {
-  display: flex;
-  background-color: rgb(0, 0, 0);
-  grid-row: 1;
-}
-
-.rightBarBottom {
-  grid-row: 2;
-}
-</style>

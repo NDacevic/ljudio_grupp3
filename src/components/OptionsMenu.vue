@@ -11,7 +11,10 @@
         :key="index"
         @click.stop="optionClicked(option)"
         class="vue-simple-context-menu__item"
-        :class="[option.class, (option.type === 'divider' ? 'vue-simple-context-menu__divider' : '')]"
+        :class="[
+          option.class,
+          option.type === 'divider' ? 'vue-simple-context-menu__divider' : '',
+        ]"
       >
         <span v-html="option.name"></span>
       </li>
@@ -19,17 +22,16 @@
   </div>
 </template>
 
-
 <script>
-import Vue from 'vue'
-import vClickOutside from 'v-click-outside'
-Vue.use(vClickOutside)
+import Vue from "vue";
+import vClickOutside from "v-click-outside";
+Vue.use(vClickOutside);
 export default {
   name: 'OptionsMenu',
  props: {
     elementId: {
       type: String,
-      required: true
+      required: true,
     },
     options: {
       type: Array,
@@ -40,63 +42,87 @@ export default {
     return {
     
       menuWidth: null,
-      menuHeight: null
-    }
+      menuHeight: null,
+    };
   },
   methods: {
-    showMenu (event, item) {
-      this.item = item
-      var menu = document.getElementById(this.elementId)
+    showMenu(event, item) {
+      this.item = item;
+      var menu = document.getElementById(this.elementId);
       if (!menu) {
-        return
+        return;
       }
       if (!this.menuWidth || !this.menuHeight) {
-        menu.style.visibility = "hidden"
-        menu.style.display = "block"
-        this.menuWidth = menu.offsetWidth
-        this.menuHeight = menu.offsetHeight
-        menu.removeAttribute("style")
+        menu.style.visibility = "hidden";
+        menu.style.display = "block";
+        this.menuWidth = menu.offsetWidth;
+        this.menuHeight = menu.offsetHeight;
+        menu.removeAttribute("style");
       }
-      if ((this.menuWidth + event.pageX) >= window.innerWidth) {
-        menu.style.left = (event.pageX - this.menuWidth + 2) + "px"
+      if (this.menuWidth + event.pageX >= window.innerWidth) {
+        menu.style.left = event.pageX - this.menuWidth + 2 + "px";
       } else {
-        menu.style.left = (event.pageX - 2) + "px"
+        menu.style.left = event.pageX - 2 + "px";
       }
-      if ((this.menuHeight + event.pageY) >= window.innerHeight) {
-        menu.style.top = (event.pageY - this.menuHeight + 2) + "px"
+      if (this.menuHeight + event.pageY >= window.innerHeight) {
+        menu.style.top = event.pageY - this.menuHeight + 2 + "px";
       } else {
-        menu.style.top = (event.pageY - 2) + "px"
+        menu.style.top = event.pageY - 2 + "px";
       }
-      menu.classList.add('vue-simple-context-menu--active')
+      menu.classList.add("vue-simple-context-menu--active");
     },
-    hideContextMenu () {
-      let element = document.getElementById(this.elementId)
+    getoption() {
+      return [
+        {
+          name: "Add to playlist",
+          slug: "add",
+        },
+        {
+          name: "Add to queue",
+          slug: "queue",
+        },
+        {
+          name: "Share",
+          slug: "share",
+        },
+        {
+          name: "Play",
+          slug: "play",
+        },
+        {
+          name: "Go to Component?",
+          slug: "go",
+        },
+      ];
+    },
+    hideContextMenu() {
+      let element = document.getElementById(this.elementId);
       if (element) {
-        element.classList.remove('vue-simple-context-menu--active');
+        element.classList.remove("vue-simple-context-menu--active");
       }
     },
-    onClickOutside () {
-      this.hideContextMenu()
+    onClickOutside() {
+      this.hideContextMenu();
     },
-    optionClicked (option) {   
-      this.hideContextMenu()
-      this.$emit('option-clicked', {
-        option: option       
-      })
+    optionClicked(option) {
+      this.hideContextMenu();
+      this.$emit("option-clicked", {
+        option: option,
+      });
     },
-    onEscKeyRelease (event) {
+    onEscKeyRelease(event) {
       if (event.keyCode === 27) {
         this.hideContextMenu();
       }
-    }
+    },
   },
-  mounted () {
-    document.body.addEventListener('keyup', this.onEscKeyRelease);
+  mounted() {
+    document.body.addEventListener("keyup", this.onEscKeyRelease);
   },
-  beforeDestroy () {
-    document.removeEventListener('keyup', this.onEscKeyRelease);
-  }
-}
+  beforeDestroy() {
+    document.removeEventListener("keyup", this.onEscKeyRelease);
+  },
+};
 </script>
 
 <style lang="scss">
@@ -105,6 +131,7 @@ $grey: darken($light-grey, 15%);
 $blue: #007aff;
 $white: #fff;
 $black: #333;
+
 .vue-simple-context-menu {
   top: 0;
   left: 0;
@@ -124,6 +151,7 @@ $black: #333;
   &--active {
     display: block;
   }
+
   &__item {
     display: flex;
     color: $black;
@@ -135,6 +163,7 @@ $black: #333;
       color: $white;
     }
   }
+
   &__divider {
     box-sizing: content-box;
     height: 2px;

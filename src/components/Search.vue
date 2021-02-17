@@ -1,43 +1,13 @@
 <template>
   <div id="searchComponent">
-    <input
-      id="searchbox"
-      type="text"
-      placeholder="Search for Song, Album, Artist or Playlist..."
-      v-model="searchString"
-      @keyup.enter="getMedia(), setSearchHasBeenPerformedToTrue()"
-    />
+    <input id="searchbox" type="text" placeholder="Search for Song, Album, Artist or Playlist..." v-model="searchString" @keyup.enter="getMedia(), setSearchHasBeenPerformedToTrue()" />
 
-    <md-tabs
-      id="tab-container"
-      class="md-transparent"
-      v-if="getSearchHasBeenPerformed === true"
-    >
-      <md-tab
-        id="tab-songs"
-        md-label="Songs"
-        @click="setSearchMediaType('songs'), getMedia()"
-      ></md-tab>
-      <md-tab
-        id="tab-albums"
-        md-label="Albums"
-        @click="setSearchMediaType('albums'), getMedia()"
-      ></md-tab>
-      <md-tab
-        id="tab-artists"
-        md-label="Artists"
-        @click="setSearchMediaType('artists'), getMedia()"
-      ></md-tab>
-      <md-tab
-        id="tab-playlists"
-        md-label="Playlists"
-        @click="setSearchMediaType('playlists'), getMedia()"
-      ></md-tab>
-      <md-tab
-        id="tab-video"
-        md-label="Videos"
-        @click="setSearchMediaType('videos'), getMedia()"
-      ></md-tab>
+    <md-tabs id="tab-container" class="md-transparent" v-if="getSearchHasBeenPerformed === true">
+      <md-tab id="tab-songs" md-label="Songs" @click="setSearchMediaType('songs'), getMedia()"></md-tab>
+      <md-tab id="tab-albums" md-label="Albums" @click="setSearchMediaType('albums'), getMedia()"></md-tab>
+      <md-tab id="tab-artists" md-label="Artists" @click="setSearchMediaType('artists'), getMedia()"></md-tab>
+      <md-tab id="tab-playlists" md-label="Playlists" @click="setSearchMediaType('playlists'), getMedia()"></md-tab>
+      <md-tab id="tab-video" md-label="Videos" @click="setSearchMediaType('videos'), getMedia()"></md-tab>
     </md-tabs>
     <div id="searchResultsContainer" v-if="getSearchHasBeenPerformed === true">
       <div v-if="this.searchMedia === 'songs'" class="headers">
@@ -46,69 +16,37 @@
         <h3>Album</h3>
         <h3>Duration</h3>
       </div>
-      <div
-        v-if="this.searchMedia === 'albums'"
-        id="albumHeaders"
-        class="headers"
-      >
+      <div v-if="this.searchMedia === 'albums'" id="albumHeaders" class="headers">
         <h3>Title</h3>
         <h3>Artist</h3>
         <h3>Year</h3>
       </div>
-      <div
-        v-if="this.searchMedia === 'artists'"
-        id="artistHeaders"
-        class="headers"
-      >
+      <div v-if="this.searchMedia === 'artists'" id="artistHeaders" class="headers">
         <h3>Artist</h3>
       </div>
-      <div
-        v-if="this.searchMedia === 'playlists'"
-        id="playlistHeaders"
-        class="headers"
-      >
+      <div v-if="this.searchMedia === 'playlists'" id="playlistHeaders" class="headers">
         <h3>Title</h3>
       </div>
-      <div
-        v-if="this.searchMedia === 'videos'"
-        id="videoHeaders"
-        class="headers"
-      >
+      <div v-if="this.searchMedia === 'videos'" id="videoHeaders" class="headers">
         <h3>Title</h3>
         <h3>Artist</h3>
         <h3>Duration</h3>
       </div>
       <div id="searchResults" class="md-scrollbar">
-  
-        <div
-          class="mediaContainer"
-          v-for="(media, index) in getSearchContent"
-          :key="index"
-        >
-          <button
-            @contextmenu.prevent.stop="showOptionsOnClick($event ,media)"
-            class="listButton"
-            v-if="media.type === 'song'"
-            @dblclick="performActionWhenMediaIsClicked(media)"
-          >
+        <div class="mediaContainer" v-for="(media, index) in getSearchContent" :key="index">
+          <button @contextmenu.prevent.stop="showOptionsOnClick($event, media)" class="listButton" v-if="media.type === 'song'" @dblclick="performActionWhenMediaIsClicked(media)">
             <p>{{ media.name }}</p>
             <p>{{ media.artist.name }}</p>
             <p>{{ media.album.name }}</p>
             <p>{{ convertMillisecondsToTimeString(media.duration) }}</p>
           </button>
-          <button
-           @contextmenu.prevent.stop="showOptionsOnClick($event ,media)"
-            class="listButton"
-            id="albumButton"
-            v-if="media.type === 'album'"
-            @dblclick="performActionWhenMediaIsClicked(media)"
-          >
+          <button @contextmenu.prevent.stop="showOptionsOnClick($event, media)" class="listButton" id="albumButton" v-if="media.type === 'album'" @dblclick="performActionWhenMediaIsClicked(media)">
             <p>{{ media.name }}</p>
             <p>{{ media.artist }}</p>
             <p>{{ media.year }}</p>
           </button>
           <button
-           @contextmenu.prevent.stop="showArtistOptionOnClick($event ,media)"
+            @contextmenu.prevent.stop="showArtistOptionOnClick($event, media)"
             class="listButton"
             id="artistButton"
             v-if="media.type === 'artist'"
@@ -117,7 +55,7 @@
             <p>{{ media.name }}</p>
           </button>
           <button
-           @contextmenu.prevent.stop="showPlaylistOptionOnClick($event ,media)"
+            @contextmenu.prevent.stop="showPlaylistOptionOnClick($event, media)"
             class="listButton"
             id="playlistButton"
             v-if="searchMedia === 'playlists'"
@@ -125,13 +63,7 @@
           >
             <p>{{ media.PlaylistName }}</p>
           </button>
-          <button
-            @contextmenu.prevent.stop="showOptionsOnClick($event, media)"
-            class="listButton"
-            id="videoButton"
-            v-if="searchMedia === 'videos'"
-            @dblclick="performActionWhenMediaIsClicked(media)"
-          >
+          <button @contextmenu.prevent.stop="showOptionsOnClick($event, media)" class="listButton" id="videoButton" v-if="searchMedia === 'videos'" @dblclick="performActionWhenMediaIsClicked(media)">
             <p>{{ media.name }}</p>
             <p>{{ media.author }}</p>
             <p>{{ convertMillisecondsToTimeString(media.duration) }}</p>
@@ -139,29 +71,13 @@
         </div>
       </div>
     </div>
-    <OptionsMenu
-      :elementId="'optionMenuId'"
-      :options="menuOptions"
-      :ref="'optionMenu'"
-      @option-clicked="setOption"
-    />
-    <OptionsMenu
-      :elementId="'playlistMenuId'"
-      :options="playlistOptions"
-      :ref="'playlistMenu'"
-      @option-clicked="setOption"
-    />
-    <OptionsMenu
-      :elementId="'artistMenuId'"
-      :options="artistOptions"
-      :ref="'artistMenu'"
-      @option-clicked="setOption"
-    />
+    <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
+    <OptionsMenu :elementId="'playlistMenuId'" :options="playlistOptions" :ref="'playlistMenu'" @option-clicked="setOption" />
+    <OptionsMenu :elementId="'artistMenuId'" :options="artistOptions" :ref="'artistMenu'" @option-clicked="setOption" />
   </div>
 </template>
 
 <script>
-let track = {};
 import OptionsMenu from "../components/OptionsMenu";
 
 export default {
@@ -169,7 +85,6 @@ export default {
 
   components: {
     OptionsMenu,
-
   },
   methods: {
     convertMillisecondsToTimeString(milliseconds) {
@@ -204,24 +119,26 @@ export default {
         this.$store.commit("setSearchHasBeenPerformed", true);
       }
     },
-    showOptionsOnClick(event,media) {      
-      track = media;
+    showOptionsOnClick(event, media) {
+      this.track = media;
       this.$refs.optionMenu.showMenu(event);
     },
-    showPlaylistOptionOnClick(event,media) {
-      track = media;
+    showPlaylistOptionOnClick(event, media) {
+      this.track = media;
       this.$refs.playlistMenu.showMenu(event);
     },
-    showArtistOptionOnClick(event,media) {
-      track = media;
+    showArtistOptionOnClick(event, media) {
+      this.track = media;
       this.$refs.artistMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
-        this.queuedTracks.push(track);
-      }
-      if (event.option.slug == "add") {
-        this.$store.commit("setcreatePlaylistHasBeenClicked", true);
+        this.queuedTracks.push(this.track);
+      } else if (event.option.slug == "add") {
+        //Add to playlist
+      } else if (event.option.slug == "share") {
+        this.$store.commit("showShareComponent", true);
+        this.$store.commit("setShareMedia", this.track);
       }
     },
     performActionWhenMediaIsClicked(media) {
@@ -234,12 +151,7 @@ export default {
           break;
         default:
           //for artist, album and playlist
-          media.type === undefined
-            ? this.$store.commit("setComponentToRenderInHomeCenter", "playlist")
-            : this.$store.commit(
-                "setComponentToRenderInHomeCenter",
-                media.type
-              );
+          media.type === undefined ? this.$store.commit("setComponentToRenderInHomeCenter", "playlist") : this.$store.commit("setComponentToRenderInHomeCenter", media.type);
           break;
         case "artist":
           this.$store.commit("setSelectedArtistBrowseId", media.browseId);
@@ -275,34 +187,35 @@ export default {
     return {
       searchString: "",
       searchMedia: "songs",
-       menuOptions:[
+      track: {},
+      menuOptions: [
         {
-          name: 'Add to playlist',
-          slug: 'add'
-        },
-       {
-          name: 'Add to queue',
-          slug: 'queue'
+          name: "Add to playlist",
+          slug: "add",
         },
         {
-          name: 'Share',
-          slug: 'share'
+          name: "Add to queue",
+          slug: "queue",
+        },
+        {
+          name: "Share",
+          slug: "share",
         },
       ],
-      artistOptions:[
-         {
-          name: 'Share',
-          slug: 'share'
+      artistOptions: [
+        {
+          name: "Share",
+          slug: "share",
         },
       ],
-      playlistOptions:[
+      playlistOptions: [
         {
-          name: 'Add to queue',
-          slug: 'queue'
+          name: "Add to queue",
+          slug: "queue",
         },
         {
-          name: 'Share',
-          slug: 'share'
+          name: "Share",
+          slug: "share",
         },
       ],
     };
