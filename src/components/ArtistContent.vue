@@ -14,16 +14,18 @@
         @dblclick="setAlbumBrowseId(album)"
         @contextmenu.prevent.stop="fetchSelectedAlbum(album, false), showOptionsOnClick($event, album)"
       >
-        <md-table-cell class="albumImage">
-          <button
-            @click="fetchSelectedAlbum(album, true)"
-            class="md-icon-button md-raised md-accent temp"
-          >
-            <i class="material-icons-round">play_arrow</i>
-          </button>
-          <img :src="album.thumbnails[0].url">
+        <md-table-cell class="imageCell">
+          <div class="albumImage">
+            <button
+              @click="fetchSelectedAlbum(album, true)"
+              class="md-icon-button md-raised md-accent temp"
+            >
+              <i class="material-icons-round">play_arrow</i>
+            </button>
+            <img :src="album.thumbnails[0].url">
+          </div>
         </md-table-cell>
-        <md-table-cell md-label="Albums">{{ album.name }}</md-table-cell>
+        <md-table-cell md-label="Album">{{ album.name }}</md-table-cell>
         <md-table-cell md-label="Year">{{ album.year }}</md-table-cell>
       </md-table-row>
     </md-table>
@@ -106,7 +108,7 @@ export default {
 }
 </script>
 
-<style type="scss" scoped>
+<style scoped>
 .artistContainer {
   display: flex;
   flex-direction: column;
@@ -163,5 +165,13 @@ export default {
   font-size: 70px;
   color: rgba(200, 200, 200, 0.6);
   filter: drop-shadow(0px 0px 1px rgb(26, 26, 26));
+}
+.md-icon-button :hover {
+  cursor: pointer;
+}
+
+.imageCell {
+  width: 226px;
+  height: 226px;
 }
 </style>

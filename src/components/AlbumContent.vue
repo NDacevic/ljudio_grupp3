@@ -1,7 +1,7 @@
 <template>
-  <div class="artistContainer">
+  <div class="artistContainer" v-if="selectedAlbum != undefined">
     <div class="albumImage">
-      <img class="image" :src="selectedAlbum.thumbnails[2].url" />
+      <img class="image" :src="selectedAlbum.thumbnails[2].url"/>
       <div class="infoContainer">
         <h1 class="albumHeader">{{ selectedAlbum.title }}</h1>
         <p class="albumDescription">
@@ -98,7 +98,7 @@ export default {
   },
   data() {
     return {
-      selectedTrack: Object,
+      selectedTrack: Object
     };
   },
 };
