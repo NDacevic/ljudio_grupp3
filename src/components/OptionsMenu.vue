@@ -1,12 +1,13 @@
 <template>
   <div>
+    
     <ul
       :id="elementId"
       class="vue-simple-context-menu"
       v-click-outside="onClickOutside"
     >
       <li
-        v-for="(option, index) in optionsMenu"
+        v-for="(option, index) in options"
         :key="index"
         @click.stop="optionClicked(option)"
         class="vue-simple-context-menu__item"
@@ -25,16 +26,19 @@ import vClickOutside from 'v-click-outside'
 Vue.use(vClickOutside)
 export default {
   name: 'OptionsMenu',
-  props: {
+ props: {
     elementId: {
       type: String,
       required: true
     },
+    options: {
+      type: Array,
+      required: true
+    }
   },
-  data () {
-    let optionsMenu = this.getoption()    
+  data () {  
     return {
-      optionsMenu,
+    
       menuWidth: null,
       menuHeight: null
     }
@@ -64,30 +68,6 @@ export default {
         menu.style.top = (event.pageY - 2) + "px"
       }
       menu.classList.add('vue-simple-context-menu--active')
-    },
-    getoption(){
-      return [
-        {
-          name: 'Add to playlist',
-          slug: 'add'
-        },
-       {
-          name: 'Add to queue',
-          slug: 'queue'
-        },
-        {
-          name: 'Share',
-          slug: 'share'
-        },
-        {
-          name: 'Play',
-          slug: 'play'
-        },
-        {
-          name: 'Go to Component?',
-          slug: 'go'
-        }
-      ];
     },
     hideContextMenu () {
       let element = document.getElementById(this.elementId)
@@ -132,7 +112,7 @@ $black: #333;
   padding: 0;
   display: none;
   list-style: none;
-  position: absolute;
+  position: fixed;
   z-index: 1000000;
   background-color: $light-grey;
   border-bottom-width: 0px;
