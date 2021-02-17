@@ -124,14 +124,6 @@ export default {
   filter: drop-shadow(0px 0px 5px rgb(26, 26, 26));
   background: none;
 }
-.md-content {
-  height: 100%;
-  max-height: 100%;
-}
-.md-content .md-table-content .md-scrollbar .md-theme-default {
-  height: 100%;
-  max-height: 100%;
-}
 .albumDescription {
   width: 50%;
   font-size: 15px;
