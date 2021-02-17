@@ -120,25 +120,25 @@ export default {
       }
     },
     showOptionsOnClick(event, media) {
-      this.track = media;
+      this.media = media;
       this.$refs.optionMenu.showMenu(event);
     },
     showPlaylistOptionOnClick(event, media) {
-      this.track = media;
+      this.media = media;
       this.$refs.playlistMenu.showMenu(event);
     },
     showArtistOptionOnClick(event, media) {
-      this.track = media;
+      this.media = media;
       this.$refs.artistMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
-        this.queuedTracks.push(this.track);
+        this.queuedTracks.push(this.media);
       } else if (event.option.slug == "add") {
         //Add to playlist
       } else if (event.option.slug == "share") {
         this.$store.commit("showShareComponent", true);
-        this.$store.commit("setShareMedia", this.track);
+        this.$store.commit("setShareMedia", this.media);
       }
     },
     performActionWhenMediaIsClicked(media) {
@@ -187,7 +187,7 @@ export default {
     return {
       searchString: "",
       searchMedia: "songs",
-      track: {},
+      media: {},
       menuOptions: [
         {
           name: "Add to playlist",

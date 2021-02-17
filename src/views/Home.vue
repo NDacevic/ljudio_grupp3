@@ -1,6 +1,6 @@
 <template>
   <div class="homeContainer">
-    <Share v-if="this.$store.getters.getShareComponentVisible" :track="this.$store.getters.getShareMedia" />
+    <Share v-if="this.$store.getters.getShareComponentVisible" :media="this.$store.getters.getShareMedia" />
     <div class="leftBar">
       <LeftMenu />
     </div>
