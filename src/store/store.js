@@ -98,7 +98,7 @@ export default new Vuex.Store({
     setRenderNotificationsModal(state, render) {
       state.renderNotificationsModal = render;
     },
-    addTrackFromNotificationToQueue(state, track){
+    addTrackFromNotificationToQueue(state, track) {
       state.queuedTracks.push(track);
     },
     setNotificationUser(state, user) {
@@ -123,9 +123,7 @@ export default new Vuex.Store({
     async getSearchResults({ commit }, searchParameters) {
       let response;
       if (searchParameters.searchMedia === "playlists") {
-        response = await fetch(
-          `/api/playlist/${searchParameters.searchString}`
-        );
+        response = await fetch(`/api/playlist/${searchParameters.searchString}`);
       } else {
         response = await fetch(`/api/yt/${searchParameters.searchMedia}/search+${searchParameters.searchString}`);
       }
@@ -261,42 +259,39 @@ export default new Vuex.Store({
     },
     async getMediaObjectAndAddToQueueOrPlay({ commit, dispatch }, sharedContent) {
       let response;
-      response = await fetch(
-        `/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`
-      );
+      response = await fetch(`/api/yt/${sharedContent.sharedContentType}s/${sharedContent.sharedContentId}`);
       const track = await response.json();
-      
+
       if (sharedContent.addToQueue) {
-        commit("addTrackFromNotificationToQueue",track.content[0])
-      }
-      else {
+        commit("addTrackFromNotificationToQueue", track.content[0]);
+      } else {
         dispatch("setSongToPlay", track.content[0]);
       }
-
     },
     async getMediaContentAndRender({ commit, dispatch }, sharedContent) {
-      switch (sharedContent.sharedContentType){
+      switch (sharedContent.sharedContentType) {
         case "artist":
           dispatch("fetchArtistByBrowseId", sharedContent.sharedContentId);
           break;
         case "album":
-          dispatch("fetchAlbumByBrowseId", sharedContent.sharedContentId)
+          dispatch("fetchAlbumByBrowseId", sharedContent.sharedContentId);
           break;
         case "playlist":
-          dispatch("getCurrentPlaylist", sharedContent.sharedContentId)
+          dispatch("getCurrentPlaylist", sharedContent.sharedContentId);
           break;
       }
-      commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType)
+      commit("setComponentToRenderInHomeCenter", sharedContent.sharedContentType);
     },
     // eslint-disable-next-line no-unused-vars
-    async sendNotification({ commit }, notification) {
+    async sendNotification(notification) {
+      console.log(notification);
       const response = await fetch(`api/notification`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(notification),
-      });
+      }).catch(e => console.error(e.message));
       const result = await response;
 
       if (result.ok) {
@@ -304,7 +299,6 @@ export default new Vuex.Store({
       } else {
         console.log("ERROR", response.status);
       }
-      commit();
     },
   },
   getters: {
@@ -379,9 +373,9 @@ export default new Vuex.Store({
     getShareComponentVisible(state) {
       return state.shareComponentVisible;
     },
-    getShareMedia(state){
+    getShareMedia(state) {
       return state.shareMedia;
-    }
+    },
   },
   modules: {},
 });
