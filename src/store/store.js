@@ -64,11 +64,6 @@ export default new Vuex.Store({
     addTrackToTopOfQueue(state, trackToAdd) {
       state.queuedTracks.unshift(trackToAdd);
     },
-    addPlaylistToQueue(state, playlist) {
-      for(var track in playlist) {
-        state.queuedTracks.push(track);
-      }
-    },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
