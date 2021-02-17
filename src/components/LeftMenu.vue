@@ -6,7 +6,7 @@
       <button id="noNewNotifications" v-else>0</button>
     </div>
     
-    <NotificationsPopUp v-if="renderNotificationsModal===true"/>
+    <NotificationsPopUp v-if="renderNotificationsModal===true && newNotifications.length > 0"/>
 
     <button id="searchButton" @click="renderEmptySearchPageInCenter()">
       <p>Search</p>
@@ -45,7 +45,10 @@ export default {
     },
     renderNotificationsModal() {
       return this.$store.getters.getRenderNotificationsModalStatus;
-    }
+    },
+    newNotifications() {
+      return this.$store.getters.getNewNotifications;
+    },
   },
 };
 </script>
