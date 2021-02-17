@@ -111,19 +111,6 @@ module.exports = (app, db) => {
     response.json(data.recordset)
   })
 
-  //alt get playlists with userId
-/*  app.get("/api/userplaylist/:id", async (request, response) => {
-    //check user
-    if(!request.session.user){
-      response.status(401) // unauthorised
-      response.json({error:'not logged in'})
-      return;
-    }
-    let data = await db.pool.request()
-    .query('SELECT * FROM [UserPlaylist] WHERE UserId = ?', [request.session.user.id])
-    response.json(data.recordset)
-  })*/
-
  // unfollow/delete from userplaylist
  app.delete("/api/deletePlaylist/:playlistId", async (request, response) => {
   // check if user exists before writing
@@ -158,6 +145,15 @@ module.exports = (app, db) => {
     .input('playlistId', db.Int, request.params.playlistId)
     .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId AND UserId = @id")
   response.json(result)
+})
+
+//get musicplaylist 
+app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
+  let data = await db.pool.request()
+  .input('playlistId', db.Int, request.params.playlistId)
+  //.query('SELECT * FROM [MusicPlaylist] join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] join [Playlist] on [MusicPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where [Playlist].[PlaylistId] = @playlistId')
+  .query('SELECT [Music].*, [MusicPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [MusicPlaylist] join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] join [Playlist] on [MusicPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where Playlist.PlaylistId = @playlistId')
+  response.json(data.recordset)
 })
 
   // public get another table (happens to be a left joined view)
