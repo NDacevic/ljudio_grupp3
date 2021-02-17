@@ -70,16 +70,20 @@ export default {
     playNext() {
       let media;
       if (this.$store.getters.getQueuedTracks.length > 0) {
-        media = this.$store.state.queuedTracks[0];
+        if (this.shuffle) {
+         let randomQueueIndex = Math.floor(Math.random() * this.$store.state.queuedTracks.length);
+         media = this.$store.state.queuedTracks[randomQueueIndex]
+        }
+        else
+          media = this.$store.state.queuedTracks[0];
         this.$store.dispatch("setTrackToPlay", { media, caller: "playNext" });
-        this.$store.commit("removeTopFromQueue");
+        this.$store.commit("removeFromQueue", media);
         return true;
       } else {
         return false;
       }
     },
     playPrev() {
-      console.log(this.$store.getters.getTrackHistoryLength);
       if (this.$store.state.trackHistory.length > 0) {
         let media = this.$store.state.trackHistory[this.$store.state.trackHistory.length - 1];
         this.$store.commit("addTrackToTopOfQueue", this.$store.state.currentTrack);

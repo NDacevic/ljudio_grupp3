@@ -51,8 +51,8 @@ export default new Vuex.Store({
         1
       );
     },
-    removeTopFromQueue(state) {
-      state.queuedTracks.shift();
+    removeFromQueue(state, track) {
+      state.queuedTracks.splice(state.queuedTracks.findIndex(t => t.videoId  === track.videoId), 1);
     },
     removeFromBottomOfHistory(state) {
       state.trackHistory.pop();
