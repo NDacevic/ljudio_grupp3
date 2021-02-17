@@ -1,12 +1,20 @@
 <template>
   <div id="leftMenu">
+    <div id="navigationArrows">
+      <figure id="arrowBack" class="arrows" @click="anything()">
+        <i class="material-icons-round">arrow_back_ios_new</i>
+      </figure>
+      <figure id="arrowForward" class="arrows" @click="anything()">
+        <i class="material-icons-round">arrow_forward_ios</i>
+      </figure>
+    </div>
     <div id="notifications">
       Notifications
-      <button v-if="getNewNotifications.length > 0" id="newNotifications" @click="setRenderNotificationsModalTrue">{{getNewNotifications.length}}</button>
+      <button v-if="getNewNotifications.length > 0" id="newNotifications" @click="setRenderNotificationsModalTrue">{{ getNewNotifications.length }}</button>
       <button id="noNewNotifications" v-else>0</button>
     </div>
-    
-    <NotificationsPopUp v-if="renderNotificationsModal===true"/>
+
+    <NotificationsPopUp v-if="renderNotificationsModal === true" />
 
     <button id="searchButton" @click="renderEmptySearchPageInCenter()">
       <p>Search</p>
@@ -18,13 +26,12 @@
 </template>
 
 <script>
-
-import NotificationsPopUp from "./NotificationsPopUp"
+import NotificationsPopUp from "./NotificationsPopUp";
 
 export default {
   name: "LeftMenu",
   components: {
-    NotificationsPopUp
+    NotificationsPopUp,
   },
   methods: {
     renderEmptySearchPageInCenter() {
@@ -33,11 +40,11 @@ export default {
       this.$store.commit("setSearchHasBeenPerformed", false);
     },
     logOut() {
-      this.$store.dispatch("logOut")  
+      this.$store.dispatch("logOut");
     },
     setRenderNotificationsModalTrue() {
-      this.$store.commit("setRenderNotificationsModal", true)
-    }
+      this.$store.commit("setRenderNotificationsModal", true);
+    },
   },
   computed: {
     getNewNotifications() {
@@ -45,7 +52,7 @@ export default {
     },
     renderNotificationsModal() {
       return this.$store.getters.getRenderNotificationsModalStatus;
-    }
+    },
   },
 };
 </script>
