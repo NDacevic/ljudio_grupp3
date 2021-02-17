@@ -29,15 +29,14 @@ export default {
     getPlaylists() {
         return this.$store.getters.getPlaylists;
     },
-    user: {
-      get() {
-        return this.$store.getters.getUser;
-      }
+    user() {
+      return this.$store.getters.getUser;
     }
   },
   methods: {
     goToPlaylist(playlistId) {
-      this.$store.commit("setCurrentPlaylistId", playlistId);
+      //this.$store.commit("setCurrentPlaylistId", playlistId);
+      this.$store.dispatch("getCurrentPlaylist", playlistId);
       console.log(playlistId);
       this.$store.commit("setComponentToRenderInHomeCenter", "playlist");
     },
