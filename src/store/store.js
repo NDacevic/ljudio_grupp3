@@ -14,12 +14,15 @@ export default new Vuex.Store({
     componentToRenderInHomeCenter: "search",
     queuedTracks: [],
     searchHasBeenPerformed: false, //Used to render search headers (or not)
-    selectedArtistBrowseId: "",
-    selectedArtist: {},
-    selectedAlbumBrowseId: "",
     selectedAlbum: {},
     newNotifications: [],
     createPlaylistBool:false,
+    currentPlaylistId: "",
+    selectedArtistBrowseId: "",
+    selectedArtist: {},
+    selectedAlbumBrowseId: "",
+    currentPlaylist: []
+
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -70,6 +73,12 @@ export default new Vuex.Store({
     setSearchHasBeenPerformed(state, searchHasBeenPerformed) {
       state.searchHasBeenPerformed = searchHasBeenPerformed;
     },
+    setCurrentPlaylistId(state, playlistId) {
+      state.currentPlaylistId = playlistId;
+    },
+    setCurrentPlaylist(state, currentPlaylist) {
+      state.currentPlaylist = currentPlaylist;
+    },
     setSelectedArtistBrowseId(state, browseId) {
       state.selectedArtistBrowseId = browseId;
     },
@@ -87,7 +96,7 @@ export default new Vuex.Store({
     },
     setcreatePlaylistHasBeenClicked(state, createPlaylistBool) {
       state.createPlaylistBool = createPlaylistBool;
-    },
+    }
   },
   actions: {
     async setTrackToPlay({ commit }, payload) {
@@ -152,6 +161,12 @@ export default new Vuex.Store({
       });
       await response.json();
       commit("modifyPlaylist", playlistId);
+    },
+    async getCurrentPlaylist({ commit }, playlistId) {
+      let response = await fetch(`/api/getMusicPlaylist/${playlistId}`);
+      let playlist = await response.json();
+      console.log(playlist)
+      commit("setCurrentPlaylist", playlist);
     },
     async createUser() {
       const response = await fetch("/api/users/", {
@@ -266,6 +281,12 @@ export default new Vuex.Store({
     getSearchHasBeenPerformed(state) {
       return state.searchHasBeenPerformed;
     },
+    getCurrentPlaylistId(state) {
+      return state.currentPlaylistId;
+    },
+    getCurrentPlaylist(state) {
+      return state.currentPlaylist;
+    },
     getSelectedArtistBrowseId(state) {
       return state.selectedArtistBrowseId;
     },
@@ -283,7 +304,7 @@ export default new Vuex.Store({
     },
     getcreatePlaylistBool(state){
       return state.createPlaylistBool;
-    },
+    }
   },
   modules: {},
 });
