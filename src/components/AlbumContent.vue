@@ -1,7 +1,7 @@
 <template>
-  <div class="albumContainer" v-if="selectedAlbum != undefined">
+  <div class="albumContainer">
     <div class="albumImage">
-      <img class="image" :src="selectedAlbum.thumbnails[2].url"/>
+      <img v-if="selectedAlbum != undefined" class="image" :src="selectedAlbum.thumbnails[2].url"/>
       <div class="infoContainer">
         <h1 class="albumHeader">{{ selectedAlbum.title }}</h1>
         <p class="albumDescription">
@@ -11,8 +11,7 @@
     </div>
     <div class="albumFooter">
       <md-button @click="playAlbum(selectedAlbum)">Play</md-button>
-      <md-button>Add to Playlist</md-button>
-      <md-button>Share Album</md-button>
+      <md-button @click="shareAlbum(selectedAlbum)">Share Album</md-button>
     </div>
     <md-table v-model="selectedAlbum" md-fixed-header>
       <md-table-row
@@ -25,20 +24,19 @@
         <md-table-cell md-label="Duration">{{ track.duration }}</md-table-cell>
       </md-table-row>
     </md-table>
-    <OptionsMenu
-      :elementId="'myUniqueId'"
-      :ref="'OptionsMenu'"
-      @option-clicked="setOption"
-    />
+    <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
+    <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool"></AddPlaylist>
   </div>
 </template>
 
 <script>
+import AddPlaylist from './AddPlaylist.vue';
 import OptionsMenu from "./OptionsMenu";
 
 export default {
   components: {
     OptionsMenu,
+    AddPlaylist
   },
   computed: {
     selectedAlbumBrowseId: {
@@ -48,7 +46,7 @@ export default {
     },
     selectedAlbum: {
       get() {
-        return this.$store.getters.getSelectedAlbum ?? {};
+        return this.$store.getters.getSelectedAlbum;
       },
     },
     queuedTracks: {
@@ -58,7 +56,7 @@ export default {
       set(newQueue) {
         this.$store.commit("updateQueue", newQueue);
       },
-    },
+    }
   },
   created() {
     this.$store.dispatch("fetchAlbumByBrowseId", this.selectedAlbumBrowseId);
@@ -72,17 +70,34 @@ export default {
     },
     showOptionsOnClick(event, track) {
       this.selectedTrack = track;
-      this.$refs.OptionsMenu.showMenu(event);
+      this.$refs.optionMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
         this.queuedTracks.push(this.selectedTrack);
       }
       if (event.option.slug == "add") {
-        //Add to playlist
+        this.$store.commit("setcreatePlaylistHasBeenClicked", true);
+        this.$store.commit("setplaylistTrack", {
+          name: this.selectedTrack.name,
+          artist: {
+            name: this.selectedTrack.artistNames,
+          },
+          type: "song",
+          videoId: this.selectedTrack.videoId
+        });
       }
       if (event.option.slug == "share") {
-        //@TODO: Share selectedTrack
+        console.log(this.selectedTrack);
+        this.$store.commit("showShareComponent", true);
+        this.$store.commit("setShareMedia", {
+          name: this.selectedTrack.name,
+          artist: {
+            name: this.selectedTrack.artistNames,
+          },
+          type: "song",
+          videoId: this.selectedTrack.videoId
+        });
       }
     },
     playAlbum(album) {
@@ -92,16 +107,34 @@ export default {
       });
       this.queuedTracks = album.tracks.slice(1, album.tracks.length);
     },
-    addAlbumToPlaylist(/* album */) {
-      //@TODO: Add album to playlist
-    },
-    shareAlbum(/* album */) {
-      //@TODO: Share album
+    shareAlbum(album) {
+      this.$store.commit("showShareComponent", true);
+      this.$store.commit("setShareMedia", {
+        name: album.title,
+        artist: album.artist[0].name,
+        type: "album",
+        browseId: album.browseId,
+        year: album.year
+      });
     }
   },
   data() {
     return {
-      selectedTrack: Object
+      selectedTrack: Object,
+      menuOptions: [
+        {
+          name: "Add to playlist",
+          slug: "add",
+        },
+        {
+          name: "Add to queue",
+          slug: "queue",
+        },
+        {
+          name: "Share",
+          slug: "share",
+        },
+      ]
     };
   },
 };

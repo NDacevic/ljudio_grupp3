@@ -29,11 +29,9 @@
         <md-table-cell md-label="Year">{{ album.year }}</md-table-cell>
       </md-table-row>
     </md-table>
-    <OptionsMenu
-      :elementId="'myUniqueId'"
-      :ref="'OptionsMenu'"
-      @option-clicked="setOption"
-    />
+    <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
+    <OptionsMenu :elementId="'playlistMenuId'" :options="playlistOptions" :ref="'playlistMenu'" @option-clicked="setOption" />
+    <OptionsMenu :elementId="'artistMenuId'" :options="artistOptions" :ref="'artistMenu'" @option-clicked="setOption" />
   </div>
 </template>
 
@@ -78,7 +76,7 @@ export default {
       this.$store.commit("setComponentToRenderInHomeCenter", "album");
     }, 
     showOptionsOnClick(event) {
-      this.$refs.OptionsMenu.showMenu(event);
+      this.$refs.optionMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
@@ -88,7 +86,16 @@ export default {
         // Add selectedAlbum to playlist
       }
       if (event.option.slug == "share") {
-        //@TODO: Share selectedAlbum
+        const album = this.selectedAlbum;
+        console.log(album);
+        this.$store.commit("showShareComponent", true);
+        this.$store.commit("setShareMedia", {
+        name: album.title,
+        artist: album.artist[0].name,
+        type: "album",
+        browseId: album.browseId,
+        year: album.year
+      });
       }
     },
     async fetchSelectedAlbum(album, playAlbum) {
@@ -103,6 +110,20 @@ export default {
         caller: "search",
       });
       this.queuedTracks = this.selectedAlbum.tracks.slice(1, this.selectedAlbum.tracks.length);
+    }
+  },
+  data() {
+    return {
+      menuOptions: [
+        {
+          name: "Add to queue",
+          slug: "queue",
+        },
+        {
+          name: "Share",
+          slug: "share",
+        },
+      ],
     }
   }
 }
