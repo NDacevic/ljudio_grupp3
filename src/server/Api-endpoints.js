@@ -81,6 +81,16 @@ module.exports = (app, db) => {
     response.json(data);
   });
 
+   // search for new notifications
+   app.get("/api/notification/:userId", async (request, response) => {
+    let data = await db.pool
+      .request()
+      .input("userId", db.Int, request.params.userId)
+      .query("SELECT * FROM [Notification] WHERE UserId = @userId AND Unread = 1");
+    data = data.recordset;
+    response.json(data);
+  });
+
   //get userId from a username for notification sending
   app.get("/api/notification/:userName", async (request, response) => {
     let data = await db.pool
@@ -91,15 +101,7 @@ module.exports = (app, db) => {
     response.json(data);
   });
 
-  // search for new notifications
-  app.get("/api/notification/:userId", async (request, response) => {
-    let data = await db.pool
-      .request()
-      .input("userId", db.Int, request.params.userId)
-      .query("SELECT * FROM [Notification] WHERE UserId = @userId AND Unread = 1");
-    data = data.recordset;
-    response.json(data);
-  });
+ 
 
   // send notifications
   app.post("/api/notification", async (request, response) => {
@@ -113,6 +115,26 @@ module.exports = (app, db) => {
       .input("sharedContentName", db.NVarChar, request.body.sharedContentName)
       .query("INSERT INTO [Notification] VALUES (@userId, @senderName, @unread, @sharedContentId, @sharedContentType, @sharedContentName)");
     response.json(data);
+  });
+
+  // update notification-unread to false
+  app.put("/api/notification/", async (request, response) => {
+    // check if user exists before writing
+    if (!request.session.user) {
+      response.status(403); // forbidden
+      response.json({ error: "not logged in" });
+      return;
+    }
+    let result = await db.pool
+      .request()
+      .input("id", db.Int, request.body.Id)
+      .input("UserId", db.Int, request.body.UserId)
+      .input("SenderName", db.NVarChar, request.body.SenderName)
+      .input("SharedContentId", db.NVarChar, request.body.SharedContentId)
+      .input("SharedContentType", db.NVarChar, request.body.SharedContentType)
+      .input("SharedContentName", db.NVarChar, request.body.SharedContentName)
+      .query("UPDATE [Notification] SET UserId = @UserId, SenderName = @SenderName, Unread = 0, SharedContentId = @SharedContentId, SharedContentType = @SharedContentType, SharedContentName = @SharedContentName WHERE Id = @id");
+    response.json(result);
   });
 
   // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************

@@ -35,13 +35,13 @@
       <div id="searchResults" class="md-scrollbar">
         <div class="mediaContainer" v-for="(media, index) in getSearchContent" :key="index">
           <button @contextmenu.prevent.stop="showOptionsOnClick($event, media)" class="listButton" v-if="media.type === 'song'" @dblclick="performActionWhenMediaIsClicked(media)">
-            <p>{{ media.name }}</p>
+            <p>{{ truncatedTrackTitleArtistName(media.name) }}</p>
             <p>{{ media.artist.name }}</p>
             <p>{{ media.album.name }}</p>
             <p>{{ convertMillisecondsToTimeString(media.duration) }}</p>
           </button>
           <button @contextmenu.prevent.stop="showOptionsOnClick($event, media)" class="listButton" id="albumButton" v-if="media.type === 'album'" @dblclick="performActionWhenMediaIsClicked(media)">
-            <p>{{ media.name }}</p>
+            <p>{{ truncatedTrackTitleArtistName(media.name) }}</p>
             <p>{{ media.artist }}</p>
             <p>{{ media.year }}</p>
           </button>
@@ -162,6 +162,11 @@ export default {
           this.$store.commit("setComponentToRenderInHomeCenter", media.type);
         break;
       }
+    },
+    truncatedTrackTitleArtistName(mediaName) {
+      let length = 70;
+      if (mediaName == null || mediaName.Length < length || mediaName.indexOf(" ", length) == -1) return mediaName;
+      return mediaName.substring(0, mediaName.indexOf(" ", length)) + "...";
     },
   },
   computed: {

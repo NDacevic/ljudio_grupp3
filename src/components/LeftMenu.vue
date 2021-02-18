@@ -6,7 +6,7 @@
       <button id="noNewNotifications" v-else>0</button>
     </div>
     
-    <NotificationsPopUp v-if="renderNotificationsModal===true"/>
+    <NotificationsPopUp v-if="renderNotificationsModal===true && newNotifications.length > 0"/>
 
     <button id="searchButton" @click="renderEmptySearchPageInCenter()">
       <p>Search</p>
@@ -50,7 +50,10 @@ export default {
     },
     checkWhichComponentIsRenderedInCenter() {
       return this.$store.getters.getCenterComponentForHome
-    }
+    },
+    newNotifications() {
+      return this.$store.getters.getNewNotifications;
+    },
   },
 };
 </script>
