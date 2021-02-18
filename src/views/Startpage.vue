@@ -54,17 +54,18 @@ data(){
     return{
         errors:[],
         user:{},
-        confirmPassword:"String",
+        confirmPassword:"",
         toggle: true,          
     };
   },
 methods: {
   checkForm: function(e){
-       this.errors = [];
+       
     if(this.user.username && this.user.password)
     {
       this.loginUser();
     }
+    this.errors = [];
     if(!this.user.username){
       this.errors.push('Username required');
     }
@@ -73,12 +74,15 @@ methods: {
     }
     e.preventDefault();
   },
+
     checkFormReg: function(e){
-       this.errors = [];
+      
+     this.errors = [];
     if(this.user.username && this.user.password && this.confirmPassword)
     {   
       this.validateUsername();   
     }  
+  
     if(!this.user.username){
       this.errors.push('Username required');
     }
@@ -96,11 +100,14 @@ methods: {
        },
 
   validateUsername() {
+    
     if(this.user.password != this.confirmPassword)
     {
      this.errors.push('Password doesn´t match');
     }
-    else{ this.$store.dispatch("validateUsername")}   
+    else{
+       this.$store.commit("updateUser",this.user); 
+       this.$store.dispatch("validateUsername")}   
     },
 }
 }

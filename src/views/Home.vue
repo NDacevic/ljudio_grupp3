@@ -5,7 +5,6 @@
       <LeftMenu />
     </div>
     <div class="centerContent">
-      <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"/>
       <Search v-if="renderCenterComponent === 'search'" />
       <AlbumContent v-if="renderCenterComponent === 'album'" />
       <ArtistContent v-if="renderCenterComponent === 'artist'" />
@@ -34,7 +33,6 @@ import Search from "../components/Search";
 import Playlists from "../components/Playlists";
 import Player from "../components/Player";
 import Queue from "../components/Queue";
-import AddPlaylist from "../components/AddPlaylist"
 import AlbumContent from "../components/AlbumContent";
 import ArtistContent from "../components/ArtistContent";
 import PlaylistContent from "../components/PlaylistContent";
@@ -51,7 +49,6 @@ export default {
     AlbumContent,
     ArtistContent,
     PlaylistContent,
-    AddPlaylist,
     Share,
   },
   data() {

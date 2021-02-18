@@ -1,8 +1,19 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> c906f08... felhant i db fil
-=======
-SELECT * FROM UserPlaylist
->>>>>>> 502abfb... style playlistcontent
+-- declare 
+-- SET @myVal = (SELECT IDENT_CURRENT ('Playlist'))
+-- INSERT INTO [UserPlaylist](UserId,PlaylistId) VALUES (5,@myVal)
+
+-- SELECT * from [User]
+-- SELECT * from [UserPlaylist]
+-- SELECT * from [Music]
+-- SELECT * from [MusicPlaylist]
+SELECT * from [Playlist]
+
+-- declare @myVal int; 
+-- SET @myVal = (SELECT 'SongId' WHERE 'video') INSERT INTO [MusicPlaylist](SongId,PlaylistId) VALUES (@myVal,@playlistId)
+
+
+
+ declare @myVal int; 
+ SET @myVal = (SELECT SongId FROM [Music] WHERE SongId = 2)
+

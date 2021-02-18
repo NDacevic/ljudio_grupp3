@@ -6,26 +6,26 @@ module.exports = (app, db) => {
   // register user
   app.post("/api/users", async (request, response) => {
     let password = await bcrypt.hash(request.body.password, 10);
-    let result = await db.pool
-      .request()
-      .input("Username", db.VarChar, request.body.username)
-      .input("Password", db.VarChar, password)
-      .query("INSERT INTO [User](Username,Password) VALUES (@username,@password)");
-    response.json(result);
+    let result = await db.pool.request()
+      .input('Username', db.VarChar, request.body.username)
+      .input('Password', db.VarChar, password)
+      .query("INSERT INTO [User](Username,Password) VALUES (@username,@password)")
+    response.json(result)
   }),
-    //Check if username already exists
-    app.post("/api/checkUser", async (request, response) => {
-      let user = await db.pool
-        .request()
-        .input("Username", db.VarChar, request.body.username)
-        .query("SELECT * FROM [User] WHERE Username = @Username");
-      user = user.recordset[0];
-      if (user != undefined) {
-        response.status(403);
-        response.json({ message: "Username already exists" });
-      } else response.status(200);
-      response.json({ message: "User dont exist" });
-    });
+  //Check if username already exists
+  app.post("/api/checkUser",async (request,response) => {
+    let user = await db.pool.request()
+      .input('Username', db.VarChar, request.body.username)
+      .query("SELECT * FROM [User] WHERE Username = @username")
+    user = user.recordset[0];
+    if(user!=undefined)
+    {
+        response.status(403); 
+        response.json({ message:"Username already exists" });
+    }
+    else
+    response.status(200)
+  })
   // authentication: perform login
   app.post("/api/login", async (request, response) => {
     let user = await db.pool
@@ -139,16 +139,6 @@ module.exports = (app, db) => {
 
   // ******************************** OBS!!!! ALL BELOW ARE Example routes ****************************************
 
-  // public get one table row
-  app.get("/api/examples/:id", async (request, response) => {
-    let data = await db.pool
-      .request()
-      .input("id", db.Int, request.params.id)
-      .query("SELECT * FROM [TABLE] WHERE id = @id");
-    data = data.recordset[0]; // single row
-    response.json(data);
-  });
-
   //public get playlists with userId
   app.get("/api/getplaylist", async (request, response) => {
     let data = await db.pool
@@ -205,29 +195,49 @@ app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
   response.json(data.recordset)
 })
 
-  // public get another table (happens to be a left joined view)
-  app.get("/api/examples_with_colors", async (request, response) => {
-    let data = await db.pool.request().query("SELECT * FROM [TABLE]");
-    response.json(data.recordset);
-  });
+//Post Music 
+app.post("/api/music", async (request, response) => {
 
-  // private create one row
-  app.post("/api/examples", async (request, response) => {
+  await db.pool.request()
+  .input('Artist', db.NVarChar, request.body.artist.name)
+  .input('Title', db.NVarChar, request.body.name)
+  .input('AlbumName', db.NVarChar, request.body.album.name)
+  .input('Duration', db.Int, request.body.duration)
+  .input('videoId', db.NVarChar, request.body.videoId)
+  .input('contentType', db.NVarChar, request.body.type)
+  .query("IF NOT EXISTS ( SELECT 1 FROM [Music] WHERE videoId = @videoId) BEGIN INSERT INTO [Music] VALUES (@Artist,@Title,@AlbumName,@Duration,@videoId,@contentType) END")
+
+   response.json();
+   
+})
+//Post MusicPlaylist
+app.post("/api/musicplaylist/", async (request, response) => {
+    
+    await db.pool.request()
+      .input('videoId', db.NVarChar, request.body.videoId)
+      .input('playlistId', db.Int, request.body.id)
+      .query(`declare @myVal int; SET @myVal = (SELECT SongId FROM [Music] WHERE videoId = @videoId)  INSERT INTO [MusicPlaylist](SongId,PlaylistId) VALUES (@myVal,@playlistId)`)
+      response.json()
+
+}),
+ 
+  // private create new playlist 
+  app.post("/api/newPlaylist", async (request, response) => {
     // check if user exists before writing
     if (!request.session.user) {
       response.status(403); // forbidden
       response.json({ error: "not logged in" });
       return;
     }
-    // https://www.npmjs.com/package/mssql#data-types
-    let result = await db.pool
-      .request()
-      .input("name", db.VarChar, request.body.name)
-      .input("slogan", db.VarChar, request.body.slogan)
-      .input("color", db.Int, request.body.color)
-      .query("INSERT INTO [TABLE] (name, slogan, color) VALUES (@name, @slogan, @color)");
-    response.json(result);
-  });
+    let data = await db.pool.request()
+    .input('PlaylistName', db.VarChar, request.body.PlaylistName)
+    .input('Shared', db.VarChar, false)
+    .input('OwnerId', db.VarChar, request.session.user.UserId)
+    .input('ReadOnly', db.VarChar, false)
+    .query(`INSERT INTO [Playlist](PlaylistName,Shared,OwnerId,ReadOnly) OUTPUT Inserted.PlaylistId VALUES (@playlistname,@shared,@ownerid,@readonly) declare @myVal int; SET @myVal = (SELECT IDENT_CURRENT ('Playlist')) INSERT INTO [UserPlaylist](UserId,PlaylistId) VALUES (@OwnerId,@myVal)`)
+    response.json(data.recordset[0])
+  })
+
 
   // private update one row
   app.put("/api/examples/:id", async (request, response) => {

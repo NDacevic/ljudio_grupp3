@@ -9,6 +9,7 @@ export default new Vuex.Store({
     user: {},
     searchResults: [],
     playlists: [],
+    playlistTrack:{},
     currentTrack: {},
     trackHistory: [],
     componentToRenderInHomeCenter: "search",
@@ -66,6 +67,9 @@ export default new Vuex.Store({
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
     },
+    setplaylistTrack(state,track){
+      state.playlistTrack = track;
+    },
     updateUser(state, newUser) {
       state.user = newUser;
     },
@@ -111,6 +115,9 @@ export default new Vuex.Store({
     setShareMedia(state, media) {
       state.shareMedia = media;
     },
+    setLastPlaylistId(state,id){
+      state.playlists[state.playlists.length-1].PlaylistId = id;
+    },
     toggleShuffle(state) {
       if (state.shuffleOn)
         state.shuffleOn = false;
@@ -154,6 +161,53 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
+    async addPlaylistMusic({commit}){
+        let playlist={};     
+        playlist.id = this.state.currentPlaylistId
+        playlist.videoId = this.state.playlistTrack.videoId
+        const response = await fetch("/api/music", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.state.playlistTrack),       
+        });
+        if(response.status==200)
+        {
+          const secondresponse = await fetch("/api/musicplaylist", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(playlist),       
+          });
+          if(secondresponse.status==200){ 
+            commit("setcreatePlaylistHasBeenClicked", false);
+          }
+        }
+
+    },
+
+    async addNewPlaylist({commit,dispatch},playlist){ 
+      const response = await fetch("/api/newPlaylist/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(playlist),
+      });
+      if (response.status == "200") {
+        alert("playlist has been created");
+        let playlistId = (await response.json()).PlaylistId
+        console.log(playlistId)
+        commit("setLastPlaylistId",playlistId)
+        commit("setCurrentPlaylistId",playlistId)
+        dispatch("addPlaylistMusic")
+      } else {
+        alert("Something went wrong, try again");
+      }
+       
+    },
     async getPlaylists({ commit }) {
       try {
         let response = await fetch(`/api/getplaylist/`);
@@ -184,6 +238,7 @@ export default new Vuex.Store({
       commit("setCurrentPlaylist", playlist);
     },
     async createUser() {
+      
       const response = await fetch("/api/users/", {
         method: "POST",
         headers: {
@@ -198,7 +253,7 @@ export default new Vuex.Store({
         alert("Something went wrong, try again");
       }
     },
-    async validateUsername() {
+    async validateUsername({dispatch}) {
       const response = await fetch("/api/checkUser/", {
         method: "POST",
         headers: {
@@ -207,7 +262,7 @@ export default new Vuex.Store({
         body: JSON.stringify(this.state.user),
       });
       if (response.status == "200") {
-        this.dispatch("createUser");
+         dispatch("createUser");
       } else {
         alert("Username already exists,choose another");
       }
@@ -348,6 +403,9 @@ export default new Vuex.Store({
     },
     getUser(state) {
       return state.user;
+    },
+    getplaylistTrack(state){
+      return state.playlistTrack;
     },
     getQueuedTracksLength(state) {
       return state.queuedTracks.length;

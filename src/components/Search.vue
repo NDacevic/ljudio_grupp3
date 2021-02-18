@@ -71,6 +71,7 @@
         </div>
       </div>
     </div>
+    <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"/>
     <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
     <OptionsMenu :elementId="'playlistMenuId'" :options="playlistOptions" :ref="'playlistMenu'" @option-clicked="setOption" />
     <OptionsMenu :elementId="'artistMenuId'" :options="artistOptions" :ref="'artistMenu'" @option-clicked="setOption" />
@@ -79,12 +80,15 @@
 
 <script>
 import OptionsMenu from "../components/OptionsMenu";
+import AddPlaylist from "../components/AddPlaylist";
 
 export default {
   name: "Search",
 
   components: {
     OptionsMenu,
+    AddPlaylist
+
   },
   methods: {
     convertMillisecondsToTimeString(milliseconds) {
@@ -134,9 +138,12 @@ export default {
     setOption(event) {
       if (event.option.slug == "queue") {
         this.queuedTracks.push(this.media);
-      } else if (event.option.slug == "add") {
-        //Add to playlist
-      } else if (event.option.slug == "share") {
+      }
+      else if (event.option.slug == "add") {
+        this.$store.commit("setcreatePlaylistHasBeenClicked", true);
+        this.$store.commit("setplaylistTrack",this.media);
+      }
+      else if (event.option.slug == "share") {
         this.$store.commit("showShareComponent", true);
         this.$store.commit("setShareMedia", this.media);
       }
