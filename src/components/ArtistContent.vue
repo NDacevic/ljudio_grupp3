@@ -124,22 +124,6 @@ export default {
           slug: "share",
         },
       ],
-      artistOptions: [
-        {
-          name: "Share",
-          slug: "share",
-        },
-      ],
-      playlistOptions: [
-        {
-          name: "Add to queue",
-          slug: "queue",
-        },
-        {
-          name: "Share",
-          slug: "share",
-        },
-      ],
     }
   }
 }
