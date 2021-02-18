@@ -15,7 +15,7 @@
         <md-table-cell md-label="Title">{{ track.Title }}</md-table-cell>
         <md-table-cell md-label="Artist">{{ track.Artist }}</md-table-cell>
         <md-table-cell md-label="Album">{{ track.AlbumName }}</md-table-cell>
-        <md-table-cell md-label="Duration">{{ track.Duration }}</md-table-cell>
+        <md-table-cell md-label="Duration">{{ convertMillisecondsToTimeString(track.Duration) }}</md-table-cell>
       </md-table-row>
     </md-table>
     <OptionsMenu
@@ -94,6 +94,16 @@ export default {
           type: this.selectedTrack.contentType,
           videoId: this.selectedTrack.videoId,
         });
+      }
+    },
+    convertMillisecondsToTimeString(milliseconds) {
+      let seconds = milliseconds / 1000;
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      if (remainingSeconds.toString().length === 1) {
+        return minutes + ":0" + remainingSeconds;
+      } else {
+        return minutes + ":" + remainingSeconds;
       }
     },
   },

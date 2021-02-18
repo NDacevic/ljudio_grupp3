@@ -11,10 +11,11 @@
         <button
           v-if="playlist.OwnerId === user.UserId"
           v-on:click="deletePlaylist(playlist.PlaylistId)"
+          v-on:click.prevent.stop="goToPlaylist(playlist.PlaylistId)"
         >
           Delete
         </button>
-        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)">
+        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)" v-on:click.prevent.stop="goToPlaylist(playlist.PlaylistId)">      
           Unfollow
         </button>
       </div>
