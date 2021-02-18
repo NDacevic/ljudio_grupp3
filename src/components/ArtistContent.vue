@@ -29,11 +29,9 @@
         <md-table-cell md-label="Year">{{ album.year }}</md-table-cell>
       </md-table-row>
     </md-table>
-    <OptionsMenu
-      :elementId="'myUniqueId'"
-      :ref="'OptionsMenu'"
-      @option-clicked="setOption"
-    />
+    <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
+    <OptionsMenu :elementId="'playlistMenuId'" :options="playlistOptions" :ref="'playlistMenu'" @option-clicked="setOption" />
+    <OptionsMenu :elementId="'artistMenuId'" :options="artistOptions" :ref="'artistMenu'" @option-clicked="setOption" />
   </div>
 </template>
 
@@ -78,7 +76,7 @@ export default {
       this.$store.commit("setComponentToRenderInHomeCenter", "album");
     }, 
     showOptionsOnClick(event) {
-      this.$refs.OptionsMenu.showMenu(event);
+      this.$refs.optionMenu.showMenu(event);
     },
     setOption(event) {
       if (event.option.slug == "queue") {
@@ -103,6 +101,40 @@ export default {
         caller: "search",
       });
       this.queuedTracks = this.selectedAlbum.tracks.slice(1, this.selectedAlbum.tracks.length);
+    }
+  },
+  data() {
+    return {
+      menuOptions: [
+        {
+          name: "Add to playlist",
+          slug: "add",
+        },
+        {
+          name: "Add to queue",
+          slug: "queue",
+        },
+        {
+          name: "Share",
+          slug: "share",
+        },
+      ],
+      artistOptions: [
+        {
+          name: "Share",
+          slug: "share",
+        },
+      ],
+      playlistOptions: [
+        {
+          name: "Add to queue",
+          slug: "queue",
+        },
+        {
+          name: "Share",
+          slug: "share",
+        },
+      ],
     }
   }
 }

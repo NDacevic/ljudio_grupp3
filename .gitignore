@@ -3,6 +3,7 @@ node_modules
 /dist
 /src/database
 package-lock.json
+vetur.config.js
 
 
 # local env files
