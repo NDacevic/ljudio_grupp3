@@ -71,8 +71,7 @@
         </div>
       </div>
     </div>
-    <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"
-    :ref="'addsongtoplaylist'"/>
+    <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool === true"/>
     <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
     <OptionsMenu :elementId="'playlistMenuId'" :options="playlistOptions" :ref="'playlistMenu'" @option-clicked="setOption" />
     <OptionsMenu :elementId="'artistMenuId'" :options="artistOptions" :ref="'artistMenu'" @option-clicked="setOption" />
@@ -142,7 +141,7 @@ export default {
       }
       else if (event.option.slug == "add") {
         this.$store.commit("setcreatePlaylistHasBeenClicked", true);
-        this.$refs.addsongtoplaylist.getTrack(this.media)
+        this.$store.commit("setplaylistTrack",this.media);
       }
       else if (event.option.slug == "share") {
         this.$store.commit("showShareComponent", true);

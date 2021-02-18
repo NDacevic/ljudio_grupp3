@@ -173,7 +173,33 @@ app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
   response.json(data.recordset)
 })
 
-  // private create new playlist
+//Post Music 
+app.post("/api/music", async (request, response) => {
+
+  await db.pool.request()
+  .input('Artist', db.NVarChar, request.body.artist.name)
+  .input('Title', db.NVarChar, request.body.name)
+  .input('AlbumName', db.NVarChar, request.body.album.name)
+  .input('Duration', db.Int, request.body.duration)
+  .input('videoId', db.NVarChar, request.body.videoId)
+  .input('contentType', db.NVarChar, request.body.type)
+  .query("IF NOT EXISTS ( SELECT 1 FROM [Music] WHERE videoId = @videoId) BEGIN INSERT INTO [Music] VALUES (@Artist,@Title,@AlbumName,@Duration,@videoId,@contentType) END")
+
+   response.json();
+   
+})
+//Post MusicPlaylist
+app.post("/api/musicplaylist/", async (request, response) => {
+
+    
+    await db.pool.request()
+      .input('playlistId', db.Int, request.body.id)
+      .query("declare @myVal int; SET @myVal = (SELECT IDENT_CURRENT ('Music')) INSERT INTO [MusicPlaylist](SongId,PlaylistId) VALUES (@myVal,@playlistId)")
+      response.json()
+
+}),
+ 
+  // private create new playlist 
   app.post("/api/newPlaylist", async (request, response) => {
     let user = request.session.user.UserId
     // check if user exists before writing

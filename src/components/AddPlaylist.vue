@@ -10,10 +10,8 @@
         <select>
        <option disabled value="">Please select one</option>
        <option v-on:click="addToPlaylist(playlist.PlaylistId)"  v-for="(playlist, index) in getPlaylists"
-      :key="index">{{playlist}}</option>
-       </select>
- 
-       
+      :key="index">{{playlist.PlaylistName}}</option>
+       </select>     
     </div>
   </div>
 </template>
@@ -21,44 +19,29 @@
 <script>
 export default {
   name: "AddPlaylist",
+  props:{
+  pickedTrack:{},
+  },
 data() {
   return {
     newPlaylist:[],
-    selectedPlaylist:[],
-    pickedTrack:{},
+    selectedPlaylist:[],  
   }
 },
   methods: {
     addToPlaylist(playlistId){   
-      alert(playlistId)
-      this.$store.dispatch("getCurrentPlaylist", playlistId );
-      this.selectedPlaylist.push(this.pickedTrack)
-      this.addTrackToPlaylist.push(this.pickedTrack)
-      console.log(this.$store.getters.getCurrentPlaylist)
-    },
-    getTrack(track){
-    
-      this.pickedTrack=track;
-
+      this.$store.commit("setCurrentPlaylistId", playlistId );    
+      this.$store.dispatch("addPlaylistMusic");     
     },
     addNewPlaylist() {
       this.addPlaylist.push(this.newPlaylist);
       this.$store.commit("setCurrentPlaylist",this.newPlaylist);
       this.$store.dispatch("addNewPlaylist") 
     }
-
   },
   computed: {
      getPlaylists() {
         return this.$store.getters.getPlaylists;
-    },
-    addTrackToPlaylist:{
-      get() {
-        return this.$store.getters.getCurrentPlaylist;
-      },
-      set(selectedPlaylist) {
-        this.$store.commit("setCurrentPlaylist",selectedPlaylist);
-      },
     },
     addPlaylist: {
       get() {
@@ -66,10 +49,8 @@ data() {
       },
       set(newPlaylist) {
         this.$store.commit("setPlaylistList",newPlaylist);
-      },
-      
-    }
-    
+      },    
+    }    
   }
 }
 </script>

@@ -107,7 +107,7 @@ methods: {
     }
     else{
        this.$store.commit("updateUser",this.user); 
-       this.$store.dispatch("createUser")}   
+       this.$store.dispatch("validateUsername")}   
     },
 }
 }

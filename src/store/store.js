@@ -9,6 +9,7 @@ export default new Vuex.Store({
     user: {},
     searchResults: [],
     playlists: [],
+    playlistTrack:{},
     currentTrack: {},
     trackHistory: [],
     componentToRenderInHomeCenter: "search",
@@ -64,6 +65,9 @@ export default new Vuex.Store({
     },
     setComponentToRenderInHomeCenter(state, componentToRender) {
       state.componentToRenderInHomeCenter = componentToRender;
+    },
+    setplaylistTrack(state,track){
+      state.playlistTrack = track;
     },
     updateUser(state, newUser) {
       state.user = newUser;
@@ -144,10 +148,35 @@ export default new Vuex.Store({
         commit("setSearchResults", searchResults.content);
       }
     },
+    async addPlaylistMusic({commit}){
+        let playlist={};
+        playlist.id = this.state.currentPlaylistId
+        const response = await fetch("/api/music", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.state.playlistTrack),       
+        });
+        if(response.status==200)
+        {
+          const secondresponse = await fetch("/api/musicplaylist", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(playlist),       
+          });
+          if(secondresponse.status==200){ 
+            commit("setcreatePlaylistHasBeenClicked", false);
+          }
+        }
+
+    },
+
     async addNewPlaylist(){ 
       let playlist={};
       playlist.PlaylistName = this.state.currentPlaylist.PlaylistName
-      alert(playlist.PlaylistName)
       const response = await fetch("/api/newPlaylist/", {
         method: "POST",
         headers: {
@@ -185,7 +214,6 @@ export default new Vuex.Store({
       commit("modifyPlaylist", playlistId);
     },
     async getCurrentPlaylist({ commit }, playlistId) {
-      alert(playlistId)
       let response = await fetch(`/api/getMusicPlaylist/${playlistId}`);
       let playlist = await response.json();
       console.log(playlist);
@@ -207,7 +235,7 @@ export default new Vuex.Store({
         alert("Something went wrong, try again");
       }
     },
-    async validateUsername() {
+    async validateUsername({dispatch}) {
       const response = await fetch("/api/checkUser/", {
         method: "POST",
         headers: {
@@ -216,7 +244,7 @@ export default new Vuex.Store({
         body: JSON.stringify(this.state.user),
       });
       if (response.status == "200") {
-        await this.dispatch("createUser");
+         dispatch("createUser");
       } else {
         alert("Username already exists,choose another");
       }
@@ -341,6 +369,9 @@ export default new Vuex.Store({
     },
     getUser(state) {
       return state.user;
+    },
+    getplaylistTrack(state){
+      return state.playlistTrack;
     },
     getQueuedTracksLength(state) {
       return state.queuedTracks.length;
