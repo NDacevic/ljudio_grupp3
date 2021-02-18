@@ -13,18 +13,21 @@ module.exports = (app, db) => {
     response.json(result)
   }),
   //Check if username already exists
-  app.post("/api/checkUser",async (request,response) => {
+  app.get("/api/checkUser/:username",async (request,response) => {
     let user = await db.pool.request()
-      .input('Username', db.VarChar, request.body.username)
-      .query("SELECT * FROM [User] WHERE Username = @username")
-    user = user.recordset[0];
-    if(user!=undefined)
-    {
-        response.status(403); 
-        response.json({ message:"Username already exists" });
-    }
-    else
-    response.status(200)
+      .input('username', db.VarChar, request.params.username)
+      .query("SELECT COUNT(*) as 'exists' FROM [User] WHERE Username = @username")
+
+      response.json(user.recordset[0]);
+
+    // if()
+    // {  
+    //     response.json({ message:"Username already exists" });
+    // }
+    // else
+    // {
+    //   response.json({ message:"Username dont exists" });
+    // }
   })
   // authentication: perform login
   app.post("/api/login", async (request, response) => {
