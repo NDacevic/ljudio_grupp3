@@ -95,7 +95,7 @@ module.exports = (app, db) => {
   });
 
   //get userId from a username for notification sending
-  app.get("/api/notification/:userName", async (request, response) => {
+  app.get("/api/shareNotification/:userName", async (request, response) => {
     let data = await db.pool
       .request()
       .input("userName", db.NVarChar, request.params.userName)

@@ -23,16 +23,30 @@ export default {
     return {
       showMessage: false,
       message: "",
+      userNameToSearch: "",
     };
   },
   methods: {
     async checkUser(userName) {
-      this.$store.commit("setNotificationUser", userName);
-      let id = await this.$store.getters.getNotificationUser;
+      this.userNameToSearch = userName;
+      let id = await this.getIdByName();
+      console.log("id", id);
       return id;
+    },
+    async getIdByName() {
+      const response = await fetch(`api/shareNotification/${this.userNameToSearch}`);
+      const foundIdArray = await response.json();
+      let foundId;
+      if (foundIdArray.length > 0) {
+        foundId = foundIdArray[0].UserId;
+      } else {
+        foundId = -1;
+      }
+      return foundId;
     },
     async sendShareContent() {
       let userInputText = document.getElementById("userInput").value;
+      
       let id;
       let mediaType = this.media.type != null ? this.media.type : "playlist";
       let contentId = this.getContentId(mediaType);
@@ -40,7 +54,6 @@ export default {
 
       if (userInputText !== "") {
         id = await this.checkUser(userInputText);
-
         if (id < 0) {
           this.showMessage = !this.showMessage;
           const x = setInterval(() => {
@@ -56,8 +69,7 @@ export default {
             sharedContentType: mediaType,
             sharedContentName: contentName,
           };
-         this.sendNotification(notificationToSend);
-          this.$store.commit("setNotificationUser", -1);
+          this.sendNotification(notificationToSend);
           this.$store.commit("showShareComponent", false);
         }
       }
@@ -88,7 +100,7 @@ export default {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(notification),
-      }).catch(e => console.error(e.message));
+      }).catch((e) => console.error(e.message));
       const result = await response;
 
       if (result.ok) {
