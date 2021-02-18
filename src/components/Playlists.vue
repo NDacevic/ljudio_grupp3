@@ -9,7 +9,7 @@
       <div class="listItem">
         <p>{{ playlist.PlaylistName }}</p>
         <button
-          v-if="playlist.OwnerId === user.UserId"
+          v-if="playlist.OwnerId === user.UserId || user !== undefined"
           v-on:click="deletePlaylist(playlist.PlaylistId)"
           v-on:click.prevent.stop="goToPlaylist(playlist.PlaylistId)"
         >

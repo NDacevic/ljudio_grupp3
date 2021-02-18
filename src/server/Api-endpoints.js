@@ -159,6 +159,12 @@ module.exports = (app, db) => {
       .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId");
     response.json(result);
 
+    let result1 = await db.pool
+    .request()
+    .input("playlistId", db.Int, request.params.playlistId)
+    .query("DELETE FROM [MusicPlaylist] WHERE PlaylistId = @playlistId");
+  response.json(result1);
+
     let result2 = await db.pool
       .request()
       .input("playlistId", db.Int, request.params.playlistId)
