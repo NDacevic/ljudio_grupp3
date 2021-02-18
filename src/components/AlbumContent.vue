@@ -81,14 +81,17 @@ export default {
         this.$store.commit("setplaylistTrack", {
           name: this.selectedTrack.name,
           artist: {
-            name: this.selectedTrack.artistNames,
+            name: this.selectedTrack.artistNames
           },
           type: "song",
-          videoId: this.selectedTrack.videoId
+          videoId: this.selectedTrack.videoId,
+          duration: this.selectedTrack.duration,
+          album: {
+            name: this.selectedAlbum.title
+          }
         });
       }
       if (event.option.slug == "share") {
-        console.log(this.selectedTrack);
         this.$store.commit("showShareComponent", true);
         this.$store.commit("setShareMedia", {
           name: this.selectedTrack.name,

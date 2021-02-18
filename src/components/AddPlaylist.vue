@@ -7,10 +7,14 @@
         <input type="submit" value="Create playlist" @click="addNewPlaylist()" >
       </div>
         
-        <select>
-       <option disabled value="">Please select one</option>
-       <option v-on:click="addToPlaylist(playlist.PlaylistId)"  v-for="(playlist, index) in getPlaylists"
-      :key="index">{{playlist.PlaylistName}}</option>
+      <select @change="addToPlayList($event)">
+        <option 
+          v-for="(playlist, index) in getPlaylists"
+          :key="index"
+          :value="playlist.PlaylistId"
+        >
+          {{playlist.PlaylistName}}
+        </option>
        </select>     
     </div>
   </div>
@@ -29,8 +33,8 @@ data() {
   }
 },
   methods: {
-    addToPlaylist(playlistId){   
-      this.$store.commit("setCurrentPlaylistId", playlistId );    
+    addToPlayList(event){
+      this.$store.commit("setCurrentPlaylistId", event.target.value);    
       this.$store.dispatch("addPlaylistMusic");     
     },
     addNewPlaylist() {

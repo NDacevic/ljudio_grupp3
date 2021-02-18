@@ -5,7 +5,7 @@
       <h1 v-else>Playlist error</h1>
       <button v-on:click="addToQueue()">Add to queue</button>
     </div>
-    <md-table v-model="playlist" md-fixed-header class="md-scrollbar scroll">
+    <md-table v-model="playlist" md-fixed-header class="md-scrollbar">
       <md-table-row
         v-for="(track, index) in playlist"
         :key="index"
@@ -121,12 +121,6 @@ export default {
       background-color: black;
       padding: 6px;
     }
-  }
-
-  & .scroll {
-    overflow-y: scroll;
-    position: relative;
-
   }
 }
 </style>
