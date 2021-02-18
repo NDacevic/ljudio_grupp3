@@ -1,21 +1,18 @@
 <template>
   <div class="playlistBar">
     <h3>My playlists</h3>
-    <li
-      v-for="(playlist, index) in getPlaylists"
-      :key="index"
-      v-on:click="goToPlaylist(playlist.PlaylistId)"
-    >
+    <li v-for="(playlist, index) in getPlaylists" :key="index">
       <div class="listItem">
-        <p>{{ playlist.PlaylistName }}</p>
+        <p v-on:click="goToPlaylist(playlist.PlaylistId)">
+          {{ playlist.PlaylistName }}
+        </p>
         <button
           v-if="playlist.OwnerId === user.UserId || user !== undefined"
           v-on:click="deletePlaylist(playlist.PlaylistId)"
-          v-on:click.prevent.stop="goToPlaylist(playlist.PlaylistId)"
         >
           Delete
         </button>
-        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)" v-on:click.prevent.stop="goToPlaylist(playlist.PlaylistId)">      
+        <button v-else v-on:click="unfollowPlaylist(playlist.PlaylistId)">
           Unfollow
         </button>
       </div>
@@ -28,11 +25,11 @@ export default {
   name: "Playlists",
   computed: {
     getPlaylists() {
-        return this.$store.getters.getPlaylists;
+      return this.$store.getters.getPlaylists;
     },
     user() {
       return this.$store.getters.getUser;
-    }
+    },
   },
   methods: {
     goToPlaylist(playlistId) {
@@ -66,11 +63,11 @@ export default {
     list-style-type: none;
 
     &:hover {
-        background-color: #44507F !important;
-    & > p {
+      background-color: #44507f !important;
+      & > p {
         color: #448aff;
+      }
     }
-  }
   }
 
   li::marker {
@@ -83,7 +80,7 @@ export default {
   }
 
   & button {
-    //background-color: rgb(56, 54, 54) !important;
+    background-color: rgb(199, 23, 23) !important;
     color: white;
     border: 0;
     margin: 0;
@@ -92,7 +89,7 @@ export default {
     font-size: small;
 
     &:hover {
-      background-color: #44507F !important;
+      background-color: #44507f !important;
       color: #448aff;
     }
   }
