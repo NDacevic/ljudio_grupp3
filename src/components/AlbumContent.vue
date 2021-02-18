@@ -11,7 +11,6 @@
     </div>
     <div class="albumFooter">
       <md-button @click="playAlbum(selectedAlbum)">Play</md-button>
-      <md-button>Add to Playlist</md-button>
       <md-button @click="shareAlbum(selectedAlbum)">Share Album</md-button>
     </div>
     <md-table v-model="selectedAlbum" md-fixed-header>

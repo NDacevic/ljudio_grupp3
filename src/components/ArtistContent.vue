@@ -116,10 +116,6 @@ export default {
     return {
       menuOptions: [
         {
-          name: "Add to playlist",
-          slug: "add",
-        },
-        {
           name: "Add to queue",
           slug: "queue",
         },
