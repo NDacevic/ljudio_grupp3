@@ -124,6 +124,10 @@ export default {
       }
     },
     showOptionsOnClick(event, media) {
+      if(media.artist.length<1)
+      {
+        media.artist={name:" "}
+      }
       this.media = media;
       this.$refs.optionMenu.showMenu(event);
     },
