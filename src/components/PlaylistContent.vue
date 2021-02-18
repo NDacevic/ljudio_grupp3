@@ -5,7 +5,7 @@
       <h1 v-else>Playlist error</h1>
       <button v-on:click="addToQueue()">Add to queue</button>
     </div>
-    <md-table v-model="playlist" md-fixed-header>
+    <md-table v-model="playlist" md-fixed-header class="md-scrollbar scroll">
       <md-table-row
         v-for="(track, index) in playlist"
         :key="index"
@@ -36,14 +36,14 @@ export default {
     OptionsMenu,
   },
   computed: {
-    queue: {
-      get() {
-        return this.$store.getters.getQueuedTracks;
-      },
-      set(newQueue) {
-        this.$store.commit("updateQueue", newQueue);
-      },
-    },
+    // queue: {
+    //   get() {
+    //     return this.$store.getters.getQueuedTracks;
+    //   },
+    //   set(newQueue) {
+    //     this.$store.commit("updateQueue", newQueue);
+    //   },
+    // },
     playlist() {
       return this.$store.getters.getCurrentPlaylist;
     },
@@ -95,7 +95,16 @@ export default {
         });
       }
       if (event.option.slug == "share") {
-        //@TODO: Share track
+        console.log("track", this.selectedTrack);
+        this.$store.commit("showShareComponent", true);
+        this.$store.commit("setShareMedia", {
+          name: this.selectedTrack.Title,
+          artist: {
+            name: this.selectedTrack.Artist,
+          },
+          type: 'song',
+          videoId: this.selectedTrack.videoId,
+        });
       }
     },
   },
@@ -124,6 +133,12 @@ export default {
       background-color: black;
       padding: 6px;
     }
+  }
+
+  & .scroll {
+    overflow-y: scroll;
+    position: relative;
+
   }
 
   // .listContainer {
