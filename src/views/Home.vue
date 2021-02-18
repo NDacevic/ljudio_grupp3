@@ -15,7 +15,7 @@
       <div class="rightBarTop">
         <Queue />
       </div>
-      <div class="rightBarBottom">
+      <div class="rightBarBottom md-scrollbar">
         <Playlists />
         <!-- Komponent 4 -->
       </div>
