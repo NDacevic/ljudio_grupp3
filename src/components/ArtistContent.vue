@@ -104,8 +104,16 @@ export default {
     },
     playAlbum() {
       this.$store.dispatch("setTrackToPlay", {
-        media: this.selectedAlbum.tracks[0],
-        caller: "album",
+        media: {
+          name: this.selectedAlbum.tracks[0].name,
+          artist: {
+            name: this.selectedAlbum.tracks[0].artistNames,
+          },
+          type: "song",
+          videoId: this.selectedAlbum.tracks[0].videoId,
+          thumbnails: this.selectedAlbum.tracks[0].thumbnails
+        },
+        caller: "album"
       });
       this.queuedTracks = this.selectedAlbum.tracks.slice(1, this.selectedAlbum.tracks.length);
     }
