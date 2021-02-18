@@ -5,7 +5,7 @@
       <div id="scroll" class="md-scrollbar">
         <div id="notification" v-for="notification in newNotifications" :key="notification.Id">
           <p>
-            {{notification.Id}} <b>{{ notification.SenderName }}</b> wants to share this {{ notification.SharedContentType }} with you:
+            <b>{{ notification.SenderName }}</b> wants to share this {{ notification.SharedContentType }} with you:
           </p>
           <p>
             <em>{{ notification.SharedContentName }}</em>
