@@ -80,7 +80,7 @@ export default {
   }
 
   & button {
-    background-color: rgb(199, 23, 23) !important;
+    //background-color: rgb(199, 23, 23) !important;
     color: white;
     border: 0;
     margin: 0;
