@@ -165,11 +165,12 @@ export default new Vuex.Store({
         let playlist={};     
         playlist.id = this.state.currentPlaylistId
         playlist.videoId = this.state.playlistTrack.videoId
+        console.log(this.state.playlistTrack)
         const response = await fetch("/api/music", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-          },
+          },        
           body: JSON.stringify(this.state.playlistTrack),       
         });
         if(response.status==200)
