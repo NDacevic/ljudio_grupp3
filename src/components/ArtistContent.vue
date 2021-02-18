@@ -86,7 +86,16 @@ export default {
         // Add selectedAlbum to playlist
       }
       if (event.option.slug == "share") {
-        //@TODO: Share selectedAlbum
+        const album = this.selectedAlbum;
+        console.log(album);
+        this.$store.commit("showShareComponent", true);
+        this.$store.commit("setShareMedia", {
+        name: album.title,
+        artist: album.artist[0].name,
+        type: "album",
+        browseId: album.browseId,
+        year: album.year
+      });
       }
     },
     async fetchSelectedAlbum(album, playAlbum) {

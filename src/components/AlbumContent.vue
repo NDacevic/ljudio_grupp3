@@ -101,7 +101,6 @@ export default {
       //@TODO: Add album to playlist
     },
     shareAlbum(album) {
-      console.log(album);
       this.$store.commit("showShareComponent", true);
       this.$store.commit("setShareMedia", {
         name: album.title,
