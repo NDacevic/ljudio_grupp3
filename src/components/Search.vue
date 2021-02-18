@@ -162,6 +162,9 @@ export default {
           break;
         default:
           //for artist, album and playlist
+          if(this.searchMedia === 'playlists'){         
+            this.$store.dispatch("getCurrentPlaylist", media.PlaylistId);
+          }
           media.type === undefined ? this.$store.commit("setComponentToRenderInHomeCenter", "playlist") : this.$store.commit("setComponentToRenderInHomeCenter", media.type);
           break;
         case "artist":
