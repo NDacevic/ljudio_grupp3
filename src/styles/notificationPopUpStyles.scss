@@ -87,20 +87,14 @@
     background-color: green;
     width: 100px;
   }
-}
 
-.md-scrollbar {
-  &::-webkit-scrollbar-thumb {
-    background: grey !important;
-  }
-}
+    button {
+    border-radius: 5px;
+    padding: 0 2px;
+    }
 
-button {
-  border-radius: 5px;
-  padding: 0 2px;
-}
+    button:not(:last-child) {
+    margin-bottom: 5px;
+    }
 
-button:not(:last-child) {
-  margin-bottom: 5px;
 }
-
