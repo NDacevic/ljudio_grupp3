@@ -105,7 +105,7 @@ export default {
     playAlbum() {
       this.$store.dispatch("setTrackToPlay", {
         media: this.selectedAlbum.tracks[0],
-        caller: "search",
+        caller: "album",
       });
       this.queuedTracks = this.selectedAlbum.tracks.slice(1, this.selectedAlbum.tracks.length);
     }

@@ -65,7 +65,7 @@ export default {
     convertMillisecondsToTimeString(milliseconds) {
       let seconds = milliseconds / 1000;
       let minutes = Math.floor(seconds / 60);
-      let remainingSeconds = seconds % 60;
+      let remainingSeconds = Math.trunc(seconds % 60);
       if (remainingSeconds.toString().length === 1) {
         return minutes + ":0" + remainingSeconds;
       } else {
