@@ -1,15 +1,13 @@
 <template>
   <div class="player">
-    <div class="thumbnail-container">
-      <img v-if="currentTrack.thumbnails !== undefined && currentTrack.type === 'song'" :src="currentTrack.thumbnails[1].url" />
-      <img v-if="currentTrack.thumbnails !== undefined && currentTrack.type === 'video'" :src="currentTrack.thumbnails.url" />
+    <div :class="{ 'thumbnail-container': true, blackBackground: this.currentTrack != null && this.currentTrack.thumbnails != null }">
+      <img v-if="currentTrack.thumbnails != null" :src="thumbnail" />
     </div>
     <section class="controls-container">
       <div class="controls-container-seekbar">
-        <p v-if="currentTrack.artist != null || currentTrack.author != null">
+        <p>
           {{ truncatedTrackTitleArtistName }}
         </p>
-        <p v-else></p>
         <div>
           <p>{{ convertSecondsToTimeString(this.trackProgress) }}</p>
           <input type="range" min="0" v-bind:max="trackDuration" v-on:click="playFromTime" v-bind:value="trackProgress" />
@@ -31,7 +29,7 @@
         <figure :class="{ active: this.$store.getters.getQueuedTracksLength < 1 }" v-on:click="playNext()">
           <i class="material-icons-round">skip_next</i>
         </figure>
-        <figure class="shuffle-off" v-if="shuffle===false" v-on:click="toggleShuffle()">
+        <figure class="shuffle-off" v-if="shuffle === false" v-on:click="toggleShuffle()">
           <i class="material-icons-round">shuffle</i>
         </figure>
         <figure class="shuffle-on" v-else v-on:click="toggleShuffle()">
@@ -56,7 +54,7 @@
     </section>
   </div>
 </template>
-
+<style></style>
 <script>
 export default {
   name: "Player",
@@ -71,11 +69,9 @@ export default {
       let media;
       if (this.$store.getters.getQueuedTracks.length > 0) {
         if (this.shuffle) {
-         let randomQueueIndex = Math.floor(Math.random() * this.$store.state.queuedTracks.length);
-         media = this.$store.state.queuedTracks[randomQueueIndex]
-        }
-        else
-          media = this.$store.state.queuedTracks[0];
+          let randomQueueIndex = Math.floor(Math.random() * this.$store.state.queuedTracks.length);
+          media = this.$store.state.queuedTracks[randomQueueIndex];
+        } else media = this.$store.state.queuedTracks[0];
         this.$store.dispatch("setTrackToPlay", { media, caller: "playNext" });
         this.$store.commit("removeFromQueue", media);
         return true;
@@ -206,9 +202,8 @@ export default {
       }
     },
     toggleShuffle() {
-      this.$store.commit("toggleShuffle")
-    }
-
+      this.$store.commit("toggleShuffle");
+    },
   },
   data() {
     return {
@@ -243,8 +238,15 @@ export default {
       let value;
       if (this.currentTrack.artist != null) {
         value = this.currentTrack.artist.name + " - " + this.currentTrack.name;
+        console.log("1");
       } else if (this.currentTrack.author != null) {
         value = this.currentTrack.author + " - " + this.currentTrack.name;
+        console.log("2");
+      } else if (this.currentTrack.artistNames != null) {
+        value = this.currentTrack.artistNames + " - " + this.currentTrack.name;
+        console.log("3");
+      } else {
+        value = " ";
       }
       let length = 70;
       if (value == null || value.Length < length || value.indexOf(" ", length) == -1) return value;
@@ -255,7 +257,17 @@ export default {
     },
     shuffle() {
       return this.$store.getters.getShuffleStatus;
-    }
+    },
+    thumbnail() {
+      let imageSrc = "";
+      console.log(this.currentTrack);
+      if (this.currentTrack.thumbnails.length > 0) {
+        imageSrc = this.currentTrack.thumbnails[this.currentTrack.thumbnails.length - 1].url;
+      }else{
+        imageSrc = this.currentTrack.thumbnails.url;
+      }
+      return imageSrc;
+    },
   },
 
   mounted() {
