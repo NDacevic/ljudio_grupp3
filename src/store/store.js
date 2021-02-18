@@ -443,7 +443,7 @@ export default new Vuex.Store({
       return state.receivedNotificationUserId;
     },
     async getNotificationUser(state) {
-      const response = await fetch(`api/notification/${state.notificationUser}`);
+      const response = await fetch(`api/shareNotification/${state.notificationUser}`);
       const foundIdArray = await response.json();
       let foundId;
       if (foundIdArray.length > 0) {
@@ -451,6 +451,7 @@ export default new Vuex.Store({
       } else {
         foundId = -1;
       }
+      console.log("we got here?");
       return foundId;
     },
     getShareComponentVisible(state) {
