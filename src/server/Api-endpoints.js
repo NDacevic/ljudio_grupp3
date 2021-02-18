@@ -151,25 +151,21 @@ module.exports = (app, db) => {
     response.json(data.recordset);
   });
 
- // unfollow/delete from userplaylist
- app.delete("/api/deletePlaylist/:playlistId", async (request, response) => {
-    let result = await db.pool
+  // unfollow/delete from userplaylist
+  app.delete("/api/deletePlaylist/:playlistId", async (request, response) => {
+    await db.pool
       .request()
       .input("playlistId", db.Int, request.params.playlistId)
       .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId");
-    response.json(result);
-
-    let result1 = await db.pool
-    .request()
-    .input("playlistId", db.Int, request.params.playlistId)
-    .query("DELETE FROM [MusicPlaylist] WHERE PlaylistId = @playlistId");
-  response.json(result1);
-
-    let result2 = await db.pool
+    await db.pool
+      .request()
+      .input("playlistId", db.Int, request.params.playlistId)
+      .query("DELETE FROM [MusicPlaylist] WHERE PlaylistId = @playlistId");
+    let data = await db.pool
       .request()
       .input("playlistId", db.Int, request.params.playlistId)
       .query("DELETE FROM [Playlist] WHERE PlaylistId = @playlistId");
-    response.json(result2);
+      response.json(data);
   });
 
   // delete from userplaylist with userid and playlistid

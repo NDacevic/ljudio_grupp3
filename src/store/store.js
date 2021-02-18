@@ -219,17 +219,16 @@ export default new Vuex.Store({
         commit("setPlaylistList", playlists);
       }
     },
-    async unfollowPlaylist(playlistId) {
-      let response = await fetch(`/api/unfollowpPlaylist/${playlistId}`, {
+    async unfollowPlaylist({ commit }, playlistId) {
+      await fetch(`/api/unfollowpPlaylist/${playlistId}`, {
         method: "delete",
       });
-      await response.json();
+      commit("modifyPlaylist", playlistId);
     },
     async deletePlaylist({ commit }, playlistId) {
-      let response = await fetch(`/api/deletePlaylist/${playlistId}`, {
+      await fetch(`/api/deletePlaylist/${playlistId}`, {
         method: "delete",
       });
-      await response.json();
       commit("modifyPlaylist", playlistId);
     },
     async getCurrentPlaylist({ commit }, playlistId) {
