@@ -22,7 +22,7 @@
             ><div>{{ track.name }}</div>
             <div>{{ track.artist.name }}</div></md-table-cell
           >
-          <md-table-cell md-label="Track" v-if="track.type === 'video'"
+          <md-table-cell md-label="Track" v-else-if="track.type === 'video'"
             ><div>{{ track.name }}</div>
             <div>{{ track.author }}</div></md-table-cell
           >
