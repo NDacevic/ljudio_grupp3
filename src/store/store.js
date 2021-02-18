@@ -254,14 +254,12 @@ export default new Vuex.Store({
       }
     },
     async validateUsername({dispatch}) {
-      const response = await fetch("/api/checkUser/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(this.state.user),
-      });
-      if (response.status == "200") {
+      console.log(this.state.user.username)
+      const response = await fetch(`/api/checkUser/${this.state.user.username}`)
+        let exists = await response.json()
+        console.log(exists)
+        console.log(exists.exists)
+      if (exists.exists === 0) {
          dispatch("createUser");
       } else {
         alert("Username already exists,choose another");

@@ -106,6 +106,7 @@ methods: {
      this.errors.push('Password doesn´t match');
     }
     else{
+      console.log(this.user)
        this.$store.commit("updateUser",this.user); 
        this.$store.dispatch("validateUsername")}   
     },
