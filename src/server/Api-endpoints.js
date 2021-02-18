@@ -144,7 +144,7 @@ module.exports = (app, db) => {
     let data = await db.pool
       .request()
       .input("id", db.Int, request.session.user.UserId)
-      .query("SELECT [UserPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [UserPlaylist] left join [Playlist] on [UserPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where OwnerId = @id");
+      .query("SELECT [UserPlaylist].[PlaylistId], [Playlist].[PlaylistName], [Playlist].[OwnerId] FROM [UserPlaylist] left join [Playlist] on [UserPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where UserId = @id");
     response.json(data.recordset);
   });
 

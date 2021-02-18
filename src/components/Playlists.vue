@@ -35,9 +35,7 @@ export default {
   },
   methods: {
     goToPlaylist(playlistId) {
-      //this.$store.commit("setCurrentPlaylistId", playlistId);
       this.$store.dispatch("getCurrentPlaylist", playlistId);
-      console.log(playlistId);
       this.$store.commit("setComponentToRenderInHomeCenter", "playlist");
     },
     unfollowPlaylist(id) {
@@ -48,6 +46,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.user.UserId)
     this.$store.dispatch("getPlaylists");
   },
 };
