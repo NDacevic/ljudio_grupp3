@@ -25,7 +25,7 @@
             <img :src="album.thumbnails[0].url">
           </div>
         </md-table-cell>
-        <md-table-cell md-label="Album">{{ album.name }}</md-table-cell>
+        <md-table-cell class="albumName" md-label="Album">{{ album.name }}</md-table-cell>
         <md-table-cell md-label="Year">{{ album.year }}</md-table-cell>
       </md-table-row>
     </md-table>
@@ -136,6 +136,11 @@ export default {
 </script>
 
 <style scoped>
+.albumName{
+  font-size:40px;
+  line-height:1;
+}
+
 .artistContainer {
   display: flex;
   flex-direction: column;
