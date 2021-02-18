@@ -25,15 +25,18 @@
       </md-table-row>
     </md-table>
     <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
+    <AddPlaylist v-if="this.$store.getters.getcreatePlaylistBool"></AddPlaylist>
   </div>
 </template>
 
 <script>
+import AddPlaylist from './AddPlaylist.vue';
 import OptionsMenu from "./OptionsMenu";
 
 export default {
   components: {
     OptionsMenu,
+    AddPlaylist
   },
   computed: {
     selectedAlbumBrowseId: {
@@ -74,7 +77,15 @@ export default {
         this.queuedTracks.push(this.selectedTrack);
       }
       if (event.option.slug == "add") {
-        //Add to playlist
+        this.$store.commit("setcreatePlaylistHasBeenClicked", true);
+        this.$store.commit("setplaylistTrack", {
+          name: this.selectedTrack.name,
+          artist: {
+            name: this.selectedTrack.artistNames,
+          },
+          type: "song",
+          videoId: this.selectedTrack.videoId
+        });
       }
       if (event.option.slug == "share") {
         console.log(this.selectedTrack);
@@ -95,9 +106,6 @@ export default {
         caller: "search",
       });
       this.queuedTracks = album.tracks.slice(1, album.tracks.length);
-    },
-    addAlbumToPlaylist(/* album */) {
-      //@TODO: Add album to playlist
     },
     shareAlbum(album) {
       this.$store.commit("showShareComponent", true);
