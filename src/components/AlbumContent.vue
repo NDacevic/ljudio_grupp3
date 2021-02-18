@@ -21,7 +21,7 @@
         @contextmenu.prevent.stop="showOptionsOnClick($event, track)"
       >
         <md-table-cell md-label="Tracks">{{ track.name }}</md-table-cell>
-        <md-table-cell md-label="Duration">{{ track.duration }}</md-table-cell>
+        <md-table-cell md-label="Duration">{{ convertMillisecondsToTimeString(track.duration) }}</md-table-cell>
       </md-table-row>
     </md-table>
     <OptionsMenu :elementId="'optionMenuId'" :options="menuOptions" :ref="'optionMenu'" @option-clicked="setOption" />
@@ -119,6 +119,16 @@ export default {
         browseId: album.browseId,
         year: album.year
       });
+    },
+    convertMillisecondsToTimeString(milliseconds) {
+      let seconds = milliseconds / 1000;
+      let minutes = Math.floor(seconds / 60);
+      let remainingSeconds = seconds % 60;
+      if (remainingSeconds.toString().length === 1) {
+        return minutes + ":0" + remainingSeconds;
+      } else {
+        return minutes + ":" + remainingSeconds;
+      }
     }
   },
   data() {
