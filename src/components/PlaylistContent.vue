@@ -36,14 +36,6 @@ export default {
     OptionsMenu,
   },
   computed: {
-    // queue: {
-    //   get() {
-    //     return this.$store.getters.getQueuedTracks;
-    //   },
-    //   set(newQueue) {
-    //     this.$store.commit("updateQueue", newQueue);
-    //   },
-    // },
     playlist() {
       return this.$store.getters.getCurrentPlaylist;
     },
@@ -65,8 +57,6 @@ export default {
   },
   methods: {
     playSong(track) {
-      console.log(track.contentType);
-      console.log(track.videoId);
       this.$store.dispatch("getMediaObjectAndAddToQueueOrPlay", {
         addToQueue: false,
         sharedContentType: track.contentType,
@@ -95,14 +85,13 @@ export default {
         });
       }
       if (event.option.slug == "share") {
-        console.log("track", this.selectedTrack);
         this.$store.commit("showShareComponent", true);
         this.$store.commit("setShareMedia", {
           name: this.selectedTrack.Title,
           artist: {
             name: this.selectedTrack.Artist,
           },
-          type: 'song',
+          type: this.selectedTrack.contentType,
           videoId: this.selectedTrack.videoId,
         });
       }
@@ -116,7 +105,6 @@ export default {
   color: white;
   width: 100%;
   height: 100%;
-  grid-template-columns: 57.5fr 23fr 23fr 13fr;
 
   & .head {
     margin-top: 5vh;
@@ -140,43 +128,5 @@ export default {
     position: relative;
 
   }
-
-  // .listContainer {
-  //   .headers {
-  //     display: flex;
-  //     justify-content: space-between;
-  //     border-bottom: 2px solid #44507f;
-  //     margin-bottom: 2vh;
-  //     margin-left: 1vw;
-  //     margin-right: 1vw;
-  //     padding: 1%;
-  //     //grid-template-columns: 57.5fr 23fr 23fr 13fr;
-  //   }
-  //   div > h3:first-child {
-  //     //flex-grow: 0.5;
-  //     width: 33%;
-  //   }
-
-  //   li::marker {
-  //     content: "";
-  //   }
-
-  //   .listItem {
-  //     display: flex;
-  //     justify-content: space-between;
-  //     margin-left: 1vw;
-  //     margin-right: 1vw;
-  //     padding: 1%;
-  //     border-bottom: 1px solid #44507f;
-  //     //grid-template-columns: 57.5fr 23fr 23fr 13fr;
-  //     &:hover p {
-  //       color: #448aff;
-  //     }
-  //   }
-  //   div > p:first-child {
-  //     //flex-grow: 0.5;
-  //     width: 33%;
-  //   }
-  // }
 }
 </style>

@@ -150,15 +150,8 @@ module.exports = (app, db) => {
 
  // unfollow/delete from userplaylist
  app.delete("/api/deletePlaylist/:playlistId", async (request, response) => {
-  // check if user exists before writing
-  /*if(!request.session.user){
-    response.status(403) // forbidden
-    response.json({error:'not logged in'})
-    return
-  }*/
     let result = await db.pool
       .request()
-      //.input('id', db.Int, request.params.id)
       .input("playlistId", db.Int, request.params.playlistId)
       .query("DELETE FROM [UserPlaylist] WHERE PlaylistId = @playlistId");
     response.json(result);
@@ -172,12 +165,6 @@ module.exports = (app, db) => {
 
   // delete from userplaylist with userid and playlistid
   app.delete("/api/unfollowpPlaylist/:playlistId", async (request, response) => {
-    // check if user exists before writing
-    /*if(!request.session.user){
-    response.status(403) // forbidden
-    response.json({error:'not logged in'})
-    return
-  }*/
     let result = await db.pool
       .request()
       .input("id", db.Int, request.session.user.UserId)
@@ -190,7 +177,6 @@ module.exports = (app, db) => {
 app.get("/api/getMusicPlaylist/:playlistId", async (request, response) => {
   let data = await db.pool.request()
   .input('playlistId', db.Int, request.params.playlistId)
-  //.query('SELECT * FROM [MusicPlaylist] join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] join [Playlist] on [MusicPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where [Playlist].[PlaylistId] = @playlistId')
   .query('SELECT [Music].*, [MusicPlaylist].[PlaylistId], [Playlist].[PlaylistName] FROM [MusicPlaylist] join [Music] on [MusicPlaylist].[SongId] = [Music].[SongId] join [Playlist] on [MusicPlaylist].[PlaylistId] = [Playlist].[PlaylistId] where Playlist.PlaylistId = @playlistId')
   response.json(data.recordset)
 })
