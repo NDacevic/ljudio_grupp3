@@ -46,7 +46,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.user.UserId)
     this.$store.dispatch("getPlaylists");
   },
 };
