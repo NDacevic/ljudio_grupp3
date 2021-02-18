@@ -27,6 +27,7 @@ export default new Vuex.Store({
     notificationUser: "",
     shareComponentVisible: false,
     shareMedia: {},
+    shuffleOn: false
   },
   mutations: {
     setSearchResults(state, searchResults) {
@@ -51,8 +52,8 @@ export default new Vuex.Store({
         1
       );
     },
-    removeTopFromQueue(state) {
-      state.queuedTracks.shift();
+    removeFromQueue(state, track) {
+      state.queuedTracks.splice(state.queuedTracks.findIndex(t => t.videoId  === track.videoId), 1);
     },
     removeFromBottomOfHistory(state) {
       state.trackHistory.pop();
@@ -113,6 +114,12 @@ export default new Vuex.Store({
     },
     setShareMedia(state, media) {
       state.shareMedia = media;
+    },
+    toggleShuffle(state) {
+      if (state.shuffleOn)
+        state.shuffleOn = false;
+      else
+        state.shuffleOn = true;
     },
   },
   actions: {
@@ -426,6 +433,9 @@ export default new Vuex.Store({
     getShareMedia(state) {
       return state.shareMedia;
     },
+    getShuffleStatus(state) {
+      return state.shuffleOn;
+    }
   },
   modules: {},
 });
