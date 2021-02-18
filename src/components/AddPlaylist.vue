@@ -95,6 +95,7 @@ data() {
     },
     addNewPlaylist() {
       console.log("addnewplaylist",this.newPlaylist)
+      this.newPlaylist.OwnerId = this.$store.getters.getUser.UserId;
       this.$store.dispatch("addNewPlaylist",this.newPlaylist) 
       this.addPlaylist.push(this.newPlaylist);
     }
