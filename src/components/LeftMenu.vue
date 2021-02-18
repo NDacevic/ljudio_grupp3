@@ -28,9 +28,11 @@ export default {
   },
   methods: {
     renderEmptySearchPageInCenter() {
-      this.$store.commit("setComponentToRenderInHomeCenter", "search");
+      if (this.checkWhichComponentIsRenderedInCenter !== "search") {
+        this.$store.commit("setComponentToRenderInHomeCenter", "search");
       this.$store.commit("setSearchResults", []);
       this.$store.commit("setSearchHasBeenPerformed", false);
+      }      
     },
     logOut() {
       this.$store.dispatch("logOut")  
@@ -45,6 +47,9 @@ export default {
     },
     renderNotificationsModal() {
       return this.$store.getters.getRenderNotificationsModalStatus;
+    },
+    checkWhichComponentIsRenderedInCenter() {
+      return this.$store.getters.getCenterComponentForHome
     },
     newNotifications() {
       return this.$store.getters.getNewNotifications;
