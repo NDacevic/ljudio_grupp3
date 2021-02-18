@@ -190,30 +190,30 @@ app.post("/api/music", async (request, response) => {
 })
 //Post MusicPlaylist
 app.post("/api/musicplaylist/", async (request, response) => {
-
     
     await db.pool.request()
+      .input('videoId', db.NVarChar, request.body.videoId)
       .input('playlistId', db.Int, request.body.id)
-      .query("declare @myVal int; SET @myVal = (SELECT IDENT_CURRENT ('Music')) INSERT INTO [MusicPlaylist](SongId,PlaylistId) VALUES (@myVal,@playlistId)")
+      .query(`declare @myVal int; SET @myVal = (SELECT SongId FROM [Music] WHERE videoId = @videoId)  INSERT INTO [MusicPlaylist](SongId,PlaylistId) VALUES (@myVal,@playlistId)`)
       response.json()
 
 }),
  
   // private create new playlist 
   app.post("/api/newPlaylist", async (request, response) => {
-    let user = request.session.user.UserId
     // check if user exists before writing
     if (!request.session.user) {
       response.status(403); // forbidden
       response.json({ error: "not logged in" });
       return;
     }
-    await db.pool.request()
+    let data = await db.pool.request()
     .input('PlaylistName', db.VarChar, request.body.PlaylistName)
     .input('Shared', db.VarChar, false)
     .input('OwnerId', db.VarChar, request.session.user.UserId)
     .input('ReadOnly', db.VarChar, false)
-    .query(`INSERT INTO [Playlist](PlaylistName,Shared,OwnerId,ReadOnly) VALUES (@playlistname,@shared,@ownerid,@readonly) declare @myVal int; SET @myVal = (SELECT IDENT_CURRENT ('Playlist')) INSERT INTO [UserPlaylist](UserId,PlaylistId) VALUES (${user},@myVal)`)
+    .query(`INSERT INTO [Playlist](PlaylistName,Shared,OwnerId,ReadOnly) OUTPUT Inserted.PlaylistId VALUES (@playlistname,@shared,@ownerid,@readonly) declare @myVal int; SET @myVal = (SELECT IDENT_CURRENT ('Playlist')) INSERT INTO [UserPlaylist](UserId,PlaylistId) VALUES (@OwnerId,@myVal)`)
+    response.json(data.recordset[0])
   })
 
 

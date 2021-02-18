@@ -115,6 +115,9 @@ export default new Vuex.Store({
     setShareMedia(state, media) {
       state.shareMedia = media;
     },
+    setLastPlaylistId(state,id){
+      state.playlists[state.playlists.length-1].PlaylistId = id;
+    },
     toggleShuffle(state) {
       if (state.shuffleOn)
         state.shuffleOn = false;
@@ -156,8 +159,9 @@ export default new Vuex.Store({
       }
     },
     async addPlaylistMusic({commit}){
-        let playlist={};
+        let playlist={};     
         playlist.id = this.state.currentPlaylistId
+        playlist.videoId = this.state.playlistTrack.videoId
         const response = await fetch("/api/music", {
           method: "POST",
           headers: {
@@ -181,9 +185,7 @@ export default new Vuex.Store({
 
     },
 
-    async addNewPlaylist(){ 
-      let playlist={};
-      playlist.PlaylistName = this.state.currentPlaylist.PlaylistName
+    async addNewPlaylist({commit,dispatch},playlist){ 
       const response = await fetch("/api/newPlaylist/", {
         method: "POST",
         headers: {
@@ -193,9 +195,15 @@ export default new Vuex.Store({
       });
       if (response.status == "200") {
         alert("playlist has been created");
+        let playlistId = (await response.json()).PlaylistId
+        console.log(playlistId)
+        commit("setLastPlaylistId",playlistId)
+        commit("setCurrentPlaylistId",playlistId)
+        dispatch("addPlaylistMusic")
       } else {
         alert("Something went wrong, try again");
       }
+       
     },
     async getPlaylists({ commit }) {
       try {

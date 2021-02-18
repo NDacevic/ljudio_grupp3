@@ -2,10 +2,10 @@
   <div class="addPlaylist" >
     <div>
     <h2>Choose playlist from menu or create a new</h2>
-      <form>
+      <div>
         <input v-model="newPlaylist.PlaylistName" type="text">
         <input type="submit" value="Create playlist" @click="addNewPlaylist()" >
-      </form>
+      </div>
         
         <select>
        <option disabled value="">Please select one</option>
@@ -24,7 +24,7 @@ export default {
   },
 data() {
   return {
-    newPlaylist:[],
+    newPlaylist:{},
     selectedPlaylist:[],  
   }
 },
@@ -34,9 +34,9 @@ data() {
       this.$store.dispatch("addPlaylistMusic");     
     },
     addNewPlaylist() {
+      console.log("addnewplaylist",this.newPlaylist)
+      this.$store.dispatch("addNewPlaylist",this.newPlaylist) 
       this.addPlaylist.push(this.newPlaylist);
-      this.$store.commit("setCurrentPlaylist",this.newPlaylist);
-      this.$store.dispatch("addNewPlaylist") 
     }
   },
   computed: {
