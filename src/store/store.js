@@ -286,7 +286,6 @@ export default new Vuex.Store({
         body: JSON.stringify(this.state.user),
       });
       if (response.status == "200") {
-        alert("logged in");
         this.dispatch("checkAuth");
       } else {
         alert("Wrong username and/or password");
