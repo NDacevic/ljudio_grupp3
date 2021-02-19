@@ -119,7 +119,7 @@ methods: {
 .imgDiv{
   display:flex;
   justify-content:center;
-  scale:80%;
+  transform: scale(0.8);
 }
 .submit {
   width:45%;
